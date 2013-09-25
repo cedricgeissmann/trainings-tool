@@ -11,7 +11,7 @@ and open the template in the editor.
 
 <html>
 <head>
-<title>TVMuttenz Volleyball Herren</title>
+<title>TVMuttenz Volleyball</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width">
