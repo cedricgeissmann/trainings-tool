@@ -51,6 +51,17 @@ class DatabaseUtil{
 		mysql_close($link);
 		return $res;
 	}
+	
+	public static function executeQueryAsJSON($sql){
+		$link = self::connectToDatabase();
+		$res = mysql_query($sql, $link) or die(mysql_error());
+		mysql_close($link);
+		$returnArray = array();
+		while($row = mysql_fetch_assoc($res)){
+			$returnArray[] = $row;
+		}
+		return json_encode($returnArray);
+	}
 
 	public static function startSession(){
 		if(!isset($_SESSION)) {
@@ -65,4 +76,17 @@ class DatabaseUtil{
 	}
 
 }
+
+
+/**
+ * Evaluate incoming requests.
+ */
+ $function = $_POST["func"];
+ switch($function){
+ 	case "getJSONFromQuery":
+ 		$query = $_POST["query"];
+ 		echo DatabaseUtil::subscribeForTraining($query);
+ 		break;
+ }
+
 ?>
