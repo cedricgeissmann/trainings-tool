@@ -37,6 +37,9 @@ body{
 						<a href='main.php' onclick="setType('beach')">Beach</a>
 					</li>
 					<li>
+						<a href='chat.php'>Chat</a>
+					</li>
+					<li>
 						<a href="logout.php">Logout</a>
 					</li>
 				</ul>

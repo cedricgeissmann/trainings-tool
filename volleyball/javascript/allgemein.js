@@ -273,6 +273,20 @@ function removeFromTrainingFromAdmin(username, trainingsID){
 	$(window).scrollTop(scroll);
 }
 
+/**
+ * Sending a chat message to the server.
+ */
+function sendMessage(sender, receiver, message){
+	$.ajax({
+		  type: "POST",
+		  url: "ChatUtil.php",
+		  data: { sender: sender, receiver: receiver, message: message, func: 'messageSent' }
+		})
+		  .done(function( msg ) {
+//		    alert( "Message sent" );
+		  });
+}
+
 
 
 /**
