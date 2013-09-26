@@ -1,124 +1,47 @@
-/**
- * Opens a Connection to the local database, where for example the user can be stored for autologin.
- * @returns the connection to the database.
- */
-function connectToLocalDatabase(){
-	return openDatabase('u19908_herren', '1.0', 'Local database to store some userdata', 2 * 1024 * 1024);
-}
+//function send_ajax(msg, dest){
+//	var params = msg;
+//	var response = "";
+//	var xmlhttp;
+//	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+//		xmlhttp = new XMLHttpRequest();
+//	} else {// code for IE6, IE5
+//		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//	}
+//
+//	xmlhttp.open("POST", dest, false);
+//	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//
+//	xmlhttp.onreadystatechange = function() {
+//		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+//			response = xmlhttp.responseText;
+//		}
+//	};
+//
+//	xmlhttp.send(params);
+//	return response;
+//}
+
 
 /**
- * Creates a new table user in the local database, if this table does not allready exist. This table has two entries, the username and the password.
- * @param db the local database object.
+ * @deprecated sets the type of the actual training. In newer version all events are displayed in one page separated into their categories.
  */
-function createTableUser(db){
-	db.transaction(function (tx) {  
-		tx.executeSql('CREATE TABLE IF NOT EXISTS user (username unique, password)');
-	});
-}
-
-/**
- * Inserts an entry in the local database, to store the username and the password for autologin.
- * @param username the username nedded for login.
- * @param password the password nedded for login.
- */
-function createLocalUser(username, password){
-
-	var db = connectToLocalDatabase();
-	createTableUser(db);
-	db.transaction(function (tx) {  
-		var pw = MD5(password);
-		tx.executeSql('INSERT INTO user (username, password) VALUES (?, ?)', [username, pw]);
-	});
-	alert(username+" "+password);
-}
-
-function getUsernameFromLocalDatabase(){
-	var db = connectToLocalDatabase();
-	db.transaction(function(tx){
-		tx.executeSql("SELECT username FROM user", [], function(tx, results) {
-			for(var i=0;i<results.rows.length;i++){
-				return results.rows.item(i)['username'];
-			}
-		});
-	});
-}
-
-function send_ajax(msg, dest){
-	var params = msg;
-	var response = "";
-	var xmlhttp;
-	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} else {// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-
-	xmlhttp.open("POST", dest, false);
-	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			response = xmlhttp.responseText;
-		}
-	};
-
-	xmlhttp.send(params);
-	return response;
-}
-
 function setType(type){
 	sessionStorage.type=type;
 }
 
+/**
+ * @deprecated use remove from jquery.
+ */
 function removeElement(id) {
 	var element = document.getElementById(id);
 	element.parentNode.removeChild(element);
 }
 
+/**
+ * @deprecated should not be in use anymore.
+ */
 function change_type(){
 	document.getElementById("type").value = sessionStorage.type;
-}
-
-function getProfile(){
-	var resp = send_ajax("nothing", "getProfile.php");
-	res = resp.split("&");
-	document.getElementById("firstname").value = res[0];
-	document.getElementById("name").value = res[1];
-	document.getElementById("mail").value = res[2];
-}
-
-function updateProfile(){
-	if(checkPassword()){
-		send_ajax("password="+document.getElementById("newPassword").value, "updatePassword.php");
-	}
-	var firstname = document.getElementById("firstname").value;
-	var name = document.getElementById("name").value;
-	var mail = document.getElementById("mail").value;	
-	send_ajax("firstname="+firstname+"&name="+name+"&mail="+mail, "updateProfile.php");
-}
-
-function checkPassword(){
-	var newPassword = document.getElementById("newPassword").value;
-	var oldPassword = document.getElementById("oldPassword").value;
-	if(newPassword.length>0 && oldPassword.length>0){
-		if(newPassword!=document.getElementById("controlPassword").value){
-			alert("Bitte zweimal das gleiche Passwort eingeben.");
-			return false;
-		}
-		if(newPassword.length<4){
-			alert("Das Passwort muss mindestens 4 Stellen haben.");
-			return false;
-		}
-		var samePassword = send_ajax("oldPassword="+oldPassword, "getPassword.php");
-		if(samePassword==1){
-			return true;
-		}
-	}
-	return false;
-}
-
-function setDefault(arg0){
-	send_ajax("id="+arg0.name+"&type="+arg0.innerHTML, "default.php");
 }
 
 /**
@@ -128,14 +51,42 @@ function loadTraining(type){
 	if(type==undefined){
 		type = "training";
 	}
-	document.getElementById("response").innerHTML = send_ajax("type="+type+"&function=getTraining", "Training.php");
+	//document.getElementById("response").innerHTML = send_ajax("type="+type+"&function=getTraining", "Training.php");
+	$ajax({
+		type: "POST",
+		url: "Training.php",
+		data: {
+			type: type,
+			func: "getTraining"
+		}
+	}).done(function(res){
+		$("#response").html(res);
+	});
+	
 }
 
+/**
+ * subscribe the event triggering user for this training.
+ */
 function subscribe(arg){
-	send_ajax("trainingsID="+arg.name+"&subscribeType=1&function=subscribeForTraining", "Training.php");
-	loadTraining(sessionStorage.type);
+	//send_ajax("trainingsID="+arg.name+"&subscribeType=1&function=subscribeForTraining", "Training.php");
+	//loadTraining(sessionStorage.type);
+	$ajax({
+		type: "POST",
+		url: "Training.php",
+		data: {
+			trainingsID: arg.name,
+			subscribeType
+			func: "getTraining"
+		}
+	}).done(function(res){
+		$("#response").html(res);
+	});
 }
 
+/**
+ * unsubscribe the event triggering user for this training.
+ */
 function unsubscribe(arg){
 	send_ajax("trainingsID="+arg.name+"&subscribeType=0&function=subscribeForTraining", "Training.php");
 	loadTraining(sessionStorage.type);
