@@ -76,8 +76,8 @@ function subscribe(arg){
 		url: "Training.php",
 		data: {
 			trainingsID: arg.name,
-			subscribeType
-			func: "getTraining"
+			subscribeType: 1,
+			func: "subscribeForTraining"
 		}
 	}).done(function(res){
 		$("#response").html(res);
