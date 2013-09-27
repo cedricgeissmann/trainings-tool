@@ -52,7 +52,7 @@ function loadTraining(type){
 		type = "training";
 	}
 	//document.getElementById("response").innerHTML = send_ajax("type="+type+"&function=getTraining", "Training.php");
-	$ajax({
+	$.ajax({
 		type: "POST",
 		url: "Training.php",
 		data: {
@@ -226,6 +226,9 @@ function removeFromTrainingFromAdmin(username, trainingsID){
 
 /**
  * Sending a chat message to the server.
+ * @param sender is the sender of the message.
+ * @param receiver is the receiver for this message.
+ * @param message is the content of the message.
  */
 function sendMessage(sender, receiver, message){
 	$.ajax({
@@ -238,7 +241,71 @@ function sendMessage(sender, receiver, message){
 		  });
 }
 
+/**
+ * Get all messages for one receiver.
+ * @returns an array of json-objects which encode the messages.
+ */
+function getAllMessages(receiver){
+	var returnMsg = ""; 
+	$.ajax({
+		type: "POST",
+		url: "ChatUtil.php",
+		async: false,
+		data: {
+			receiver: receiver,
+			func: 'getMessages'
+		},
+		success: function(data) {
+			returnMsg = data; 
+		}
+	});
+	return jQuery.parseJSON(returnMsg);
+}
 
+/**
+ * Transformation from a message-json-object into html code.
+ */
+messageTransform = {
+		tag: 'div',
+		class: 'panel panel-default',
+		children: [
+		{
+			tag: 'div',
+			class: 'panel-heading',
+			html: '${sender} schrieb am ${sendtime}:'
+		},
+		{
+			tag: 'div',
+			class: 'panel-body',
+			html: '${message}'
+		}]
+};
+
+/**
+ * Load all the messages of the current user, and display them.
+ */
+function loadMessages(){
+	var messages = getAllMessages(sessionStorage.username);
+	trans = json2html.transform(messages, messageTransform);
+	$("#message").html(trans);
+}
+
+function executeQuery(query){
+	var response = "";
+	$.ajax({
+		type: "POST",
+		url: "DatabaseUtil.php",
+		data: {
+			func: "getJSONFromQuery",
+			query: query
+		},
+		async: false,
+		success: function(data){
+			response = data;
+		}
+	});
+	return jQuery.parseJSON(response);
+}
 
 /**
  * Remove ads from square7

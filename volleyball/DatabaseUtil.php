@@ -85,7 +85,7 @@ class DatabaseUtil{
  switch($function){
  	case "getJSONFromQuery":
  		$query = $_POST["query"];
- 		echo DatabaseUtil::subscribeForTraining($query);
+ 		echo DatabaseUtil::executeQueryAsJSON($query);
  		break;
  }
 
