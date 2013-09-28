@@ -63,6 +63,9 @@ class DatabaseUtil{
 		return json_encode($returnArray);
 	}
 
+	/**
+	 * @deprecated starts a php-session, if the session is not allready started. Is included in init.php now.
+	 */
 	public static function startSession(){
 		if(!isset($_SESSION)) {
 			session_start();

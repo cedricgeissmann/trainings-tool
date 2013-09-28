@@ -1,6 +1,5 @@
 <?php
 include 'DatabaseUtil.php';
-DatabaseUtil::startSession();
 
 class Training{
 

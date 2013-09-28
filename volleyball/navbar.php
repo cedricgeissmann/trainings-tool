@@ -5,17 +5,21 @@ body{
 }
 </style>
 
-<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="brand" href="#">TVMuttenz Volleyball Herren</a>
-			<div class="nav-collapse collapse">
-				<ul class="nav">
+<div id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navbar">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">TVMuttenz Volleyball Herren</a>
+	</div>
+			
+			
+			
+			<div class="nav-collapse collapse navbar-collapse">
+				<ul class="nav navbar-nav">
 					<?php
 						if($_SESSION["user"]["admin"]==1){
 							echo "<li class='nav' ><a href='admin-formular.php'>Admin</a></li>";
@@ -47,7 +51,5 @@ body{
 					Logged in as
 					<a href="profile.php" class="navbar-link"><?php echo $_SESSION["user"]["username"];?></a>
 				</p>
-			</div>
 		</div>
-	</div>
 </div>
