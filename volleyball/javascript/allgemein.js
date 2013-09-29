@@ -9,7 +9,8 @@ function subscribe(id){
 			trainingsID: id,
 			subscribeType: 1,
 			'function': "subscribeForTraining"
-		}
+		},
+		success: function(){location.reload();}
 	});
 }
 
@@ -25,7 +26,7 @@ function unsubscribe(id){
 			subscribeType: 0,
 			'function': "subscribeForTraining"
 		},
-		success: function(res){alert(res);}
+		success: function(){location.reload();}
 	});
 }
 
@@ -33,9 +34,16 @@ function defaultSubscribe(subscribeType, trainingsID){
 	send_ajax("subscribeType="+subscribeType+"&trainingsID="+trainingsID+"&function=defaultSubscribe", "ProfileUtil.php");
 }
 
-function removeTraining(arg){
-	document.getElementById("comment").innerHTML = send_ajax("id="+arg.name+"&type="+sessionStorage.type+"&function=removeTraining", "Training.php");
-	window.location.reload();
+function removeTraining(id){
+	$.ajax({
+		type: 'POST',
+		url: 'Training.php',
+		data: {
+			id: id,
+			'function': 'removeTraining'
+		},
+		success: function(){location.reload();}
+	});
 }
 
 function getSession(sessionDescriber, variableName){
@@ -51,7 +59,8 @@ function activate(username, active){
 			username: username,
 			active: active,
 			'function': 'activate'
-		}
+		},
+		success: function(){location.reload();}
 	});
 }
 
@@ -86,7 +95,8 @@ function deleteUser(username){
 		data: {
 			username: username,
 			'function': 'deleteUser'
-		}
+		},
+		success: function(){location.reload();}
 	});
 }
 
@@ -102,9 +112,9 @@ function subscribeFromAdmin(username, trainingsID){
 			subscribeType: '1',
 			trainingsID: trainingsID,
 			'function': 'subscribeForTrainingFromAdmin'
-		}
+		},
+		success: function(){location.reload();}
 	});
-	//TODO reload page
 }
 
 /**
@@ -119,9 +129,9 @@ function unsubscribeFromAdmin(username, trainingsID){
 			subscribeType: '0',
 			trainingsID: trainingsID,
 			'function': 'subscribeForTrainingFromAdmin'
-		}
+		},
+		success: function(){location.reload();}
 	});
-	//TODO reload page
 }
 
 /**
@@ -137,7 +147,7 @@ function removeFromTrainingFromAdmin(username, trainingsID){
 			'function': 'removeFromTrainingFromAdmin'
 		}
 	});
-	//TODO reload page
+	location.reload();
 }
 
 /**

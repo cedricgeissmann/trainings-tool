@@ -13,7 +13,7 @@ body{
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="#">TVMuttenz Volleyball Herren</a>
+		<a class="navbar-brand" href="main.php">TVMuttenz Volleyball Herren</a>
 	</div>
 			
 			
@@ -29,16 +29,7 @@ body{
 						}
 					?>
 					<li>
-						<a href='main.php' onclick="setType('training')">Training</a>
-					</li>
-					<li>
-						<a href='main.php' onclick="setType('game')">Spiele</a>
-					</li>
-					<li>
-						<a href='main.php' onclick="setType('tournament')">Turniere</a>
-					</li>
-					<li>
-						<a href='main.php' onclick="setType('beach')">Beach</a>
+						<a href='main.php'">Training</a>
 					</li>
 					<li>
 						<a href='chat.php'>Chat</a>
