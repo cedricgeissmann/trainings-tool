@@ -84,7 +84,7 @@ class DatabaseUtil{
 /**
  * Evaluate incoming requests.
  */
- $function = $_POST["func"];
+ $function = $_POST["function"];
  switch($function){
  	case "getJSONFromQuery":
  		$query = $_POST["query"];

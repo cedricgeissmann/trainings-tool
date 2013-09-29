@@ -55,12 +55,12 @@ include 'head.php';
 					<h2>Login</h2>
 					<div class="form-group">
 						<label for="loginName" class="col-sd-2 control-label">Benutzername</label>
-						<div class="col-sd-10">
+						<div class="col-sm-10">
 							<input name="username" class="form-control" id="loginName"
 								type="text">
 						</div>
 						<label for="loginPassword" class="col-sd-2 control-label">Passwort</label>
-						<div class="col-sd-10">
+						<div class="col-sm-10">
 							<input name="password" class="form-control" id="" passwort
 								type="password">
 						</div>

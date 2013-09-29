@@ -2,10 +2,6 @@
     include 'DatabaseUtil.php';
     DatabaseUtil::startSession();
 	
-    if(!isset($_POST['login'])){
-    	echo "Verbindungsfehler!";
-	}
-	
     $_username = $_POST["username"];
     $_password = md5($_POST["password"]);	
 	

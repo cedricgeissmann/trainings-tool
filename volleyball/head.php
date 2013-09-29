@@ -8,7 +8,8 @@
 <script type="text/javascript" src="js/bootstrap-formhelpers-phone.js"></script>
 <script type="text/javascript" src="js/bootstrap-switch.js"></script>
 <script type="text/javascript" src="js/jquery.ui.position.js"></script>
-<script type="text/javascript" src="js/jquery.contextMenu.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/json2html.js"></script>
 <script type="text/javascript" src="js/jquery.json2html.js"></script>
 <script type="text/javascript" src="javascript/allgemein.js"></script>

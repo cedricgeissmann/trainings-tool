@@ -1,79 +1,70 @@
 <?php
 include 'DatabaseUtil.php';
+DatabaseUtil::startSession();
 
 class Training{
-
-	private static function getSideNavbar($type){
-		$sideNavbar = "<div class='well sidebar-nav span3'>
-				<ul id='trainingsNavbar' class='nav nav-list'>
-				<li class='nav-header'>Trainings</li>";		//TODO insert type
-		$res = DatabaseUtil::executeQuery("SELECT * FROM `training` WHERE type='$type' AND date>='".date("Y-m-d")."' ORDER BY date ASC");
-		$sideNavbar .= self::addTrainingsNavbarEntry($res);
+	
+	public static $types = array(
+			'training' 		=> 'Trainings',
+			'game'			=> 'Spiele',
+			'beach'			=> 'Beach',
+			'tournament'	=> 'Tourniere'
+	);
+	
+	public static function getSideNavbar(){		
+		$res = DatabaseUtil::executeQuery("SELECT * FROM `training` WHERE date>='".date("Y-m-d")."' ORDER BY type DESC, date ASC");
+		$sideNavbar = "<ul id='trainingsNavbar' class='nav bs-sidenav nav-stacked'>";
+		$oldType = "";
+		while($row = mysql_fetch_assoc($res)){
+			if($oldType != $row["type"]){
+				$oldType = $row["type"];
+				$sideNavbar .= "<li class='nav-header'>".self::$types[$oldType]."</li>";		//TODO insert type
+			}
+			$sideNavbar .= self::addTrainingsNavbarEntry($row);
+		}
 		$sideNavbar .= "</ul></div>";
 		return $sideNavbar;
 	}
 
 
 	private static function getHeader($id, $id_date){
-		$header = "<div class='row-fluid'>";
-		$header .= "<h4 name='$id' class='span'>$id_date";
+		$header = "<div class='row'>";
+		$header .= "<h4 name='$id' class='col-xs-10'>$id_date</h4>";
 		if($_SESSION["user"]["admin"]==1){
-			$header .= "<div class='span2 pull-right'>";
-			$header .= "<button class='btn' onclick='removeTraining(this)' name='$id'>Entfernen</button>";
-			$header .= "</div>";
+			$header .= "<button class='btn btn-default col-xs-2' onclick='removeTraining(this)' name='$id'>Entfernen</button>";
 		}
-		$header .= "</h4>";
 		$header .= "</div>";
 		return $header;
 	}
 	
 	private static function getNotSubscribed($id){
-		$htmlString = "<div class='span6'>
-				<div class='container-fluid'>
-				<div class='span'>
-				<h3>Nicht gemeldet</h3>
-				</div>
-				<div class='container-fluid'>".
+		$htmlString = "<div class='col-sm-4'>
+				<h3>Nicht gemeldet</h3>".
 					self::getNotSubscribedPersons($id)
-					."</div>
-					</div>
-					</div>";
+					."</div>";
 		return $htmlString;
 	}
 
 	private static function getSubscribed($id){
-		$htmlString = "<div class='span6'>
-				<div class='container-fluid'>
-				<div class='span'>
-				<h3>Angemeldet</h3>
-				</div>
-				<div class='container-fluid'>".
+		$htmlString = "<div class='col-sm-4'>
+				<h3>Angemeldet</h3>".
 				self::getSubscribedPersons($id, 1)
-				."<button name='$id' class='btn' onclick='subscribe(this)'>Anmelden</button>
-				</div>
-				</div>
+				."<button class='btn btn-default' onclick='subscribe(\"$id\")'>Anmelden</button>
 				</div>";
 		return $htmlString;
 	}
 
 	private static function getUnsubscribed($id){
-		$htmlString = "<div class='span6'>
-				<div class='container-fluid'>
-				<div class='span'>
-				<h3>Abgemeldet</h3>
-				</div>
-				<div class='container-fluid'>".
+		$htmlString = "<div class='col-sm-4'>
+				<h3>Abgemeldet</h3>".
 				self::getSubscribedPersons($id, 0)
-				."<button name='$id' class='btn' onclick='unsubscribe(this)'>Abmelden</button>
-				</div>
-				</div>
+				."<button class='btn btn-default' onclick='unsubscribe(\"$id\")'>Abmelden</button>
 				</div>";
 		return $htmlString;
 	}
 	
 	private static function createAdminButton($user, $trainingsID){
-		$adminButton = "<div class='btn-group'>";
-		$adminButton .= "<button class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+		$adminButton .= "<button class='btn btn-default dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
 		$args = "'$user[username]', '$trainingsID'";
 		//TODO make switches: <li><div class='make-switch'><input type='checkbox' checked /></div></li>
 		$adminButton .= "<ul class='dropdown-menu'>
@@ -91,22 +82,21 @@ class Training{
                   <li><a data-toggle='modal' href='#modal$user[username]'>Passwort zurücksetzen</a></li>
                   <li><a href='#' onclick=\"deleteUser('$user[username]')\">Benutzer löschen</a></li>
                 </ul>";
-		$adminButton .= "</div>";
 		return $adminButton;
 	}
 
 	private static function getNotSubscribedPersons($trainingsID){
 		$resUsernames = DatabaseUtil::executeQuery("SELECT username, activate FROM  `user` AS a WHERE NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID =  '$trainingsID' AND a.username = b.username) AND a.activate='1'");
-		$notSubscribedList = "";
+		$subscribedList = "";
 		while($row = mysql_fetch_array($resUsernames)){
  			$res = DatabaseUtil::executeQuery("SELECT DISTINCT username FROM user WHERE activate='1'");
  			
 			$res = DatabaseUtil::executeQuery("SELECT * FROM `user`
 					WHERE username = '$row[username]'");
 	
-			while($user = mysql_fetch_array($res)){
-				$subscribedList .= "<div class='row'>";
-				$subscribedList .= "<p class='personInTraining span6'>$user[firstname] $user[name]</p>";
+			while($user = mysql_fetch_assoc($res)){
+				$subscribedList .="<div class='btn-group col-xs-12'>";
+				$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
 				if($_SESSION["user"]["admin"]){
 					$subscribedList .= self::createAdminButton($user, $trainingsID);
 				}
@@ -125,8 +115,8 @@ class Training{
 					WHERE username = '$row[username]'");
 				
 			while($user = mysql_fetch_array($res)){
-				$subscribedList .= "<div class='row'>";
-				$subscribedList .= "<p class='personInTraining span6'>$user[firstname] $user[name]</p>";
+				$subscribedList .="<div class='btn-group col-xs-12'>";
+				$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
 				if($_SESSION["user"]["admin"]){
 					$subscribedList .= self::createAdminButton($user, $trainingsID);
 				}
@@ -136,13 +126,11 @@ class Training{
 		return $subscribedList;
 	}
 	
-	private static function addTrainingsNavbarEntry($res){
+	private static function addTrainingsNavbarEntry($row){
 		$returnValue = "";
-		while($row = mysql_fetch_array($res)){
-			$id = $row['id'];
-			$date = date("l j. F Y",strtotime($row[date]));
-			$returnValue .= "<li><a href=#$id>$date</a></li>";
-		}
+		$id = $row['id'];
+		$date = date("l j. F Y",strtotime($row[date]));
+		$returnValue .= "<li><a href=#$id>$date</a></li>";
 		return $returnValue;
 	}
 
@@ -155,28 +143,32 @@ class Training{
 		}
 	}
 
-	public static function getTraining($type){
-		$returnValue = "<div class='container'>";
-		$returnValue .= "<div class='row-fluid'>";
-		$returnValue .= self::getSideNavbar($type);
-		$returnValue .= "<div class='span8'>";
-		$res = DatabaseUtil::executeQuery("SELECT * FROM `training` WHERE type='$type' AND date>='".date("Y-m-d")."' ORDER BY date ASC");
-		while($row = mysql_fetch_array($res)){
+	/**
+	 * 
+	 * @param unknown $type
+	 * @return string
+	 */
+	public static function getTraining(){
+		$returnValue = "";
+		$res = DatabaseUtil::executeQuery("SELECT * FROM `training` WHERE date>='".date("Y-m-d")."' ORDER BY type DESC, date ASC");
+		while($row = mysql_fetch_assoc($res)){
+			$returnValue .= "<div class='panel panel-default'>";
 			$id = $row['id'];
 			$date = date("l j. F Y",strtotime($row[date]));
 			$id_date = "$date $row[time_start] - $row[time_end] $row[location]";
-			$returnValue .= "<article id='$id' class='container-fluid well'>";
+			$returnValue .= "<div id='$id' class='panel-heading'>";
 			$returnValue .= self::getHeader($id, $id_date);
-			$returnValue .= "<div class='row-fluid'>";
+			$returnValue .= "</div>";
+			$returnValue .= "<div class='panel-body'>";
 			$returnValue .= self::getSubscribed($id);
 			$returnValue .= self::getUnsubscribed($id);
 			if($_SESSION["user"]["admin"]==1){
 				$returnValue .= self::getNotsubscribed($id);
 			}
 			$returnValue .= "</div>";
-			$returnValue .= "</article>";
+			$returnValue .= "</div>";
 		}
-		$returnValue .= "</div></div></div>";
+		$returnValue .= "</div>";
 		return $returnValue;
 	}
 
@@ -191,7 +183,7 @@ class Training{
 	}
 
 	public static function createNextTrainings(){
-		$nextWeeks=2;	//Wieviele Wochen im voraus ein training erzeugt werden soll.
+		$nextWeeks=4;	//Wieviele Wochen im voraus ein training erzeugt werden soll.
 		$res = DatabaseUtil::executeQuery("SELECT * FROM default_training");
 		while($row = mysql_fetch_array($res)){
 			for($k=0;$k<7*$nextWeeks;$k++){
@@ -247,11 +239,12 @@ switch($function){
 	case "subscribeForTraining":
 		$trainingsID = $_POST["trainingsID"];
 		$subscribeType = $_POST["subscribeType"];
+		var_dump($_SESSION);
 		Training::subscribeForTraining($_SESSION["user"]["username"], $subscribeType, $trainingsID);
 		break;
 	case "getTraining":
-		Training::createNextTrainings();
-		echo Training::getTraining($_POST["type"]);
+		Training::createNextTrainings();			//TODO outsource into a periodic function.
+		echo Training::getTraining();
 		break;
 	case "removeTraining":
 		$trainingsID = $_POST["id"];
