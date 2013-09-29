@@ -31,7 +31,15 @@ function unsubscribe(id){
 }
 
 function defaultSubscribe(subscribeType, trainingsID){
-	send_ajax("subscribeType="+subscribeType+"&trainingsID="+trainingsID+"&function=defaultSubscribe", "ProfileUtil.php");
+	$.ajax({
+		type: 'POST',
+		url: 'ProfileUtil.php',
+		data: {
+			subscribeType: subscribeType,
+			trainingsID: trainingsID,
+			'function': 'defaultSubscribe'
+		}
+	});
 }
 
 function removeTraining(id){
@@ -250,6 +258,94 @@ $(document).on('submit', 'form', function(e) {
 	$.cookie('teams', JSON.stringify(teams));
 });
 
+/**
+ * Admin can subscribe or unsubscribe a user for training by default.
+ * @param username id of the user.
+ * @param trainingsID id of the training used for default subscribe.
+ * @param subscribeType 1 for subscribe, 0 for unsubscribe.
+ */
+function defaultSubscribeForTrainingFromAdmin(username, trainingsID, subscribeType){
+	$.ajax({
+		type: 'POST',
+		url: 'ProfileUtil.php',
+		data: {
+			username: username,
+			trainingsID: trainingsID,
+			subscribeType: subscribeType,
+			'function': 'defaultSubscribeForTrainingFromAdmin'
+		}
+	});
+}
+
+passwordTransform = {
+		tag: 'div',
+		'class': 'modal fade',
+		id: 'pwModal',
+		tabindex: '-1',
+		children: [{
+			tag: 'div',
+			'class': 'modal-dialog',
+			children: [{
+				tag: 'div',
+				'class': 'modal-content',
+				children: [{
+					tag: 'div',
+					'class': 'modal-header',
+					children: [{
+						tag: 'button',
+						'class': 'close',
+						'data-dismiss': 'modal',
+						html: '&times'
+					},{
+						tag: 'h4',
+						'class': 'modal-title',
+						html: 'Passwort für ${firstname} ${name} zurücksetzen'
+					}]
+				},{
+					tag: 'div',
+					'class': 'modal-body',
+					html: 'TODO reset pw...'
+				},{
+					tag: 'div',
+					'class': 'modal-footer',
+					html: "<button type='button' class='btn btn-primary' onclick='resetPW(\"${username}\")'>Passwort zurücksetzen</button>"	//TODO create resetPW method
+				}]
+			}]
+		}]
+}
+
+/**
+ * Let the admin reset the users password.
+ * @param user the user whos password gets reset.
+ */
+function resetPassword(user){
+//	$.ajax({
+//		type: "POST",
+//		url: 'AdminUtil.php',
+//		async: false,
+//		data: {
+//			username: user,
+//			'function': 'resetPassword'
+//		},
+//		success: function(data){
+//			var res = json2html.transform(data, passwordTransform);
+//			$("body").add(res);
+//			$("#pwModal").modal('toggle');
+//		}
+//	});
+	var data = {
+			username: "cedy",
+			firstname: "Cedric",
+			name: "Geissmann"
+	};
+	var res = json2html.transform(data, passwordTransform);
+	$("#comment").html(res);
+	$("#pwModal").modal('toggle');
+}
+
+$('button').click(function(){
+	alert("it works");
+});
 
 /**
  * Remove ads from square7

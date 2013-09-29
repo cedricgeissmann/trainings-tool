@@ -21,12 +21,12 @@
 
 	<div class="container">
 	<div class="row">
-		<div class="col-sm-3 bs-sidebar affix" role="complementary">
+		<div class="col-sm-3 bs-sidebar" role="complementary">
 			<?php 
 				echo Training::getSideNavbar();
 			?>
 		</div>
-		<div class="col-sm-offset-2 col-sm-10" id="training">
+		<div class="col-sm-9" id="training">
 		<?php 
 			echo Training::getTraining();
 		?>		
@@ -55,7 +55,9 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div>
-	
+  
+  
+	<div id="removeNext"></div>
 <!-- </body> --></body>
 
 </html>

@@ -46,6 +46,10 @@ class AdminUtil{
 	public static function deleteUser($username){
 		DatabaseUtil::executeQuery("DELETE FROM `user` WHERE username='$username'");
 	}
+	
+	public static function resetPassword($username){
+		
+	}
 
 	
 }
@@ -72,6 +76,9 @@ switch($function){
 		break;
 	case "deleteUser":
 		AdminUtil::deleteUser($_POST["username"]);
+		break;
+	case "resetPassword":
+		AdminUtil::resetPassword($_POST["username"]);
 		break;
 }
 ?>

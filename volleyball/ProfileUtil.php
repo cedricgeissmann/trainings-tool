@@ -52,7 +52,7 @@ class ProfileUtil{
 	public static function defaultSubscribe($username, $subscribeType, $trainingsID){
 		$res = DatabaseUtil::executeQuery("SELECT * FROM `user_defaults` WHERE username='$username' AND trainingsID='$trainingsID'");
 		if(mysql_num_rows($res)>0){
-			DatabaseUtil::executeQuery("UPDATE `user_defaults` SET subscribe_type='$subscribeType' WHERE username='$username' AND trainingsID='$trainiingsID'");
+			DatabaseUtil::executeQuery("UPDATE `user_defaults` SET subscribe_type='$subscribeType' WHERE username='$username' AND trainingsID='$trainingsID'");
 		}else{
 			DatabaseUtil::executeQuery("INSERT INTO `user_defaults` (username, trainingsID, subscribe_type) VALUES ('$username', '$trainingsID', '$subscribeType')");
 		}
@@ -75,7 +75,11 @@ switch($function){
 		header ("Location: main.php");
 		break;
 	case "defaultSubscribe":
+		echo $_SESSION["user"]["username"];
 		ProfileUtil::defaultSubscribe($_SESSION["user"]["username"], $_POST["subscribeType"], $_POST["trainingsID"]);
+		break;
+	case "defaultSubscribeForTrainingFromAdmin":
+		ProfileUtil::defaultSubscribe($_POST["username"], $_POST["subscribeType"], $_POST["trainingsID"]);
 		break;
 	case "getSession":
 		echo $_SESSION[$_POST["sessionDescriber"]][$_POST["variableName"]];

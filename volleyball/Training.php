@@ -19,7 +19,7 @@ class Training {
 			}
 			$sideNavbar .= self::addTrainingsNavbarEntry ( $row );
 		}
-		$sideNavbar .= "</ul></div>";
+		$sideNavbar .= "</ul>";
 		return $sideNavbar;
 	}
 	private static function getHeader($id, $id_date) {
@@ -58,14 +58,24 @@ class Training {
 				</div>";
 		return $htmlString;
 	}
+	
+	private static function getTID($trainingsID){
+		$res = DatabaseUtil::executeQuery("SELECT trainingsID FROM training WHERE id='$trainingsID'");
+		$row = mysql_fetch_assoc($res);
+		return $row["trainingsID"];
+	}
+	
 	private static function createAdminButton($user, $trainingsID) {
 		$adminButton .= "<button class='btn btn-default dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
 		$args = "'$user[username]', '$trainingsID'";
+		$tid = self::getTID($trainingsID);
 		// TODO make switches: <li><div class='make-switch'><input type='checkbox' checked /></div></li>
 		$adminButton .= "<ul class='dropdown-menu'>
                   <li><a href='#' onclick=\"subscribeFromAdmin($args)\">Spieler anmelden</a></li>
                   <li><a href='#' onclick=\"unsubscribeFromAdmin($args)\">Spieler abmelden</a></li>
                   <li><a href='#' onclick=\"removeFromTrainingFromAdmin($args)\">Spieler entfernen</a></li>
+                  <li><a href='#' onclick=\"defaultSubscribeForTrainingFromAdmin('$user[username]', '$tid', '1')\">Spieler immer anmelden</a></li>
+                  <li><a href='#' onclick=\"defaultSubscribeForTrainingFromAdmin('$user[username]', '$tid', '0')\">Spieler immer abmelden</a></li>
                   <li class='divider'></li>
                   <li><a href='#' onclick=\"activate('$user[username]', '1')\">Freischalten</a></li>
                   <li><a href='#' onclick=\"activate('$user[username]', '0')\">Sperren</a></li>
@@ -74,7 +84,7 @@ class Training {
                   <li><a href='#' onclick=\"changeAdmin('$user[username]', '1')\">Adminrechte gewähren</a></li>
                   <li><a href='#' onclick=\"changeAdmin('$user[username]', '0')\">Adminrechte verwerfen</a></li>
                   <li class='divider'></li>
-                  <li><a data-toggle='modal' href='#modal$user[username]'>Passwort zurücksetzen</a></li>
+                  <li><a href='#' onclick=\"resetPassword('$user[username]')\">Passwort zurücksetzen</a></li>
                   <li><a href='#' onclick=\"deleteUser('$user[username]')\">Benutzer löschen</a></li>
                 </ul>";
 		return $adminButton;
@@ -140,6 +150,8 @@ class Training {
 	 * @return string
 	 */
 	public static function getTraining() {
+		self::createNextTrainings();
+		self::defaultSignUp();
 		$returnValue = "";
 		$res = DatabaseUtil::executeQuery ( "SELECT * FROM `training` WHERE date>='" . date ( "Y-m-d" ) . "' ORDER BY type DESC, date ASC" );
 		while ( $row = mysql_fetch_assoc ( $res ) ) {
@@ -159,9 +171,11 @@ class Training {
 			$returnValue .= "</div>";
 			$returnValue .= "</div>";
 		}
-		$returnValue .= "</div>";
+// 		$returnValue .= "</div>";
 		return $returnValue;
 	}
+	
+	
 	public static function getNextTraining($type) {
 		$returnValue = "";
 		$res = DatabaseUtil::executeQuery ( "SELECT * FROM `training` WHERE type='$type' AND date>='" . date ( "Y-m-d" ) . "' ORDER BY date ASC" );
