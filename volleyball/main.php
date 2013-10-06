@@ -21,7 +21,7 @@
 
 	<div class="container">
 	<div class="row">
-		<div class="col-sm-3 bs-sidebar" role="complementary">
+		<div class="col-sm-3 bs-sidebar" role="complementary" id="trainingsNav">
 			<?php 
 				echo Training::getSideNavbar();
 			?>

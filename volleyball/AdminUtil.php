@@ -1,6 +1,7 @@
 <?php
 
 include_once 'DatabaseUtil.php';
+DatabaseUtil::startSession();
 
 class AdminUtil{
 	
@@ -13,9 +14,6 @@ class AdminUtil{
 	}
 	
 	public static function subscribeForTrainingFromAdmin($username, $subscribeType, $trainingsID){
-// 		$username = DatabaseUtil::executeQuery("SELECT username FROM user WHERE firstname='$firstname' AND name='$lastname'");
-// 		$username = mysql_fetch_array($username);
-// 		$username = $username["username"];
 		$allreadySubscribed = DatabaseUtil::executeQuery("SELECT * FROM subscribed_for_training WHERE username = '$username' AND trainingsID = '$trainingsID'");
 		if(mysql_num_rows($allreadySubscribed)>0){
 			DatabaseUtil::executeQuery("UPDATE subscribed_for_training SET subscribe_type = '$subscribeType' WHERE trainingsID='$trainingsID' AND username='$username'");
@@ -25,9 +23,6 @@ class AdminUtil{
 	}
 	
 	public static function removeFromTrainingFromAdmin($username, $trainingsID){
-// 		$username = DatabaseUtil::executeQuery("SELECT username FROM user WHERE firstname='$firstname' AND name='$lastname'");
-// 		$username = mysql_fetch_array($username);
-// 		$username = $username["username"];
 		DatabaseUtil::executeQuery("DELETE FROM `subscribed_for_training` WHERE username = '$username' AND trainingsID = '$trainingsID'");
 	}
 	
@@ -36,11 +31,13 @@ class AdminUtil{
 	}
 	
 	public static function changeTrainer($username, $active){
-		DatabaseUtil::executeQuery("UPDATE `user` SET trainer='$active' WHERE username='$username'");
+		$admin = $_SESSION['user']['username'];
+		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.trainer='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM team_member WHERE team_member.username='$admin')");
 	}
 	
 	public static function changeAdmin($username, $active){
-		DatabaseUtil::executeQuery("UPDATE `user` SET admin='$active' WHERE username='$username'");
+		$admin = $_SESSION['user']['username'];
+		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.admin='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM team_member WHERE team_member.username='$admin')");
 	}
 	
 	public static function deleteUser($username){

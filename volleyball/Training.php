@@ -29,6 +29,7 @@ class Training {
 		$sideNavbar .= "</ul>";
 		return $sideNavbar;
 	}
+	
 	private static function getHeader($id, $id_date) {
 		$header = "<div class='row'>";
 		$header .= "<h4 name='$id' class='col-xs-10'>$id_date</h4>";
@@ -239,6 +240,9 @@ switch ($function) {
 		$subscribeType = $_POST ["subscribeType"];
 		var_dump ( $_SESSION );
 		Training::subscribeForTraining ( $_SESSION ["user"] ["username"], $subscribeType, $trainingsID );
+		break;
+	case "getSideNavbar":
+		echo Training::getSideNavbar();
 		break;
 	case "getTraining" :
 		Training::createNextTrainings (); // TODO outsource into a periodic function.

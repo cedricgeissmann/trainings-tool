@@ -1,3 +1,10 @@
+function getTraining(){
+	scroll = $(window).scrollTop();
+	loadTraining();
+	loadSideNavbar();
+	$(window).scrollTop(scroll);
+}
+
 /**
  * subscribe the event triggering user for this training.
  */
@@ -10,7 +17,7 @@ function subscribe(id){
 			subscribeType: 1,
 			'function': "subscribeForTraining"
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -26,7 +33,7 @@ function unsubscribe(id){
 			subscribeType: 0,
 			'function': "subscribeForTraining"
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -50,7 +57,7 @@ function removeTraining(id){
 			id: id,
 			'function': 'removeTraining'
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -68,7 +75,7 @@ function activate(username, active){
 			active: active,
 			'function': 'activate'
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -104,7 +111,7 @@ function deleteUser(username){
 			username: username,
 			'function': 'deleteUser'
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -121,7 +128,7 @@ function subscribeFromAdmin(username, trainingsID){
 			trainingsID: trainingsID,
 			'function': 'subscribeForTrainingFromAdmin'
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -138,7 +145,7 @@ function unsubscribeFromAdmin(username, trainingsID){
 			trainingsID: trainingsID,
 			'function': 'subscribeForTrainingFromAdmin'
 		},
-		success: function(){location.reload();}
+		success: function(){getTraining();}
 	});
 }
 
@@ -153,9 +160,9 @@ function removeFromTrainingFromAdmin(username, trainingsID){
 			username: username,
 			trainingsID: trainingsID,
 			'function': 'removeFromTrainingFromAdmin'
-		}
+		},
+		success: function(){getTraining();}
 	});
-	location.reload();
 }
 
 /**
@@ -173,6 +180,10 @@ function sendMessage(sender){
 			  receiver: sessionStorage.receiver,
 			  message: $("#msg").val(),
 			  'function': 'messageSent'
+		  },
+		  async: false,
+		  success: function(){
+			  loadMessages(sessionStorage.receiver);
 		  }
 	});
 }
@@ -430,6 +441,38 @@ $('button').click(function(){
 //    })
 //
 //})
+
+/**
+ * calls the getTraining-function from php.
+ */
+function loadTraining(){
+	$.ajax({
+		type: 'POST',
+		url: 'Training.php',
+		data: {
+			'function': 'getTraining'
+		},
+		success: function(data){
+			$("#training").html(data);
+		}
+	});
+}
+
+/**
+ * calls the getSideNavbar-function from php.
+ */
+function loadSideNavbar(){
+	$.ajax({
+		type: 'POST',
+		url: 'Training.php',
+		data: {
+			'function': 'getSideNavbar'
+		},
+		success: function(data){
+			$("#trainingsNav").html(data);
+		}
+	});
+}
 
 /**
  * Remove ads from square7
