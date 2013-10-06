@@ -47,8 +47,8 @@ class AdminUtil{
 		DatabaseUtil::executeQuery("DELETE FROM `user` WHERE username='$username'");
 	}
 	
-	public static function resetPassword($username){
-		
+	public static function resetPassword($username, $password){
+		DatabaseUtil::executeQuery("UPDATE user SET password='$password' WHERE username='$username'");
 	}
 
 	
@@ -78,7 +78,7 @@ switch($function){
 		AdminUtil::deleteUser($_POST["username"]);
 		break;
 	case "resetPassword":
-		AdminUtil::resetPassword($_POST["username"]);
+		AdminUtil::resetPassword($_POST["username"], $_POST["password"]);
 		break;
 }
 ?>

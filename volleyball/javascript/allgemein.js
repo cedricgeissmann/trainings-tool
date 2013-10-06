@@ -164,14 +164,14 @@ function removeFromTrainingFromAdmin(username, trainingsID){
  * @param receiver is the receiver for this message.
  * @param message is the content of the message.
  */
-function sendMessage(sender, receiver, message){
+function sendMessage(sender){
 	$.ajax({
 		  type: "POST",
 		  url: "ChatUtil.php",
 		  data: {
-			  sender: sender,
-			  receiver: receiver,
-			  message: message,
+			  sender: sessionStorage.username,
+			  receiver: sessionStorage.receiver,
+			  message: $("#msg").val(),
 			  'function': 'messageSent'
 		  }
 	});
@@ -188,8 +188,30 @@ function getAllMessages(receiver){
 		url: "ChatUtil.php",
 		async: false,
 		data: {
-			receiver: receiver,
+			'receiver': receiver,
 			'function': 'getMessages'
+		},
+		success: function(data) {
+			returnMsg = data; 
+		}
+	});
+	return jQuery.parseJSON(returnMsg);
+}
+
+/**
+ * Get all messages for one receiver from one sender.
+ * @returns an array of json-objects which encode the messages.
+ */
+function getAllMessagesFromSender(sender, receiver){
+	var returnMsg = ""; 
+	$.ajax({
+		type: "POST",
+		url: "ChatUtil.php",
+		async: false,
+		data: {
+			'sender': sender,
+			'receiver': receiver,
+			'function': 'getMessagesFromSender'
 		},
 		success: function(data) {
 			returnMsg = data; 
@@ -204,13 +226,11 @@ function getAllMessages(receiver){
 messageTransform = {
 		tag: 'div',
 		class: 'panel panel-default',
-		children: [
-		{
+		children: [{
 			tag: 'div',
 			class: 'panel-heading',
 			html: '${sender} schrieb am ${sendtime}:'
-		},
-		{
+		},{
 			tag: 'div',
 			class: 'panel-body',
 			html: '${message}'
@@ -220,8 +240,9 @@ messageTransform = {
 /**
  * Load all the messages of the current user, and display them.
  */
-function loadMessages(){
-	var messages = getAllMessages(sessionStorage.username);
+function loadMessages(sender){
+	sessionStorage.receiver = sender;
+	var messages = getAllMessagesFromSender(sender, sessionStorage.username);
 	trans = json2html.transform(messages, messageTransform);
 	$("#message").html(trans);
 }
@@ -304,7 +325,29 @@ passwordTransform = {
 				},{
 					tag: 'div',
 					'class': 'modal-body',
-					html: 'TODO reset pw...'
+					children: [{
+						tag: 'div',
+						'class': 'input-group',
+						children: [{
+							tag: 'label',
+							'for': 'password',
+							html: 'Neues Passwort: '
+						},{
+							tag: 'input',
+							id: 'password',
+							type: 'password',
+							'class': 'form-control'
+						},{
+							tag: 'label',
+							'for': 'passwordConfirm',
+							html: 'Passwort bestätigen: '
+						},{
+							tag: 'input',
+							id: 'passwordConfirm',
+							type: 'password',
+							'class': 'form-control'
+						}]
+					}]
 				},{
 					tag: 'div',
 					'class': 'modal-footer',
@@ -312,6 +355,27 @@ passwordTransform = {
 				}]
 			}]
 		}]
+}
+
+/**
+ * Sends the reset password command to the server.
+ */
+function resetPW(username){
+	if($("#password").val()===$("#passwordConfirm").val()){
+		$.ajax({
+			type: 'POST',
+			url: 'AdminUtil.php',
+			async: false,
+			data: {
+				'password': MD5($("#password").val()),
+				'username': username,
+				'function': 'resetPassword'
+			}
+		});
+		$("#pwModal").modal('toggle');
+	}else{
+		console.log($("#password").val()+" "+$("#passwordConfirm").val());
+	}
 }
 
 /**
@@ -346,6 +410,26 @@ function resetPassword(user){
 $('button').click(function(){
 	alert("it works");
 });
+
+
+//$(function(){
+//
+//    $('.nav li a').on('click', function(e){
+//
+////        e.preventDefault(); // prevent link click if necessary?
+//
+//        var $thisLi = $(this).parent('li');
+//        var $ul = $thisLi.parent('ul');
+//
+//        if (!$thisLi.hasClass('active'))
+//        {
+//            $ul.find('li.active').removeClass('active');
+//                $thisLi.addClass('active');
+//        }
+//
+//    })
+//
+//})
 
 /**
  * Remove ads from square7

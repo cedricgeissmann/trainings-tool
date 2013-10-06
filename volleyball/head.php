@@ -12,6 +12,7 @@
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/json2html.js"></script>
 <script type="text/javascript" src="js/jquery.json2html.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
 <script type="text/javascript" src="javascript/allgemein.js"></script>
 
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css">

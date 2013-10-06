@@ -5,9 +5,9 @@
     $_username = $_POST["username"];
     $_password = md5($_POST["password"]);	
 	
-    $res = DatabaseUtil::executeQuery("SELECT * FROM user WHERE
-                    username='$_username' AND
-                    password='$_password'");
+    $res = DatabaseUtil::executeQuery("SELECT * FROM user INNER JOIN role ON (user.username = role.username) WHERE
+                    user.username='$_username' AND
+                    user.password='$_password'");
 		$array = mysql_fetch_array($res);
         if (mysql_num_rows($res) > 0){
 			if($array["activate"]==1){
