@@ -29,7 +29,7 @@ class ChatUtil{
 
 	public static function getTeamMembers($username){
 		$resultString = "";
-		$res = DatabaseUtil::executeQuery("SELECT DISTINCT user.username, firstname, name FROM user LEFT JOIN team_member ON (user.username = team_member.username) WHERE tid IN (SELECT tid FROM team_member WHERE username = '$username')");
+		$res = DatabaseUtil::executeQuery("SELECT DISTINCT user.username, firstname, name FROM user LEFT JOIN team_member ON (user.username = team_member.username) WHERE tid IN (SELECT tid FROM team_member WHERE username = '$username') AND activate='1'");
 		while($row = mysql_fetch_assoc($res)){
 			$resultString .= "<li><a href='#' class='teamMember' onclick=\"loadMessages('$row[username]')\">$row[firstname] $row[name]</a></li>";
 		}

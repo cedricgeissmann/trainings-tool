@@ -11,7 +11,7 @@ class Training {
 	
 	
 	private static function selectTrainings($username){
-		return DatabaseUtil::executeQuery ( "SELECT * FROM `training` INNER JOIN (team_member) ON (training.teamID = team_member.tid) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY type DESC, date ASC" );
+		return DatabaseUtil::executeQuery ( "SELECT * FROM `training` INNER JOIN (team_member) ON (training.teamID = team_member.tid) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY type DESC, date ASC, time_start ASC" );
 	}
 	
 	public static function getSideNavbar() {
@@ -97,11 +97,9 @@ class Training {
 		return $adminButton;
 	}
 	private static function getNotSubscribedPersons($trainingsID) {
-		$resUsernames = DatabaseUtil::executeQuery ( "SELECT username, activate FROM  `user` AS a WHERE NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID =  '$trainingsID' AND a.username = b.username) AND a.activate='1'" );
+		$resUsernames = DatabaseUtil::executeQuery ( "SELECT * FROM user INNER JOIN (team_member) ON (team_member.username=user.username) INNER JOIN (training) ON (training.teamID=tid) WHERE training.id = '$trainingsID' AND activate='1' AND NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID =  '$trainingsID' AND user.username = b.username)" );
 		$subscribedList = "";
 		while ( $row = mysql_fetch_array ( $resUsernames ) ) {
-			$res = DatabaseUtil::executeQuery ( "SELECT DISTINCT username FROM user WHERE activate='1'" );
-			
 			$res = DatabaseUtil::executeQuery ( "SELECT * FROM `user`
 					WHERE username = '$row[username]'" );
 			
