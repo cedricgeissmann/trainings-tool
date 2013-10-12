@@ -9,9 +9,19 @@ class Training {
 			'tournament' => 'Tourniere' 
 	);
 	
+	public static $dayTranslate = array (
+			'Monday' => 'Montag',
+			'Tuesday' => 'Dienstag',
+			'Wedensday' => 'Mittwoch',
+			'Thursday' => 'Donnesrtag',
+			'Friday' => 'Freitag',
+			'Saturday' => 'Samstag',
+			'Sunday' => 'Sonntag'
+	);
+	
 	
 	private static function selectTrainings($username){
-		return DatabaseUtil::executeQuery ( "SELECT * FROM `training` INNER JOIN (team_member) ON (training.teamID = team_member.tid) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY type DESC, date ASC, time_start ASC" );
+		return DatabaseUtil::executeQuery ( "SELECT * FROM `training` INNER JOIN (role) ON (training.teamID = role.tid) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY type DESC, date ASC, time_start ASC" );
 	}
 	
 	public static function getSideNavbar() {
@@ -98,19 +108,24 @@ class Training {
 		return $adminButton;
 	}
 	private static function getNotSubscribedPersons($trainingsID) {
-		$resUsernames = DatabaseUtil::executeQuery ( "SELECT * FROM user INNER JOIN (team_member) ON (team_member.username=user.username) INNER JOIN (training) ON (training.teamID=tid) WHERE training.id = '$trainingsID' AND activate='1' AND NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID =  '$trainingsID' AND user.username = b.username)" );
+		$resUsernames = DatabaseUtil::executeQuery ( "SELECT DISTINCT * FROM user INNER JOIN (role) ON (role.username=user.username) INNER JOIN (training) ON (training.teamID=tid) WHERE training.id = '$trainingsID' AND activate='1' AND NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID ='$trainingsID' AND user.username = b.username)" );
 		$subscribedList = "";
 		while ( $row = mysql_fetch_array ( $resUsernames ) ) {
 			$res = DatabaseUtil::executeQuery ( "SELECT * FROM `user`
 					WHERE username = '$row[username]'" );
 			
 			while ( $user = mysql_fetch_assoc ( $res ) ) {
-				$subscribedList .= "<div class='btn-group col-xs-12'>";
-				$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
+				
+				
 				if ($_SESSION ["user"] ["admin"]) {
+					$subscribedList .= "<div class='btn-group col-xs-12'>";
+					$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
 					$subscribedList .= self::createAdminButton ( $user, $trainingsID );
+					$subscribedList .= "</div>";
+				}else{
+					$subscribedList .= "<p col-xs-10'>$user[firstname] $user[name]</p>";
 				}
-				$subscribedList .= "</div>";
+				
 			}
 		}
 		return $subscribedList;
@@ -124,12 +139,14 @@ class Training {
 					WHERE username = '$row[username]' AND activate='1'" );
 			
 			while ( $user = mysql_fetch_assoc ( $res ) ) {
-				$subscribedList .= "<div class='btn-group col-xs-12'>";
-				$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
-				if ($_SESSION ["user"] ["admin"]) {
+			if ($_SESSION ["user"] ["admin"]) {
+					$subscribedList .= "<div class='btn-group col-xs-12'>";
+					$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
 					$subscribedList .= self::createAdminButton ( $user, $trainingsID );
+					$subscribedList .= "</div>";
+				}else{
+					$subscribedList .= "<p col-xs-10'>$user[firstname] $user[name]</p>";
 				}
-				$subscribedList .= "</div>";
 			}
 		}
 		return $subscribedList;
@@ -164,8 +181,10 @@ class Training {
 		while ( $row = mysql_fetch_assoc ( $res ) ) {
 			$returnValue .= "<div class='panel panel-default'>";
 			$id = $row ['id'];
-			$date = date ( "l j. F Y", strtotime ( $row [date] ) );
-			$id_date = "$date $row[time_start] - $row[time_end] $row[location]";
+			$day = date("l", strtotime($row[date]));
+			$day = self::$dayTranslate[$day];
+			$date = date ( "j. F Y", strtotime ( $row [date] ) );
+			$id_date = "$day $date $row[time_start] - $row[time_end] $row[location]";
 			$returnValue .= "<div id='$id' class='panel-heading'>";
 			$returnValue .= self::getHeader ( $id, $id_date );
 			$returnValue .= "</div>";
@@ -173,7 +192,7 @@ class Training {
 			$returnValue .= self::getSubscribed ( $id );
 			$returnValue .= self::getUnsubscribed ( $id );
 			if ($_SESSION ["user"] ["admin"] == 1) {
-				$returnValue .= self::getNotsubscribed ( $id );
+				$returnValue .= self::getNotSubscribed ( $id );
 			}
 			$returnValue .= "</div>";
 			$returnValue .= "</div>";

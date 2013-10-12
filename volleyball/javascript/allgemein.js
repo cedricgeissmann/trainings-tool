@@ -214,6 +214,8 @@ function getAllMessages(receiver){
  * @returns an array of json-objects which encode the messages.
  */
 function getAllMessagesFromSender(sender, receiver){
+	console.log('sender: '+sender);
+	console.log('receiver: '+receiver);
 	var returnMsg = ""; 
 	$.ajax({
 		type: "POST",
@@ -394,33 +396,29 @@ function resetPW(username){
  * @param user the user whos password gets reset.
  */
 function resetPassword(user){
-//	$.ajax({
-//		type: "POST",
-//		url: 'AdminUtil.php',
-//		async: false,
-//		data: {
-//			username: user,
-//			'function': 'resetPassword'
-//		},
-//		success: function(data){
-//			var res = json2html.transform(data, passwordTransform);
-//			$("body").add(res);
-//			$("#pwModal").modal('toggle');
-//		}
-//	});
-	var data = {
-			username: "cedy",
-			firstname: "Cedric",
-			name: "Geissmann"
-	};
-	var res = json2html.transform(data, passwordTransform);
-	$("#comment").html(res);
-	$("#pwModal").modal('toggle');
+	$.ajax({
+		type: "POST",
+		url: 'AdminUtil.php',
+		async: false,
+		data: {
+			username: user,
+			'function': 'getUser'
+		},
+		success: function(data){
+			var res = json2html.transform(data, passwordTransform);
+			$("#comment").html(res);
+			$("#pwModal").modal('toggle');
+		}
+	});
+//	var data = {
+//			username: "cedy",
+//			firstname: "Cedric",
+//			name: "Geissmann"
+//	};
+//	var res = json2html.transform(data, passwordTransform);
+//	$("#comment").html(res);
+//	$("#pwModal").modal('toggle');
 }
-
-$('button').click(function(){
-	alert("it works");
-});
 
 
 //$(function(){

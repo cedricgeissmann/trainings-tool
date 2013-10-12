@@ -39,3 +39,6 @@
 	header ("Location: $URL"); 
     
 ?>
+<script type="text/javascript">
+sessionStorage.username = <?php echo $_username?>;
+</script>

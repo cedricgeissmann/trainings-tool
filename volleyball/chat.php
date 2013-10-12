@@ -20,6 +20,7 @@
 		include "navbar.php";
 	?>
 	
+	<div class="container">
 	<div class="row">
 		<div class="sidebar-nav col-sm-3">
 			<ul class="nav-list nav">
@@ -36,6 +37,7 @@
 			<div id="message"></div> 
 		</div>
 	</div>	
+	</div>
 	
 	<div id="response"></div>
 	<div id="comment"></div>

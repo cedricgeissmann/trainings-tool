@@ -32,12 +32,12 @@ class AdminUtil{
 	
 	public static function changeTrainer($username, $active){
 		$admin = $_SESSION['user']['username'];
-		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.trainer='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM team_member WHERE team_member.username='$admin')");
+		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.trainer='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM role WHERE role.username='$admin')");
 	}
 	
 	public static function changeAdmin($username, $active){
 		$admin = $_SESSION['user']['username'];
-		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.admin='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM team_member WHERE team_member.username='$admin')");
+		DatabaseUtil::executeQuery("UPDATE `user` INNER JOIN role ON (user.username=role.username) SET role.admin='$active' WHERE user.username='$username' AND role.tid IN (SELECT tid FROM role WHERE role.username='$admin')");
 	}
 	
 	public static function deleteUser($username){
@@ -47,7 +47,15 @@ class AdminUtil{
 	public static function resetPassword($username, $password){
 		DatabaseUtil::executeQuery("UPDATE user SET password='$password' WHERE username='$username'");
 	}
-
+	
+	/**
+	 * Returns a json-array for a spesific user.
+	 * @param string $username this spesific user.
+	 * @return json a json array with username, firstname and name.
+	 */
+	public static function getUser($username){
+		return DatabaseUtil::executeQueryAsJSON("SELECT username, firstname, name FROM `user` WHERE username='$username'");
+	}
 	
 }
 
@@ -76,6 +84,9 @@ switch($function){
 		break;
 	case "resetPassword":
 		AdminUtil::resetPassword($_POST["username"], $_POST["password"]);
+		break;
+	case "getUser":
+		echo AdminUtil::getUser($_POST["username"]);
 		break;
 }
 ?>

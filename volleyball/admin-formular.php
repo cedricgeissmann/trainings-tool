@@ -1,7 +1,6 @@
 <?php
-	include_once 'check_login.php';
-	include_once 'DatabaseUtil.php';
-	include_once 'AdminUtil.php';
+	include 'init.php';
+	include 'AdminUtil.php';
 	
 	if($_SESSION["user"]["admin"]!=1){
 		header("Location: main.php");
@@ -10,24 +9,9 @@
 
 <html>
 	<head>
-		<title>TVMuttenz Volleyball</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width"> 
-	
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-        
-		<script type="text/javascript" src="js/bootstrap.js"></script>
-		<script type="text/javascript" src="js/bootstrap-formhelpers-phone.js"></script>
-		<script type="text/javascript" src="js/jquery.ui.position.js"></script>
-		<script type="text/javascript" src="js/jquery.contextMenu.js"></script>
-		<script type="text/javascript" src="js/jquery.flot.min.js"></script>
-		<script type="text/javascript" src="js/jquery.flot.time.js"></script>
-		<script type="text/javascript" src="javascript/allgemein.js"></script>
-		
-		<link href="css/default.css" rel="stylesheet" type="text/css">
-		<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-		<link href="css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
-		<link href="css/jquery.contextMenu.css" rel="stylesheet" type="text/css">
+		<?php 
+			include "head.php";
+		?>
 		
 </head>
 	<body>
@@ -35,12 +19,36 @@
 			include "navbar.php";
 		?>
 		
+		<div class="container">
+			<div class="row">
+				
 		<?php 
-			$res = DatabaseUtil::executeQuery("SELECT * FROM `user`");
-			while($row = mysql_fetch_array($res)){
+			$username = $_SESSION['user']['username'];
+			$res = DatabaseUtil::executeQuery("SELECT * FROM `teams` INNER JOIN role ON (role.tid=teams.id) WHERE role.username='$username'");
+			while($row = mysql_fetch_assoc($res)){
+				?>
+				<div class="panel panel-default col-sm-6">
+					<div class="panel panel-heading">
+						<?php echo $row["name"]?>
+					</div>
+					<div class="panel panel-body">
+						<?php 
+							$resMembers = DatabaseUtil::executeQuery("SELECT DISTINCT * FROM `user` INNER JOIN role ON (role.username=user.username) WHERE tid=$row[tid]");
+							while($rowMember = mysql_fetch_assoc($resMembers)){
+								echo "<p>$rowMember[firstname] $rowMember[name]</p>";
+							}
+						?>
+					</div>
+				</div>
+				<?php 
+			}
 
 		?>
-		<div class="container-fluid well">
+		</div>
+		</div>
+		
+		<!-- 
+		<div class="panel panel-body">
 		<h4> <?php echo $row[firstname] . " " . $row[name] ?> </h4>
 			<p id="<?php echo $row[username] ?>" class="person"><?php echo $row[username] ?></p>
 			<div class="btn-group pull-right">
@@ -59,8 +67,9 @@
 			<div  class="plot" id="flot-<?php echo $row[username]?>"></div>
 
 	</div>
+	 -->
 		<?php 
-			}
+// 			}
 		?>
 		
 		<div id="comment"></div>
