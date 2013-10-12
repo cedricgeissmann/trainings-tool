@@ -33,12 +33,9 @@
 	
     if ($_SESSION["login"] == 0 && isset($_SESSION["login"])){
         exit;
-    }
+    }    
     
     $URL="main.php";
 	header ("Location: $URL"); 
     
 ?>
-<script type="text/javascript">
-sessionStorage.username = <?php echo $_username?>;
-</script>

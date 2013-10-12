@@ -282,14 +282,15 @@ function executeQuery(query){
  */
 $(document).on('submit', 'form', function(e) {
 	var username = $("#loginName").val();
-	var user = executeQuery("SELECT username, firstname, name FROM user WHERE username='"+username+"'");
-	user = user.pop();
-	$.cookie('user', JSON.stringify(user));
+	sessionStorage.username = username;
+//	var user = executeQuery("SELECT username, firstname, name FROM user WHERE username='"+username+"'");
+//	user = user.pop();
+//	$.cookie('user', JSON.stringify(user));
 //	$.cookie('username', user.username);
 //	$.cookie('firstname', user.firstname);
 //	$.cookie('name', user.name);
-	var teams = executeQuery("SELECT tid FROM is_in_team WHERE username='"+username+"'");
-	$.cookie('teams', JSON.stringify(teams));
+//	var teams = executeQuery("SELECT tid FROM is_in_team WHERE username='"+username+"'");
+//	$.cookie('teams', JSON.stringify(teams));
 });
 
 /**
