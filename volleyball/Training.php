@@ -264,7 +264,7 @@ switch ($function) {
 		echo Training::getSideNavbar();
 		break;
 	case "getTraining" :
-		Training::createNextTrainings (); // TODO outsource into a periodic function.
+		Training::createNextTrainings (); // TODO out-source into a periodic function.
 		echo Training::getTraining ();
 		break;
 	case "removeTraining" :
