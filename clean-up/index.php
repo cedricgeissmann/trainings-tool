@@ -6,6 +6,7 @@
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="javascript/index.js"></script>
 	
 	<!-- Importing a font from google api -->
 	<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -18,7 +19,7 @@
 	<div class="container centered">
 		<img class="hidden-xs centered" src="img/tvm-logo.svg"></img>
 			<div class="col-xs-4 centered">
-				<form id="login" action="login.php" method="POST">
+				<form id="login">
 					<div class="form-group">
 					<h2 class="form-center">Login</h2>
 					</div>
