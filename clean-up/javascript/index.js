@@ -16,11 +16,13 @@ function login(){
 		type: "POST",
 		url: "server/login.php",
 		data: $("#login").serialize(),
+		async: false,
 		success: function(data){
 			var response = jQuery.parseJSON(data);
 			console.log(response);
 			if(response.exists && response.active){
 				console.log("You can loggin now.");		//TODO forward to main.php
+				window.location = "main.php";
 			}else if(response.exists){
 				console.log("You are not yet activeted.");	//TODO show error
 			}else{

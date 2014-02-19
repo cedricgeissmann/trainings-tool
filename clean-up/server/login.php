@@ -12,45 +12,21 @@
                     user.username='$username' AND
                     user.password='$password'");
 					
-	$array = array();
-        
+	$array = array();  
 	checkUserExists($res);
-	
 	checkUserIsActive($res, $array);
 
+	$_SESSION["user"] = $array;
+	$_SESSION["login"] = 1;
+	DatabaseUtil::executeQuery("UPDATE user SET last=NOW() WHERE username='$username'");
 	echo "{\"exists\": true, \"active\": true}";
 	
-		
-/*        if (mysql_num_rows($res) > 0){
-			if($array["activate"]==1){
-				$_SESSION["login"] = 1;
-				$_SESSION["user"] = $array;
-				DatabaseUtil::executeQuery("UPDATE user SET last=NOW()
-                     WHERE username='$_SESSION[user][username]'");
-			}else{
-				echo "Sie wurden noch nicht freigeschalten.";
-				exit;
-			}
-		}else{
-			$res = DatabaseUtil::executeQuery("SELECT * FROM user WHERE
-											username='$_username'");
-			if(mysql_num_rows($res) > 0){
-				echo "Falsches Passwort.";	//TODO Error Dialog.
-				exit;
-			}
-			
-            include("login-formular.html");
-            exit;
-        }
 	
-    if ($_SESSION["login"] == 0 && isset($_SESSION["login"])){
-        exit;
-    }    
-    
-    $URL="main.php";
-	header ("Location: $URL"); 
-*/
-	
+	/**
+	 * Checks if an user is set active.
+	 * Returns true when the user is active.
+	 * Exits the script and notifies the client that the user exists but is not activated.
+	 */
 	function checkUserIsActive(&$res, &$array){
 		$array = mysql_fetch_assoc($res);
 		if($array["activate"]==1){
@@ -61,7 +37,9 @@
 	}
     
 	/**
-	 * Checks if a user exists.
+	 * Checks if an user exists.
+	 * Returns true when the user is active.
+	 * Exits the script and notifies the client that the user does not exist.
 	 */
     function checkUserExists(&$res){
     	if(mysql_num_rows($res) > 0){
