@@ -33,7 +33,7 @@
 							<button id="loginButton" type="submit" class="btn btn-primary">Anmelden</button>
 					</div>
 					<div class="form-center">
-							ode <a id="signupLink" href="signup.php">Einschreiben</button>
+							oder <a id="signupLink" href="signup.php">Einschreiben</button>
 					</div>
 				</form>
 			</div>
