@@ -107,25 +107,25 @@ class Training {
                 </ul>";
 		return $adminButton;
 	}
+
 	private static function getNotSubscribedPersons($trainingsID) {
 		$resUsernames = DatabaseUtil::executeQuery ( "SELECT DISTINCT * FROM user INNER JOIN (role) ON (role.username=user.username) INNER JOIN (training) ON (training.teamID=tid) WHERE training.id = '$trainingsID' AND activate='1' AND NOT EXISTS (SELECT username FROM subscribed_for_training AS b WHERE trainingsID ='$trainingsID' AND user.username = b.username)" );
 		$subscribedList = "";
+		$first = true;
 		while ( $row = mysql_fetch_array ( $resUsernames ) ) {
 			$res = DatabaseUtil::executeQuery ( "SELECT * FROM `user`
 					WHERE username = '$row[username]'" );
-			
 			while ( $user = mysql_fetch_assoc ( $res ) ) {
-				
-				
-				if ($_SESSION ["user"] ["admin"]) {
-					$subscribedList .= "<div class='btn-group col-xs-12'>";
-					$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
-					$subscribedList .= self::createAdminButton ( $user, $trainingsID );
-					$subscribedList .= "</div>";
+				if($first){
+					$subscribedList .= "{";
+					$first = false;
 				}else{
-					$subscribedList .= "<p col-xs-10'>$user[firstname] $user[name]</p>";
+					$subscribedList .= ",{";
 				}
-				
+				$subscribedList .= "\"username\": \"$user[username]\",";
+				$subscribedList .= "\"name\": \"$user[name]\",";
+				$subscribedList .= "\"firstname\": \"$user[firstname]\"";
+				$subscribedList .= "}";
 			}
 		}
 		return $subscribedList;
@@ -134,19 +134,22 @@ class Training {
 		$resUsernames = DatabaseUtil::executeQuery ( "SELECT DISTINCT username FROM `subscribed_for_training`
 				WHERE trainingsID = '$trainingsID' AND subscribe_type='$subscribed'" );
 		$subscribedList = "";
+		$first = true;
 		while ( $row = mysql_fetch_assoc ( $resUsernames ) ) {
 			$res = DatabaseUtil::executeQuery ( "SELECT * FROM `user`
 					WHERE username = '$row[username]' AND activate='1'" );
 			
 			while ( $user = mysql_fetch_assoc ( $res ) ) {
-			if ($_SESSION ["user"] ["admin"]) {
-					$subscribedList .= "<div class='btn-group col-xs-12'>";
-					$subscribedList .= "<button class='btn btn-default col-xs-10'>$user[firstname] $user[name]</button>";
-					$subscribedList .= self::createAdminButton ( $user, $trainingsID );
-					$subscribedList .= "</div>";
+			if($first){
+					$subscribedList .= "{";
+					$first = false;
 				}else{
-					$subscribedList .= "<p col-xs-10'>$user[firstname] $user[name]</p>";
+					$subscribedList .= ",{";
 				}
+				$subscribedList .= "\"username\": \"$user[username]\",";
+				$subscribedList .= "\"name\": \"$user[name]\",";
+				$subscribedList .= "\"firstname\": \"$user[firstname]\"";
+				$subscribedList .= "}";
 			}
 		}
 		return $subscribedList;
@@ -183,15 +186,20 @@ class Training {
 			}else{
 				$first = false;
 			}
+			$id = $row["id"];
 			$returnValue .= "{";
- 			$returnValue .= "\"id\": $row[id],";
+ 			$returnValue .= "\"id\": $id,";
  			$day = date("l", strtotime($row[date]));
  			$day = self::$dayTranslate[$day];
 			$returnValue .= "\"day\": \"$day\",";
 			$date = date ( "j. F Y", strtotime($row[date]));
 			$returnValue .= "\"date\": \"$date\",";
-			$returnValue .= "\"time\": \"$row[time_start] - $row[time_end]\"";
-// 			$returnValue .= "\"team\": \"$row[team]\";
+			$returnValue .= "\"time\": \"$row[time_start] - $row[time_end]\",";
+ 			$returnValue .= "\"team\": \"$row[team]\",";
+			$returnValue .= "\"admin\": \"$row[admin]\",";
+			$returnValue .= "\"subscribed\": [" . self::getSubscribedPersons($id, 1) . "],";
+			$returnValue .= "\"unsubscribed\": [" . self::getSubscribedPersons($id, 0) . "],";
+			$returnValue .= "\"notSubscribed\": [" . self::getNotSubscribedPersons($id) . "]";
 			$returnValue .= "}";
 		}
  		$returnValue .= "]";

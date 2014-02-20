@@ -31,3 +31,10 @@ function login(){
 		}
 	});
 }
+
+/**
+ * Remove ads from square7
+ */
+$('document').ready(function(){
+	$('#removeNext').nextAll().remove();
+});

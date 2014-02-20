@@ -30,26 +30,38 @@ include "navbar.php";
 
 
 <div class="container">
-		<div class="row">
-<!-- 			<div class="col-sm-3"> -->
-<!-- 				<div class="bs-sidebar"> -->
-<!-- 					<ul class="nav bs-sidenav"> -->
-<!-- 						<li class="active"><a href="#">Herren</a></li> -->
-<!-- 						<li><a href="#">U19</a></li> -->
-<!-- 						<li><a href="#">U17-1</a></li> -->
-<!-- 						<li><a href="#">U17-2</a></li> -->
-<!-- 					</ul> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-			<div id="content" class="col-sm-12">
-				
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-sm-3 hidden-xs">
+            <div class="bs-sidebar" id="navbar-side">
+                <ul class="nav bs-sidenav">
+                    <li><a href="#" name="all">Alle</a>
+
+                    </li>
+                    <li><a href="#" name="herren">Herren</a>
+
+                    </li>
+                    <li><a href="#" name="u19">U19</a>
+
+                    </li>
+                    <li><a href="#" name="u17-1">U17-1</a>
+
+                    </li>
+                    <li><a href="#" name="u17-2">U17-2</a>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="content" class="col-sm-9">
+            
+        </div>
+    </div>
+</div>
 
 
 
-
+<div id="removeNext"></div>
+<!-- </body> -->
 
 </body>
 </html>

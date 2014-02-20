@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Starts the Session if not already running.
+ */
+if(!isset($_SESSION)){
+	session_start();
+}
 
 
 class DatabaseUtil{ 
@@ -90,6 +95,9 @@ class DatabaseUtil{
  		$query = $_POST["query"];
  		echo DatabaseUtil::executeQueryAsJSON($query);
  		break;
+	case "getSessionsUsername":
+		echo $_SESSION["user"]["username"];
+		break;
  }
 
 ?>
