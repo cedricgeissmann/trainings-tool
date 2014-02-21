@@ -59,6 +59,11 @@ class AdminUtil{
 	
 	
 	public static function defaultSubscribeFromAdmin($username, $subscribeType, $trainingsID){
+		//Get default-trainingsID from trainingsID...
+		$res = DatabaseUtil::executeQuery("SELECT trainingsID FROM training WHERE id='$trainingsID'");
+		while($row = mysql_fetch_assoc($res)){
+			$trainingsID = $row["trainingsID"];
+		}
 		$res = DatabaseUtil::executeQuery("SELECT * FROM `user_defaults` WHERE username='$username' AND trainingsID='$trainingsID'");
 		if(mysql_num_rows($res)>0){
 			DatabaseUtil::executeQuery("UPDATE `user_defaults` SET subscribe_type='$subscribeType' WHERE username='$username' AND trainingsID='$trainingsID'");
