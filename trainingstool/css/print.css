@@ -1,0 +1,24 @@
+@charset "utf-8";
+@media print {
+    body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+    font: 12pt "Varela Round";
+}
+    
+    select{
+    	/*display: none !important;*/
+        border:0px !important;
+        outline:0px !important;
+    }
+    
+    #navbar-head{
+        display: none !important;
+    }
+    
+    .input-group{
+        border: none;
+    }
+    
+}
