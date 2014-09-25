@@ -153,6 +153,8 @@
     </div>
   </div>
 
+  <div id="trainingNotificationAnchor"></div>
+
   <!-- begin templates -->
   
   <script id="panelTemplate" type="x-tmpl-mustache">
@@ -384,6 +386,35 @@
             {{/teams}}
           </ul>
           {{/teams.length}}
+        </script>
+        
+        <script id="trainingNotificationModalTemplate" type="x-tmpl-mustache">
+          {{#id}}
+          <div class="modal fade in" id="createTrainingNotificationModal" style="display: none;" aria-hidden="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title">Benachrichtigung erfassen</h4>
+                </div>
+                <div class="modal-body" id="createTrainingNotificationModalContent">
+                  <div class="form-group col-xs-12">
+                    <label for="trainingNotificationTitleField">Titel:</label>
+                    <input class="form-control" id="trainingNotificationTitleField">
+                  </div>
+                  <div class="form-group col-xs-12">
+                    <label for="trainingNotificationContentField">Beschreibung:</label>
+                    <textarea class="form-control" id="trainingNotificationContentField"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                  <button type="button" id="sendTrainingNotification" data-id="{{id}}" class="btn btn-primary" data-dismiss="modal">Erfassen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/id}}
         </script>
   
   <!-- end templates -->

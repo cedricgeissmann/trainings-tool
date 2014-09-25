@@ -105,13 +105,14 @@ function resizeActiveTextArea(textarea){
 }
 
 /**
+ * TODO: delete this function, is still in use in admin...
  * Generets a json representation of an entry for the dropdown menu. This can only be called in a json2html transform.
  * @param name the display name of the dropdown entry
  * @param functionName specifies the class of the dropdown entry, to add an eventhandler later.
  * @return the JSON object after inserting the display name and class name.
  */
 function generateDropdownTransformEntry(name, functionName){
-    transform = {
+    var transform = {
         "tag": "li",
         "children": [{
             "tag": "a",

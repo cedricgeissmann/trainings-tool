@@ -1,117 +1,3 @@
-var traningsID = 0;
-
-signUpPlayer = generateDropdownTransformEntry("Spieler anmelden", "signUpPlayer");
-
-signUpPlayerAlways = generateDropdownTransformEntry("Spieler immer anmelden", "signUpPlayerAlways");
-
-signOutPlayer = generateDropdownTransformEntry("Spieler abmelden", "signOutPlayer");
-
-signOutPlayerAlways = generateDropdownTransformEntry("Spieler immer abmelden", "signOutPlayerAlways");
-
-removePlayer = generateDropdownTransformEntry("Spieler entfernen", "removePlayer");
-
-resetPassword = generateDropdownTransformEntry("Passwort zurücksetzen", "resetPassword");
-
-deletePlayer = generateDropdownTransformEntry("Spieler löschen", "deletePlayer");
-
-activatePlayer = generateDropdownTransformEntry("Freischalten", "activate");
-
-deactivatePlayer = generateDropdownTransformEntry("Sperren", "deactivate");
-
-grantTrainer = generateDropdownTransformEntry("Trainerrechte gewähren", "grantTrainer");
-
-denyTrainer = generateDropdownTransformEntry("Trainerrechte verwerfen", "denyTrainer");
-
-grantAdmin = generateDropdownTransformEntry("Adminrechte gewähren", "grantAdmin");
-
-denyAdmin = generateDropdownTransformEntry("Adminrechte verwerfen", "denyAdmin");
-
-editPlayer = generateDropdownTransformEntry("Spieler bearbeiten", "editPlayer");
-
-var personTransformAdmin = {
-	"tag": "div",
-	"class": "btn-group playerDropdownButton",
-	"children": [{
-		"tag": "a",
-		"html": "${firstname} ${name}",
-		"name": "${username}",
-		"href": "#",
-		"class": "dropdown-toggle",
-		"data-toggle": "dropdown",
-		"children": [{
-			"tag": "span"
-		}, {
-			"tag": "b",
-			"class": "caret"
-		}]
-	}, {
-		"tag": "ul",
-		"class": "dropdown-menu",
-		"children": [{
-			"tag": "li",
-			"children": [
-				signUpPlayer,
-				signOutPlayer,
-				removePlayer,
-				signUpPlayerAlways,
-				signOutPlayerAlways,
-				divider,
-				activatePlayer,
-				deactivatePlayer,
-				grantTrainer,
-				denyTrainer,
-				grantAdmin,
-				denyAdmin,
-				divider,
-				resetPassword,
-				deletePlayer,
-				editPlayer
-			]
-		}]
-	}]
-};
-
-
-var tmpTransformation = {
-	"tag": "ul",
-	"class": "navbar-stacked",
-	"children": [{
-		"tag": "li",
-		"children": [{
-			"tag": "a",
-			"class": "removeTraining",
-			"href": "#!",
-			"name": "${id}",
-			"data-id": "${id}",
-			"html": "Training löschen"
-		}]
-	}, {
-		"tag": "li",
-		"html": function() {
-			return createTrainingsPlanEntry(this.id, this.type);
-		}
-	}, {
-		"tag": "li",
-		"children": [{
-			"tag": "a",
-			"class": "addTrainingNotification",
-			"href": "#!",
-			"data-id": "${id}",
-			"html": "Benachrichtigung hinzufügen"
-		}]
-	}, {
-		"tag": "li",
-		"children": [{
-			"tag": "a",
-			"class": "changeEvent",
-			"href": "#!",
-			"data-id": "${id}",
-			"html": "Ereigniss bearbeiten"
-		}]
-	}]
-};
-
-
 /**
  * Gets the selected team, and shows only contet of this team.
  * @param elem the element that triggers the event and holds the data for which team should be displayed.
@@ -499,14 +385,17 @@ function sendTrainingNotificationHandler(elem) {
  */
 function addTrainingNotificationHandler(element) {
 	var trainingsID = element.data("id");
-	var data = [{
+	var data = {
 		"id": trainingsID
-	}];
-	var res = json2html.transform(data, createTrainingNotificationTransform);
+	};
+	//var res = json2html.transform(data, createTrainingNotificationTransform);
+	var template = $("#trainingNotificationModalTemplate").html();
+	var res = Mustache.render(template, data);
 	if ($("#createTrainingNotificationModal").size() > 0) {
 		$("#createTrainingNotificationModal").remove();
 	}
-	$(res).insertBefore("#removeNext");
+	//$(res).insertBefore("#removeNext");
+	$("#trainingNotificationAnchor").html(res);
 	$("#createTrainingNotificationModal").modal("toggle");
 	$("#sendTrainingNotification").on("click", function() {
 		sendTrainingNotificationHandler(this);
