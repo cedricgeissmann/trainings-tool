@@ -1,0 +1,22 @@
+/**
+ * 	Is used to center elements vertically on login screen.
+ */
+.centered{
+	float: none !important;
+	margin: 0 auto;
+}
+
+/**
+ * 	Using another font from google api.
+ */
+body{
+	font-family: 'Varela Round';
+}
+
+/**
+ * 	this is for centering elements in a form.
+ */
+.form-center {
+    margin: 10px auto;
+    text-align: center;
+}
