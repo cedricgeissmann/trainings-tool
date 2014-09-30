@@ -9,6 +9,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/jasny-bootstrap.min.js"></script>
 
 
 
@@ -23,7 +24,11 @@
   <script type="text/javascript" src="js/json2html.js"></script>
   <script type="text/javascript" src="js/md5.js"></script>
   <script type="text/javascript" src="js/jquery.cookie.js"></script>
-
+  <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
+  <script type="text/javascript" src="js/jPushMenu.js"></script>
+  
+  <!-- loading calendars -->
+  <script type="text/javascript" src="calendars/defaultCalendar.js"></script>
 
   <!-- loading the transformations needed by json2html -->
   <script type="text/javascript" src="transformation/mainTransforms/mainPanelTransform.js"></script>
@@ -57,8 +62,10 @@
 
   <link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/jasny-bootstrap.min.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css" />
   <link rel='stylesheet' href='css/fullcalendar.css' />
+  <link href="css/jPushMenu.css" rel="stylesheet" type="text/css">
   <link href="css/tvm-volleyball.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -66,10 +73,10 @@
   <?php include "navbar.php"; ?>
 
 
-  <div class="container">
+  <div class="container" id="main">
     <!--class="container"-->
     <div class="row row-fluid">
-      <div class="col-sm-3 hidden-xs" id="navbar-side">
+      <div class="navmenu navmenu-default navmenu-fixed-left offcanvas" id="navbar-side">
         <div class="bs-sidebar">
           <ul class="nav bs-sidenav" id="teamFilter">
             <li class="dropdown-header">
@@ -87,13 +94,23 @@
           </ul>
         </div>
       </div>
-      <div id="content" class="col-sm-9 onlyContentScroll">
+      <div id="content" class="col-sm-12 onlyContentScroll">
         
       </div>
       <!--<div id="infoPanel" class="col-sm-2 hidden-xs" style="height: 500px;"></div>-->
       <div id="comment"></div>
     </div>
   </div>
+  
+  <!-- begin calendar -->
+  <div class="container">
+    <div class="row">
+      <div id="calendar" class="calendar"></div>
+                
+      <div id="comment"></div>
+    </div>
+  </div>
+  <!-- end calendar -->
 
   <div class="modal fade" id="modalNewGame" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -416,6 +433,201 @@
           </div>
           {{/id}}
         </script>
+  
+        <!-- TODO: this is not in use at the moment. Use this template instead of changing the allready given. -->
+        <script id="modalNewGameTemplate" type="x-tmpl-mustache">
+          <div class="modal fade in" id="modalNewGame" tabindex="-1" aria-hidden="false" style="display: none;">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 id="createNewEventTitle" class="modal-title">Neues Ereignis erstellen</h4>
+                </div>
+                <div class="modal-body" id="modalContent">
+                  <form class="row" id="newEvent">
+                    <div class="form-group col-xs-12">
+                      <label for="typeField">Art des Ereignisses:</label>
+                      <select id="typeField" name="typeField" class="form-control">
+                        <option value="Training">Training</option>
+                        <option value="Spiel">Spiel</option>
+                        <option value="Turnier">Turnier</option>
+                        <option value="Beach">Beach</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <label for="dateField">Datum:</label>
+                      <input type="text" id="dateField" name="dateField" class="form-control datepicker">
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <label for="locationField">Ort:</label>
+                      <input type="text" id="locationField" name="locationField" class="form-control">
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <label for="meetingPointField">Treffpunkt:</label>
+                      <input type="text" id="meetingPointField" name="meetingPointField" class="form-control">
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <label for="enemyField">Gegner:</label>
+                      <input type="text" id="enemyField" name="enemyField" class="form-control">
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <label for="teamField">Team:</label>
+                      <select id="teamField" name="teamField" class="form-control">
+                        {{!
+                        <option value="1">TV Muttenz Herren</option>
+                        <option value="2">TV Muttenz U19</option>
+                        <option value="3">TV Muttenz U17</option>
+                        <option value="4">TV Muttenz Damen 4</option>
+                        }}
+                      </select>
+                    </div>
+                    <div class="form-group col-xs-6">
+                      <label for="startTimeField">Von:</label>
+                      <input type="time" id="startTimeField" name="startTimeField" class="form-control" value="12:00">
+                    </div>
+                    <div class="form-group col-xs-6">
+                      <label for="endTimeField">bis:</label>
+                      <input type="time" id="endTimeField" name="endTimeField" class="form-control" value="14:00">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <button id="createNewEventButton" type="submit" class="btn btn-primary" data-dismiss="modal">Erstellen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </script>
+        
+        <!-- begin profile -->
+        
+        <script id="profileTemplate" type="x-tmpl-mustache">
+          {{#profileData}}
+          <div class="container swipePages" id="profile">
+            <div class="row">
+              <div id="notificationArea"></div>
+              <div id="content">
+                <form role="form" id="profileForm">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Angaben zur Person</div>
+                    <div class="panel-body">
+                      {{#adminData.length}}
+                      <div class="form-group">
+                        <label for="usernameField">Benutzername:</label>
+                        <select id="userSelection" name="userSelection" class="form-control">
+                          {{#teamMembers}}
+                          <option value="{{username}}">{{firstname}} {{name}}</option>
+                          {{/teamMembers}}
+                        </select>
+                      </div>
+                      {{/adminData.length}}
+                      {{^adminData.length}}
+                      <div class="form-group">
+                        <label for="usernameField">Benutzername:</label>
+                        <input type="text" id="usernameField" name="usernameField" class="form-control" value="{{username}}" disabled>
+                      </div>
+                      {{/adminData.length}}
+                      <div class="form-group">
+                        <label for="firstnameField">Vorname:</label>
+                        <input type="text" id="firstnameField" name="firstnameField" class="form-control" value="{{firstname}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="nameField">Nachname:</label>
+                        <input type="text" id="nameField" name="nameField" class="form-control" value="{{name}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="dateField">Geburtsdatum:</label>
+                        <input type="text" id="dateField" name="dateField" class="form-control datepicker" value="{{birthdate}}" placeholder="yyyy-mm-dd">
+                      </div>
+                      <div class="form-group">
+                        <label for="mailField">E-Mail:</label>
+                        <input type="email" id="mailField" name="mailField" class="form-control" value="{{mail}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="phoneField">Telefon:</label>
+                        <input type="text" id="phoneField" name="phoneField" class="form-control bfh-phone" value="{{phone}}" data-format="+41 dd ddd dd dd" placeholder="+41 7x xxx xx xx">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Adresse</div>
+                    <div class="panel-body">
+                      <div class="form-group col-xs-9">
+                        <label for="streetnameField">Strasse:</label>
+                        <input type="text" id="streetnameField" name="streetnameField" class="form-control" value="{{street}}">
+                      </div>
+                      <div class="form-group col-xs-3">
+                        <label for="streetNumberField">Nummer:</label>
+                        <input type="text" id="streetNumberField" name="streetNumberField" class="form-control" value="{{street_number}}">
+                      </div>
+                      <div class="form-group col-xs-4">
+                        <label for="zipField">PLZ:</label>
+                        <input type="text" id="zipField" name="zipField" class="form-control" value="{{zip}}">
+                      </div>
+                      <div class="form-group col-xs-8">
+                        <label for="cityField">Stadt:</label>
+                        <input type="text" id="cityField" name="cityField" class="form-control" value="{{city}}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading" id="changePasswordPanel">Passwort ändern</div>
+                    <div class="panel-body" id="oldPasswordForm">
+                      <div class="form-group" id="oldPasswordGroup">
+                        <label for="oldPasswordField" id="oldPasswordLabel">Altes Passwort:</label>
+                        <input type="password" id="oldPasswordField" name="oldPasswordField" class="form-control">
+                      </div>
+                      <div class="form-group" id="newPasswordForm">
+                        <label for="newPasswordField" id="newPasswordLabel">Neues Passwort:</label>
+                        <input type="password" id="newPasswordField" name="newPasswordField" class="form-control">
+                      </div>
+                      <div class="form-group" id="newPasswordConfirmForm">
+                        <label for="newPasswordConfirmField" id="newPasswordConfirmLabel">Neues Passwort bestätigen:</label>
+                        <input type="password" id="newPasswordConfirmField" name="newPasswordConfirmField" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default" id="teamSelectionPanel">
+                    <div class="panel-heading">Team</div>
+                    <div class="panel-body" id="teamSelectPanel">
+                      <div class="form-group" id="teamSelectGroup">
+                        <label for="teamSelector">Team:</label>
+                        <select multiple="" id="teamSelector" name="teamSelector[]" class="form-control">
+                          {{!TODO}}
+                          <option value="0">Default</option>
+                          <option value="1">TV Muttenz Herren</option>
+                          <option value="2">TV Muttenz U19</option>
+                          <option value="3">TV Muttenz U17</option>
+                          <option value="4">TV Muttenz Damen 4</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit">Absenden</button>
+                </form>
+              </div>
+              <div id="comment"></div>
+            </div>
+          </div>
+          {{/profileData}}
+        </script>
+        
+        <!-- end profile -->
+        
+        <!-- begin calendar -->
+        <script id="calendarTemplate" type="x-tmpl-mustache">
+          <div class="container">
+            <div class="row">
+              <div id="calendar" class="calendar"></div>
+                
+              <div id="comment"></div>
+            </div>
+          </div>
+        </script>
+        <!-- end calendar -->
+  
   
   <!-- end templates -->
 

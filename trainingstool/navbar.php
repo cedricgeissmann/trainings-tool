@@ -18,7 +18,7 @@
 				<a href="chat.php">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
 				
             </li>
-            <li id="nav-profile"><a href="profile.php">Profil</a>
+            <li id="nav-profile"><a href="#!">Profil</a>
 
             </li>
             <li id="nav-trainer" class="visibleTrainer"><a href="trainer.php">Trainer</a>
@@ -31,7 +31,7 @@
 				<a href="attendance_check.php">Anwesenheitskontrolle</a>
 			</li>
 			<li id="nav-calendar">
-				<a href="calendar.php">Kalender</a>
+				<a href="#!">Kalender</a>
 			</li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

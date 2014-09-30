@@ -455,9 +455,13 @@ var exerciseTitleData = getExerciseTitles();
  */
 function preparePrint() {
 	var body = $("body").html();
+	$("body").css("cssText", "margin-top: 0px !important");
+	$("#content").css("padding-top",  "0px");
 	$("#calendar").hide();
 	$("#trainingPlanList").show();
 	$(".btn").hide();
+	$(".btn-group").hide();
+	$(".navbar").hide();
 
 	$("#printButton").hide();
 	$(".addExercise").hide();

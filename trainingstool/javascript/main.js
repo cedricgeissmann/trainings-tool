@@ -474,7 +474,7 @@ function updateModalNewGame(trainingData) {
 function loadChangeEventHandler(element) {
 	var id = element.data("id");
 	loadTrainingByIDWithCallback(id, function(data) {
-		console.log(data);
+		//console.log(data);
 		updateModalNewGame(data);
 	});
 }
@@ -524,8 +524,8 @@ function loadPanelData(){
  * @param data a JSON object that contains the data of all trainings.
  */
 function renderPanel(data){
-	var transform = $("#panelTemplate").html();
-	var res = Mustache.render(transform, data);
+	var template = $("#panelTemplate").html();
+	var res = Mustache.render(template, data);
 	$("#content").html(res);
 	//Call here functions that have to be executed after the training panels are rendered.
 	addTrainingPanelHandlers();
@@ -667,6 +667,13 @@ function renderTeamList(teamListData){
 }
 
 /**
+ * The team filter menu is an off-canvas element. Toggle the menu to access it.
+ */
+function showTeamFilterMenu(){
+	$(".offcanvas").offcanvas("toggle");
+}
+
+/**
  * When document is loaded, call these functions.
  */
 $("document").ready(function() {
@@ -675,12 +682,69 @@ $("document").ready(function() {
 	resizeArea("content");
 	loadTeamListData();		//TODO: Load teamlist when needed
 	//HERE
+	addHandlerToElements("#nav-profile", "click", function(){loadProfileData(renderProfileData);});
+	addHandlerToElements("#nav-calendar", "click", function(){renderCalendar();});
+	addRightSwipeHandler("#main", showTeamFilterMenu);
 });
 
 
 
 /*----------------------------------------------------------------------------------------------------*/
 //TODO
+
+/**
+ * Call this function to display the calendar.
+ */
+function renderCalendar(){
+	$("#calendar").fullCalendar(defaultCalendar);
+	$('#main').toggle("slide");
+}
+
+/**
+ * Renders the JSON-object, that contains the profile data, to a valid html element, and adds is to the page.
+ * @param data the JSON-object that holds the profile data.
+ */
+ function renderProfileData(data){
+ 	var template = $("#profileTemplate").html();
+ 	var res = Mustache.render(template, data);
+ 	$("body").append(res);
+ 	$('#main').toggle("slide");
+ }
+
+/**
+ * Gets the profile data for e specific user from the server as JSON-object.
+ * @param renderDataCallback the callback function that is used to render the data after receiving.
+ */
+function loadProfileData(renderDataCallback){
+	var username = "cedy";//getSessionsUsername();		//TODO: get the username of the accessed user. If no one is defined, take the session user as default.
+	$.ajax({
+		"type": "POST",
+		"url": "server/ProfileUtil.php",
+		"data": {
+			"username": username,
+			"function": "getUserProfile"
+		},
+		"dataType": "json",
+		"success": function(data){
+			console.log(data);		//TODO replace with callback function
+			renderDataCallback(data);
+		}
+	});
+}
+
+
+/**
+ * Adds a right swipe handler to a specific element. When swipe is detected, execute the callback function.
+ * @param selector the selector which identifies the elements to which the handler is added.
+ * @param callback the callback function that is executed when the swipe is detected.
+ */
+function addRightSwipeHandler(selector, callback){
+	$(selector).swipe({
+  		swipeRight:function(event, direction, distance, duration, fingerCount) {
+  			callback();
+  		}
+	});
+}
 
 /**
  * TODO: Outsource in function.

@@ -96,7 +96,18 @@ class ProfileUtil{
 		}
 		$admin = AdminUtil::getAdmin($_SESSION["user"]["username"]);
 		$teamList = DatabaseUtil::executeQueryAsJSON("SELECT * FROM `role` WHERE username='$username'");
-		return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList }";
+		$teamMembers = self::getTeamMembersByUser($username);
+		return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList , \"teamMembers\": $teamMembers}";
+	}
+	
+	/**
+	 * Get a list of all users who are in the team specified with the specified user.
+	 * @param String $username the name of the user whos members are accessed.
+	 * @returns JSON-Array of all users that share a team with the user.
+	 */
+	public static function getTeamMembersByUser($username){
+		$res = DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT user.username AS username, user.firstname AS firstname, user.name AS name FROM `role` INNER JOIN (user, teams) ON (user.username=role.username AND role.tid=teams.id) WHERE teams.id IN (SELECT role.tid FROM role WHERE username='$username')");
+		return $res;
 	}
 	
 	/**
