@@ -736,6 +736,10 @@ function setActiveTab(id){
  	var res = Mustache.render(template, data);
  	$("#profile").html(res);
  	selectUser();
+ 	addHandlerToElements("#userSelection", "change", function(){
+ 		storeItemToCache("profileUser", $(this).val(), 10);
+ 		loadProfileData(renderProfileData);
+ 	});
  	//$('#main').toggle("slide");
  }
 
@@ -754,11 +758,17 @@ function selectUser(){
  * @param renderDataCallback the callback function that is used to render the data after receiving.
  */
 function loadProfileData(renderDataCallback){
-	var username = getItemFromCache("profileUser").data;
-	console.log(username);
+	var username = getItemFromCache("profileUser");
 	if(username==null){
-		username = "cedy";
+		getSessionsUsername(loadProfileDataCallback, renderDataCallback);
+	}else{
+		username = username.data;
+		loadProfileDataCallback(username, renderDataCallback);
 	}
+	
+}
+
+function loadProfileDataCallback(username, renderDataCallback){
 	$.ajax({
 		"type": "POST",
 		"url": "server/ProfileUtil.php",
