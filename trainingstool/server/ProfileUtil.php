@@ -95,9 +95,10 @@ class ProfileUtil{
 			$res = DatabaseUtil::executeQueryAsJSON("SELECT * FROM `user` WHERE username='$username'");
 		}
 		$admin = AdminUtil::getAdmin($_SESSION["user"]["username"]);
-		$teamList = DatabaseUtil::executeQueryAsJSON("SELECT * FROM `role` WHERE username='$username'");
+		$teamList = DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT teams.id AS tid, teams.name AS name FROM `teams` WHERE teams.id NOT IN (SELECT tid FROM role WHERE username='$username')");
+		$teamListMember = DatabaseUtil::executeQueryAsJSON("SELECT * FROM `teams` inner JOIN (role) ON (role.tid=teams.id) WHERE role.username='$username'");
 		$teamMembers = self::getTeamMembersByUser($username);
-		return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList , \"teamMembers\": $teamMembers}";
+		return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList, \"teamListMember\":$teamListMember , \"teamMembers\": $teamMembers}";
 	}
 	
 	/**
@@ -134,7 +135,8 @@ class ProfileUtil{
 	 */
 	public static function getTeamListForAdmin(){
 		$username = $_SESSION["user"]["username"];
-		return DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT * FROM teams INNER JOIN (role) ON teams.id=role.tid WHERE username='$username' AND (trainer='1' OR admin='1')");
+		$res = DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT * FROM teams INNER JOIN (role) ON teams.id=role.tid WHERE username='$username' AND (trainer='1' OR admin='1')");
+		return "{\"teamList\": $res}";
 	}
 	
 	

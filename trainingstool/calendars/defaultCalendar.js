@@ -8,10 +8,10 @@ var defaultCalendar = {
 					"function": "getEventList"
 				},
 				"success": function(data) {
-					console.log(data);
+					//console.log(data);
 					var eventData = jQuery.parseJSON(data);
 					$.each(eventData, function(i, obj) {
-						console.log(obj);
+						//console.log(obj);
 						obj.start = obj.date + "T" + obj.time_start + ":00";
 						obj.end = obj.date + "T" + obj.time_end + ":00";
 						obj.title = obj.type;
@@ -41,7 +41,7 @@ var defaultCalendar = {
 	},
 	"selectable": true,
 	"eventClick": function(event) {
-		console.log(event);
+		//console.log(event);
 	},
 	"axisFormat": "H:mm",
 	"timeFormat": "H:mm",
@@ -57,8 +57,8 @@ var defaultCalendar = {
 	monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
 	firstDay: 1,
 	select: function(start, end, allDay, event, resourceID) {
-		console.log(start + " " + end);
-		console.log(allDay);
+		//console.log(start + " " + end);
+		//console.log(allDay);
 		$("#calendar").fullCalendar("renderEvent", {
 			title: "test",
 			start: start,

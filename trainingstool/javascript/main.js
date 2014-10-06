@@ -513,7 +513,6 @@ function loadPanelData(){
 		//"dataType": "json",
 		"success": function(data) {
 			data = jQuery.parseJSON(data);
-			console.log(data);
 			renderPanel(data);
 		}
 	});
@@ -547,7 +546,7 @@ function loadTeamFilterData() {
 		//"dataType": "json",
 		"success": function(data) {
 			data = jQuery.parseJSON(data);
-			console.log(data);
+//			console.log(data);
 			renderTeamFilter(data);
 		}
 	});
@@ -560,9 +559,8 @@ function loadTeamFilterData() {
 function renderTeamFilter(filterData){
 	//if (filterData.length >= 2) {
 		//var res = json2html.transform(filterData, teamFilterTransform);		//HERE actually
-		var transform = $("#teamFilterTemplate").html();
-		var res = Mustache.render(transform, filterData);
-		console.log(res);
+		var template = $("#teamFilterTemplate").html();
+		var res = Mustache.render(template, filterData);
 		$("#teamFilter").html(res);
 		addSidebarHandlers();
 	//} else{
@@ -662,7 +660,8 @@ function loadTeamListData() {
  * @param teamListData is a JSON object that holds all the teams which are appended to the list.
  */
 function renderTeamList(teamListData){
-	var res = json2html.transform(teamListData, teamListTransform);
+	var template = $("#teamListTemplate").html();
+	var res = Mustache.render(template, teamListData);
 	$("#teamField").html(res);
 }
 
@@ -682,6 +681,7 @@ $("document").ready(function() {
 	resizeArea("content");
 	loadTeamListData();		//TODO: Load teamlist when needed
 	//HERE
+	addHandlerToElements(".nav-link", "click", function(){changeActiveTab($(this));});
 	addHandlerToElements("#nav-profile", "click", function(){loadProfileData(renderProfileData);});
 	addHandlerToElements("#nav-calendar", "click", function(){renderCalendar();});
 	addRightSwipeHandler("#main", showTeamFilterMenu);
@@ -697,7 +697,21 @@ $("document").ready(function() {
  */
 function renderCalendar(){
 	$("#calendar").fullCalendar(defaultCalendar);
-	$('#main').toggle("slide");
+	//$('#main').hide("slide");
+}
+
+/**
+ * Changes the content of the page to the selected active tab. Hide the previous active tab with a .hide("slide") and brings in the new active tab with .show("slide")
+ * @param element the nav-bar element that is clicked.
+ */
+function changeActiveTab(element){
+	var active = $(".activeTab");
+	active.removeClass("activeTab");
+	active.hide("slide");
+	var contentIdentifier = element.data("identifier");
+	var newContent = $("#"+contentIdentifier);
+	newContent.show("slide");
+	newContent.addClass("activeTab");
 }
 
 /**
@@ -707,9 +721,20 @@ function renderCalendar(){
  function renderProfileData(data){
  	var template = $("#profileTemplate").html();
  	var res = Mustache.render(template, data);
- 	$("body").append(res);
- 	$('#main').toggle("slide");
+ 	$("#profile").html(res);
+ 	selectUser();
+ 	//$('#main').toggle("slide");
  }
+
+/**
+ * Changes the default selection in #userSelection to the value specified in the data-selected attribute.
+ */
+function selectUser(){
+		var userSelection = $("#userSelection");
+ 	var selectedUser = userSelection.data("selected");
+ 	userSelection.val(selectedUser);
+}
+
 
 /**
  * Gets the profile data for e specific user from the server as JSON-object.

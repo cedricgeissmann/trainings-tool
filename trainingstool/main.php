@@ -56,6 +56,7 @@
   <script type="text/javascript" src="javascript/admin/adminFunctions.js"></script>
   <script type="text/javascript" src="javascript/admin/adminFunctionHandlers.js"></script>
   <script type="text/javascript" src="javascript/main.js"></script>
+  <script type="text/javascript" src="javascript/profile.js"></script>
 
   <!-- Importing a font from google api -->
   <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -73,7 +74,7 @@
   <?php include "navbar.php"; ?>
 
 
-  <div class="container" id="main">
+  <div class="container activeTab" id="main">
     <!--class="container"-->
     <div class="row row-fluid">
       <div class="navmenu navmenu-default navmenu-fixed-left offcanvas" id="navbar-side">
@@ -101,6 +102,8 @@
       <div id="comment"></div>
     </div>
   </div>
+  
+  <div class="container" id="profile"></div>
   
   <!-- begin calendar -->
   <div class="container">
@@ -505,8 +508,7 @@
         
         <script id="profileTemplate" type="x-tmpl-mustache">
           {{#profileData}}
-          <div class="container swipePages" id="profile">
-            <div class="row">
+            <div class="row swipePages">
               <div id="notificationArea"></div>
               <div id="content">
                 <form role="form" id="profileForm">
@@ -516,9 +518,9 @@
                       {{#adminData.length}}
                       <div class="form-group">
                         <label for="usernameField">Benutzername:</label>
-                        <select id="userSelection" name="userSelection" class="form-control">
+                        <select id="userSelection" name="userSelection" class="form-control" data-selected="{{selectedUser}}">
                           {{#teamMembers}}
-                          <option value="{{username}}">{{firstname}} {{name}}</option>
+                          <option value="{{username}}">{{username}} [{{firstname}} {{name}}]</option>
                           {{/teamMembers}}
                         </select>
                       </div>
@@ -595,12 +597,12 @@
                       <div class="form-group" id="teamSelectGroup">
                         <label for="teamSelector">Team:</label>
                         <select multiple="" id="teamSelector" name="teamSelector[]" class="form-control">
-                          {{!TODO}}
-                          <option value="0">Default</option>
-                          <option value="1">TV Muttenz Herren</option>
-                          <option value="2">TV Muttenz U19</option>
-                          <option value="3">TV Muttenz U17</option>
-                          <option value="4">TV Muttenz Damen 4</option>
+                          {{#teamList}}
+                          <option value="{{tid}}">{{name}}</option>
+                          {{/teamList}}
+                          {{#teamListMember}}
+                          <option value="{{tid}}" selected="selected">{{name}}</option>
+                          {{/teamListMember}}
                         </select>
                       </div>
                     </div>
@@ -610,23 +612,17 @@
               </div>
               <div id="comment"></div>
             </div>
-          </div>
           {{/profileData}}
         </script>
-        
         <!-- end profile -->
         
-        <!-- begin calendar -->
-        <script id="calendarTemplate" type="x-tmpl-mustache">
-          <div class="container">
-            <div class="row">
-              <div id="calendar" class="calendar"></div>
-                
-              <div id="comment"></div>
-            </div>
-          </div>
+        <!-- begin teamlist -->
+        <script id="teamListTemplate" type="x-tmpl-mustache">
+        {{#teamList}}
+        <option value="{{id}}">{{name}}</option>
+        {{/teamList}}
         </script>
-        <!-- end calendar -->
+        <!-- end teamlist -->
   
   
   <!-- end templates -->

@@ -11,27 +11,27 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-head">
         <ul class="nav navbar-nav">
-            <li class="active" id="nav-home"><a href="main.php">Home</a>
+            <li class="active" id="nav-home"><a href="#!" data-identifier="main" class="nav-link">Home</a>
 
             </li>
             <li id="nav-chat">
-				<a href="chat.php">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
+				<a href="chat.php"  data-identifier="chat" class="nav-link">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
 				
             </li>
-            <li id="nav-profile"><a href="#!">Profil</a>
+            <li id="nav-profile"><a href="#!"  data-identifier="profile" class="nav-link">Profil</a>
 
             </li>
-            <li id="nav-trainer" class="visibleTrainer"><a href="trainer.php">Trainer</a>
+            <li id="nav-trainer" class="visibleTrainer"><a href="trainer.php"  data-identifier="trainer" class="nav-link">Trainer</a>
 
             </li>
-            <li id="nav-admin" class="visibleAdmin"><a href="admin.php">Admin</a>
+            <li id="nav-admin" class="visibleAdmin"><a href="admin.php"  data-identifier="admin" class="nav-link">Admin</a>
 
             </li>
 			<li id="nav-attendanceCheck" class="visibleTrainer visibleAdmin">
-				<a href="attendance_check.php">Anwesenheitskontrolle</a>
+				<a href="attendance_check.php"  data-identifier="attendance_check" class="nav-link">Anwesenheitskontrolle</a>
 			</li>
 			<li id="nav-calendar">
-				<a href="#!">Kalender</a>
+				<a href="#!"  data-identifier="calendar" class="nav-link">Kalender</a>
 			</li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

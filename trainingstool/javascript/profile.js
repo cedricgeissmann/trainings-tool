@@ -78,15 +78,6 @@ function loadTeamSelectionData(){
 }
 
 /**
- * Takes a JSON array with a list of teams, and converts it into an html element, and appends it to the page.
- * @param teamList a JSON array that contains the list of teams.
- */
-function renderTeamSelection(teamList){
-	var res = json2html.transform(teamList, teamListTransform);
-	$("#teamSelector").append(res);
-}
-
-/**
  * Select all teams from the list, in which the user is member of, mark the entries as selected.
  * @param teamData a JSON array that contains the list of teams.
  */
@@ -115,7 +106,7 @@ function checkAdminClient(adminList){
  * Loads the data to render the panels for profile manipulation as a json array, and hands it over to a callback render function.
  * @param user the name of the user for which the profile data should be loaded.
  */
-function loadProfilePanelsWithUsername(user){
+/*function loadProfilePanelsWithUsername(user){
 	$.ajax({
 		"type": "POST",
 		"url": "server/ProfileUtil.php",
@@ -128,13 +119,13 @@ function loadProfilePanelsWithUsername(user){
 			renderProfilePanels(data);		//TODO replace with callback function
 		}
 	});
-}
+}*/
 
 /**
  * Takes a JSON array that contains the data for a specific user and converts it to an html element. Adds the element to the page.
  * @param profileData a JSON array that contains all data for this user.
  */
-function renderProfilePanels(profileData){
+/*function renderProfilePanels(profileData){
 	var admin = profileData.adminData;
 	var selected = profileData.selectedUser;
 	var teamData = profileData.teamList;
@@ -156,7 +147,7 @@ function renderProfilePanels(profileData){
 	if(signup){
 		makeSignupChanges();
 	}
-}
+}*/
 
 /**
  * Checks if username is missing.
@@ -385,18 +376,11 @@ $(document).submit(function(e){
  * When document is loaded, load the trainings.
  */
 $("document").ready(function(){
-	var username = "";
-	if(localStorage.getItem("username")!==undefined){
-		username = localStorage.getItem("username");
-		localStorage.removeItem("username");
-	}	
-    loadProfilePanelsWithUsername(username);
-    changeNavbarActive("nav-profile");
-});
-
-/**
- * Remove ads from square7
- */
-$('document').ready(function(){
-	$('#removeNext').nextAll().remove();
+	//var username = "";
+	//if(localStorage.getItem("username")!==undefined){
+	//	username = localStorage.getItem("username");
+	//	localStorage.removeItem("username");
+	//}	
+    //loadProfilePanelsWithUsername(username);
+    //changeNavbarActive("nav-profile");
 });
