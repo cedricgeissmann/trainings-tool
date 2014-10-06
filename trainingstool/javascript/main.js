@@ -715,6 +715,19 @@ function changeActiveTab(element){
 }
 
 /**
+ * Sets the content of the page to the selected active tab. Hide the previous active tab with a .hide("slide") and brings in the new active tab with .show("slide")
+ * @param id the id of element that will be displayed.
+ */
+function setActiveTab(id){
+	var active = $(".activeTab");
+	active.removeClass("activeTab");
+	active.hide("slide");
+	var newContent = $("#"+id);
+	newContent.show("slide");
+	newContent.addClass("activeTab");
+}
+
+/**
  * Renders the JSON-object, that contains the profile data, to a valid html element, and adds is to the page.
  * @param data the JSON-object that holds the profile data.
  */
@@ -741,7 +754,11 @@ function selectUser(){
  * @param renderDataCallback the callback function that is used to render the data after receiving.
  */
 function loadProfileData(renderDataCallback){
-	var username = "cedy";//getSessionsUsername();		//TODO: get the username of the accessed user. If no one is defined, take the session user as default.
+	var username = getItemFromCache("profileUser").data;
+	console.log(username);
+	if(username==null){
+		username = "cedy";
+	}
 	$.ajax({
 		"type": "POST",
 		"url": "server/ProfileUtil.php",
@@ -751,7 +768,7 @@ function loadProfileData(renderDataCallback){
 		},
 		"dataType": "json",
 		"success": function(data){
-			console.log(data);		//TODO replace with callback function
+			console.log(data);
 			renderDataCallback(data);
 		}
 	});

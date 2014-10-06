@@ -113,8 +113,9 @@ function deleteUser(username){
  * @param username the username of the user who should be edited.
  */
 function editUser(username){
-	localStorage.setItem("username", username);
-	window.location = "profile.php";
+	storeItemToCache("profileUser", username, 60);
+	loadProfileData(renderProfileData);
+	setActiveTab("profile");
 }
 
 /**
@@ -122,20 +123,18 @@ function editUser(username){
  * @param username the username for which the password gets reset.
  */
 function resetPWAdmin(username){
-	console.log("PW reset");
 	if($("#password").val()===$("#passwordConfirm").val()){
 		$.ajax({
 			"type": "POST",
 			"url": "server/AdminUtil.php",
-			//"async": false,
 			"data": {
 				"newPassword": $.md5($("#password").val()),
 				"username": username,
 				"function": "resetPassword"
 			},
 			"success": function(data){
-				console.log(data);
 				$("#pwModal").modal('toggle');
+				notifyUser(data);
 			}
 		});
 	}else{

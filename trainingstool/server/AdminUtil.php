@@ -125,19 +125,10 @@ class AdminUtil{
 		if($_SESSION["user"]["admin"]=="1"){
 			self::mayExecuteIfAdmin();
 			DatabaseUtil::executeQuery("UPDATE user SET password='$newPassword' WHERE username='$username'");
-			echo mysql_affected_rows();
-			if(mysql_affected_rows() > 0){
-				echo "Passwort wurde erfolgreich durch den Administrator zurückgesetzt.";
-			}else{
-				echo "Das Passwort konnte durch den Administrator nicht zurückgesetzt werden. Es konnte kein Benutzer mit dem Benutzernamen \"$username\" gefunden werden.";
-			}
+			echo "Passwort wurde erfolgreich durch den Administrator zurückgesetzt.";
 		}else if($_SESSION["user"]["username"]==$username){
 			$res = DatabaseUtil::executeQuery("UPDATE user SET password='$newPassword' WHERE username='$username' AND password='$oldPassword'");
-			if(mysql_affected_rows() > 0){
-				echo "Passwort wurde erfolgreich zurückgesetzt.";
-			}else{
-				echo "Das Passwort konnte nicht zurückgesetzt werden. Entweder stimmt das alte Passwort nicht überein, oder es existiert kein Benutzer mit dem Benutzernamen \"$username\".";
-			}
+			echo "Passwort wurde erfolgreich zurückgesetzt.";
 		}
 	}
 	
