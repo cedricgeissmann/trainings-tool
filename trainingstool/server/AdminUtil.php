@@ -122,13 +122,22 @@ class AdminUtil{
 	 * @param String $newPassword the md5 encrypted value for the new password.
 	 */
 	public static function resetPassword($username, $oldPassword, $newPassword){
-		if($_SESSION["user"]["username"]==$username){
-			DatabaseUtil::executeQuery("UPDATE user SET password='$newPassword' WHERE username='$username' AND password='$oldPassword'");
-			echo "Passwort wurde erfolgreich zurückgesetzt.";
-		}else{
+		if($_SESSION["user"]["admin"]=="1"){
 			self::mayExecuteIfAdmin();
 			DatabaseUtil::executeQuery("UPDATE user SET password='$newPassword' WHERE username='$username'");
-			echo "Passwort wurde erfolgreich zurückgesetzt.";
+			echo mysql_affected_rows();
+			if(mysql_affected_rows() > 0){
+				echo "Passwort wurde erfolgreich durch den Administrator zurückgesetzt.";
+			}else{
+				echo "Das Passwort konnte durch den Administrator nicht zurückgesetzt werden. Es konnte kein Benutzer mit dem Benutzernamen \"$username\" gefunden werden.";
+			}
+		}else if($_SESSION["user"]["username"]==$username){
+			$res = DatabaseUtil::executeQuery("UPDATE user SET password='$newPassword' WHERE username='$username' AND password='$oldPassword'");
+			if(mysql_affected_rows() > 0){
+				echo "Passwort wurde erfolgreich zurückgesetzt.";
+			}else{
+				echo "Das Passwort konnte nicht zurückgesetzt werden. Entweder stimmt das alte Passwort nicht überein, oder es existiert kein Benutzer mit dem Benutzernamen \"$username\".";
+			}
 		}
 	}
 	
@@ -138,7 +147,8 @@ class AdminUtil{
 	 * @return json a json array with username, firstname and name.
 	 */
 	public static function getUser($username){
-		return DatabaseUtil::executeQueryAsJSON("SELECT username, firstname, name FROM `user` WHERE username='$username'");
+		$res = DatabaseUtil::executeQueryAsJSON("SELECT username, firstname, name FROM `user` WHERE username='$username'");
+		return "{\"user\": $res}";
 	}
 	
 	/**

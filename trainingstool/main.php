@@ -31,8 +31,7 @@
   <script type="text/javascript" src="calendars/defaultCalendar.js"></script>
 
   <!-- loading the transformations needed by json2html -->
-  <script type="text/javascript" src="transformation/mainTransforms/mainPanelTransform.js"></script>
-  <script type="text/javascript" src="transformation/passwordTransform.js"></script>
+  <!--<script type="text/javascript" src="transformation/mainTransforms/mainPanelTransform.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/teamFilterTransform.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/notSubscribeTransformAdmin.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/personTransform.js"></script>
@@ -41,13 +40,14 @@
   <script type="text/javascript" src="transformation/mainTransforms/unsubscribeTransform.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/unsubscribeTransformAdmin.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/unsubscribeReasonTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/selectReasonTransform.js"></script>
   <script type="text/javascript" src="transformation/profileTransforms/teamListTransform.js"></script>
   <script type="text/javascript" src="transformation/divider.js"></script>
   <script type="text/javascript" src="transformation/trainingNotificationTransforms/createTrainingNotificationTransform.js"></script>
   <script type="text/javascript" src="transformation/trainingNotificationTransforms/trainingNotificationTransform.js"></script>
   <script type="text/javascript" src="transformation/trainingNotificationTransforms/trainingNotificationInnerTransform.js"></script>
-
+  -->
+  <script type="text/javascript" src="transformation/passwordTransform.js"></script>
+  <script type="text/javascript" src="transformation/mainTransforms/selectReasonTransform.js"></script>
   <script type="text/javascript" src="transformation/defaultNotification.js"></script>
 
 
@@ -623,7 +623,36 @@
         {{/teamList}}
         </script>
         <!-- end teamlist -->
-  
+
+        <!-- begin password modal -->
+        <script id="passwordModalTemplate" type="x-tmpl-mustache">
+          {{#user}}
+          <div class="modal fade in" id="pwModal" tabindex="-1" style="display: none;" aria-hidden="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close" data-dismiss="modal">×</button>
+                  <h4 class="modal-title">Passwort für {{firstname}} {{name}} zurücksetzen</h4>
+                </div>
+                <div class="modal-body">
+                  <div id="passwordHint"></div>
+                  <div class="input-group">
+                    <label for="password">Neues Passwort:</label>
+                    <input id="password" type="password" class="form-control">
+                    <label for="passwordConfirm">Passwort bestätigen:</label>
+                    <input id="passwordConfirm" type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" onclick="resetPWAdmin('{{username}}')">Passwort zurücksetzen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/user}}
+        </script>
+        <!-- end password modal -->
+          
   
   <!-- end templates -->
 

@@ -73,13 +73,17 @@ function resetPasswordFunction(user){
 	$.ajax({
 		"type": "POST",
 		"url": "server/AdminUtil.php",
-		"async": false,
+		//"async": false,
 		"data": {
 			"username": user,
 			"function": "getUser"
 		},
+		"dataType": "json",
 		"success": function(data){
-			var res = json2html.transform(data, passwordTransform);
+			//var res = json2html.transform(data, passwordTransform);
+			console.log(data);
+			var template = $("#passwordModalTemplate").html();
+			var res = Mustache.render(template, data)
 			$("#comment").html(res);
 			$("#pwModal").modal("toggle");
 		}
@@ -117,18 +121,20 @@ function editUser(username){
  * Sends the reset password command to the server.
  * @param username the username for which the password gets reset.
  */
-function resetPW(username){
+function resetPWAdmin(username){
+	console.log("PW reset");
 	if($("#password").val()===$("#passwordConfirm").val()){
 		$.ajax({
 			"type": "POST",
 			"url": "server/AdminUtil.php",
-			"async": false,
+			//"async": false,
 			"data": {
 				"newPassword": $.md5($("#password").val()),
 				"username": username,
 				"function": "resetPassword"
 			},
 			"success": function(data){
+				console.log(data);
 				$("#pwModal").modal('toggle');
 			}
 		});
