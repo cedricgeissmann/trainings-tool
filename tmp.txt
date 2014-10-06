@@ -1,5 +1,0 @@
-$res_arr_values = array();
-while ($row = mysql_fetch_assoc($result))
-   {
-       $res_arr_values[] = $row;
-   }
