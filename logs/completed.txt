@@ -1,0 +1,42 @@
+In progress:
+	server/*
+	server/TrainingUtil.php
+	
+finished:
+	js/*
+	javascript/admin/*
+	javascript/*
+	img/*
+	fonts/*
+	google-cal-test/src/*
+	logs/*
+	tmp/*
+	transformation/*		//combine them if possible
+	css/*
+	clean-up/*
+	
+	
+	javascript/admin/admin.js
+	javascript/admin/adminFunctionHandlers.js
+	javascript/admin/adminFunction.js
+	javascript/attendance_check.js
+	javascript/calendar.js
+	javascript/chat.js
+	javascript/index.js
+	javascript/main.js
+	javascript/navbar.js
+	javascript/profile.js	--
+	javascript/trainer.js
+	javascript/training_planer.js		#no longer exists.
+	javascript/util.js	--
+	
+	server/AdminUtil.php
+	server/ChatUtil.php
+	server/DatabaseUtil.php
+	server/LoggerUtil.php
+	server/login.php
+	server/MailUtil.php
+	server/ProfileUtil.php
+	
+	
+wished: Combine all to one js file if possible, to get rid of the http overhead.
