@@ -15,7 +15,7 @@
 
             </li>
             <li id="nav-chat">
-				<a href="chat.php"  data-identifier="chat" class="nav-link">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
+				<a href="#!"  data-identifier="chat" class="nav-link">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
 				
             </li>
             <li id="nav-profile"><a href="#!"  data-identifier="profile" class="nav-link">Profil</a>

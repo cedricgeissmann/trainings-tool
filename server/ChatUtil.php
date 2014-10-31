@@ -50,7 +50,7 @@ class ChatUtil{
 	public static function getContactList(){
 		$username = $_SESSION["user"]["username"];
 		$res = DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT user.username, firstname, name FROM user LEFT JOIN role ON (user.username = role.username) WHERE tid IN (SELECT tid FROM role WHERE username = '$username') AND activate='1' AND user.username NOT IN ('$username') ORDER BY firstname ASC, name ASC");
-		return $res;
+		return "{\"contactList\": $res}";
 	}
 	
 	/**

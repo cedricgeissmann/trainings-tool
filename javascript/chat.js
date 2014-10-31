@@ -10,6 +10,7 @@ function getContactList(){
 		},
 		"dataType": "json",
 		"success": function(data){
+			console.log(data);
 			renderContactList(data);
 		}
 	});
@@ -20,8 +21,10 @@ function getContactList(){
  * @param contactListData a JSON array that contains the data for the contact list.
  */
 function renderContactList(contactListData){
-	var res = json2html.transform(contactListData, contactListTransform);
-	$("#contactList").append(res);
+	var template = $("#chatContainer").html();
+	var res = Mustache.render(template, contactListData);
+	$("body").append(res);
+	resizeChatArea();
 	addContactListHandler();
 }
 
@@ -31,28 +34,28 @@ function renderContactList(contactListData){
  * @param username the name of the user you share a conversation with.
  */
 function getNumberOfMessages(username){
-    var res = "";
-    $.ajax({
+	var res = "";
+	$.ajax({
 		"type": "POST",
-        "url": "server/ChatUtil.php",
-        "data": {
-            "conversationPartner": username,
-            "function": "getNumberOfUnread"
-        },
+		"url": "server/ChatUtil.php",
+		"data": {
+			"conversationPartner": username,
+			"function": "getNumberOfUnread"
+		},
 		"dataType": "json",
-        "success": function(data){
-            res = data;
-        },
-        "async": false
-    });
-    return res[0].unread+"/"+res[0].tot;
+		"success": function(data){
+			res = data;
+		},
+		"async": false
+	});
+	return res[0].unread+"/"+res[0].tot;
 }
 
 /**
  * Scrolls down in the conversation area, so you can see the last message.
  */
 function scrollDown(){
-	$("#conversationArea").animate({ scrollTop: $('#conversationArea')[0].scrollHeight}, 1000);
+	$("#conversationArea").animate({ scrollTop: $('#conversationArea').scrollHeight}, 1000);
 }
 
 var refreshInterval = 5000;		//interval in miliseconds to check for new messages.
@@ -127,15 +130,24 @@ function loadConversations(username){
 			"success": function(chatData){
 				lastId = chatData.id[0].lastId;
 				if(chatData.data.length>0){
-					var res = json2html.transform(chatData.data, conversationTransform);
-					$("#conversationArea").append(res);
-					alignMessages();
-					scrollDown();
+					renderConversation(chatData);
 				}
 			},
 			//"async": false
 		});
 	}
+}
+
+/**
+ * Renders the data that it receives into a conversation. Alignes the messages and scrolls down to the most recent message.
+ * @param JSON-Array chatData the conversation represented as chat data.
+ */
+function renderConversation(chatData){
+	var template = $("#conversationTemplate").html();
+	var res = Mustache.render(template, chatData);
+	$("#conversationArea").append(res);
+	alignMessages();
+	scrollDown();
 }
 
 /**
@@ -188,10 +200,17 @@ $(window).on("resize", resizeChatArea);
  * Call these function when document is ready.
  */
 $(document).ready(function(){
+	//prepareChatPanel();
+});
+
+
+/**
+ * Sets up the chat panel and displays it.
+ */
+function prepareChatPanel(){
 	changeNavbarActive("nav-chat");
 	getContactList();
-	resizeChatArea();
 	loadConversations(localStorage.getItem("chatUsername"));
 	setInterval(function(){loadConversations(localStorage.getItem("chatUsername"));}, refreshInterval);
 	$("textarea").on("input", function(){resizeChatArea();});
-});
+}

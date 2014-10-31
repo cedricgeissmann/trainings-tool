@@ -57,6 +57,7 @@
   <script type="text/javascript" src="javascript/admin/adminFunctionHandlers.js"></script>
   <script type="text/javascript" src="javascript/main.js"></script>
   <script type="text/javascript" src="javascript/profile.js"></script>
+  <script type="text/javascript" src="javascript/chat.js"></script>
 
   <!-- Importing a font from google api -->
   <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -644,7 +645,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" onclick="resetPWAdmin('{{username}}')">Passwort zurücksetzen</button>
+                  <button type="button" class="btn btn-primary" onclick="resetPWAdmin('{{username}}')">Passwort zurücksetzen</button>
                 </div>
               </div>
             </div>
@@ -653,7 +654,61 @@
         </script>
         <!-- end password modal -->
           
-  
+        <script id="chatContainer" type="x.tmpl-mustache">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3" id="navbar-side">
+              <div class="bs-sidebar">
+                <ul class="nav bs-sidenav" id="contactListHeader">
+                  <li class="dropdown-header">
+                    <h4>Kontakte</h4>
+                  </li>
+        
+                </ul>
+                {{#contactList.length}}
+                <ul class="nav bs-sidenav" id="contactList">
+                  {{#contactList}}
+                  <li><a href="#!" name="{{username}}" class="contactListEntry" data-usename="{{username}}">{{firstname}} {{name}}<span class="pull-right label label-primary">{{unread}}/{{total}}</span></a>
+                  </li>
+                  {{/contactList}}
+                </ul>
+                {{/contactList.length}}
+              </div>
+            </div>
+            <div id="content" class="col-sm-9 chatContent">
+              <div class="panel panel-default" id="chatPanel" style="height: 675px;">
+                <div class="panel-heading" id="chatHeading">
+                  Chat
+                </div>
+                <div class="panel-body" id="conversationArea" style="height: 557px;">
+        
+                </div>
+                <div class="panel-footer" id="chatPanelFooter">
+                  <div id="chatInputField" class="input-group">
+                    <textarea id="messageInputField" class="form-control"></textarea>
+                    <span class="input-group-btn">
+                   			<button class="btn btn-default" type="button" onclick="sendMessage()">Senden</button>
+                   		</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="comment"></div>
+          </div>
+        </div>
+        </script>
+        
+        <script id="conversationTemplate" type="x-tmpl-mustache">
+          {{#data}}
+            <div class="conversationBubble {{sender}}">
+              <b>{{senderFirstname}} {{senderName}}:</b>
+              <div class="messageBody">{{message}}</div>
+              <div class="message">{{sendtime}}</div>
+            </div>
+            <hr>
+          {{/data}}
+        </script>
+        
   <!-- end templates -->
 
 

@@ -684,6 +684,7 @@ $("document").ready(function() {
 	addHandlerToElements(".nav-link", "click", function(){changeActiveTab($(this));});
 	addHandlerToElements("#nav-profile", "click", function(){loadProfileData(renderProfileData);});
 	addHandlerToElements("#nav-calendar", "click", function(){renderCalendar();});
+	addHandlerToElements("#nav-chat", "click", function(){prepareChatPanel();});
 	addRightSwipeHandler("#main", showTeamFilterMenu);
 });
 
