@@ -14,10 +14,10 @@
             <li class="active" id="nav-home"><a href="#!" data-identifier="main" class="nav-link">Home</a>
 
             </li>
-            <li id="nav-chat">
+            <!--<li id="nav-chat">
 				<a href="#!"  data-identifier="chat" class="nav-link">Nachrichten <span class="badge" id="newMessageCounter">0</span></a>
 				
-            </li>
+            </li>-->
             <li id="nav-profile"><a href="#!"  data-identifier="profile" class="nav-link">Profil</a>
 
             </li>

@@ -9,6 +9,14 @@ $("#navbar-head ul li a").click(function (e) {
     }
 });
 
+function navLinkClicked(element) {
+    var elem = element.parent();
+    if (!elem.hasClass('active')) {
+        $('.active').removeClass("active");
+        elem.addClass('active');
+    }
+}
+
 /**
  * Sets the active class on the new loaded page. Call this in the onload function of a page.
  */
@@ -36,7 +44,9 @@ function getNewMessageCount(){
 }
 
 $(document).ready(function(){
-	getNewMessageCount();
+	//getNewMessageCount();
 	addHandlerToElements("#logout", "click", function(){clearCache();});
-	var timer = setInterval(function(){getNewMessageCount();}, 60000);
+	addAdditionalHandlerToElements(".nav-link", "click", function(){navLinkClicked($(this));})
+	//var timer = setInterval(function(){getNewMessageCount();}, 60000);
+	
 });

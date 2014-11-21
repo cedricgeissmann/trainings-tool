@@ -43,7 +43,7 @@ var drawObjects = [{
 	waypoints: [{
 		x: 600,
 		y: 250,
-		steps: 1000
+		steps: 100
 	}, {
 		x: 1000,
 		y: 300,
@@ -51,7 +51,35 @@ var drawObjects = [{
 	}, {
 		x: 500,
 		y: 20,
-		steps: 1000
+		steps: 100
+	}],
+	actWaypoint: 0,
+	steps: 0
+}, {
+	id: 3,
+	radius: 20,
+	color: {
+		fill: "#ff0000",
+		stroke: "#ff0000"
+	},
+	act: {
+		x: 500,
+		y: 200
+	},
+	dx: 1.0,
+	dy: 1.0,
+	waypoints: [{
+		x: 600,
+		y: 500,
+		steps: 100
+	}, {
+		x: 1000,
+		y: 300,
+		steps: 300
+	}, {
+		x: 500,
+		y: 20,
+		steps: 100
 	}],
 	actWaypoint: 0,
 	steps: 0
@@ -102,6 +130,13 @@ function drawBall(c) {
 	calcObject(c);
 	ctx.beginPath();
 	ctx.arc(c.act.x, c.act.y, c.radius, 0, Math.PI * 2, true);
+	if(c.color == undefined){
+		ctx.fillStyle = "#ffffff";
+		ctx.strokeStyle = "#000000";
+	}else{
+		ctx.fillStyle = c.color.fill;
+		ctx.strokeStyle = c.color.stroke;
+	}
 	ctx.fill();
 	ctx.stroke();
 }

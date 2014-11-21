@@ -669,6 +669,7 @@ function renderTeamList(teamListData){
  * The team filter menu is an off-canvas element. Toggle the menu to access it.
  */
 function showTeamFilterMenu(){
+	console.log("foo");
 	$(".offcanvas").offcanvas("toggle");
 }
 
@@ -685,7 +686,8 @@ $("document").ready(function() {
 	addHandlerToElements("#nav-profile", "click", function(){loadProfileData(renderProfileData);});
 	addHandlerToElements("#nav-calendar", "click", function(){renderCalendar();});
 	addHandlerToElements("#nav-chat", "click", function(){prepareChatPanel();});
-	addRightSwipeHandler("#main", showTeamFilterMenu);
+	addHandlerToElements("#offcanvas-toggler", "click", function(){showTeamFilterMenu();});
+//	addRightSwipeHandler("#menu-dragger", showTeamFilterMenu);
 });
 
 

@@ -354,6 +354,16 @@ function addHandlerToElements(name, handlerType, callbackFunction){
 
 
 /**
+ * Adds a additional new handler to an element.
+ * @param name means the jQuery selection identifier to select the element the handler will be added to.
+ * @param handlerType defines what type of handler will be added. {click, mouseover, ...}
+ * @param callbackFunction the function which is executed when the event is triggered.
+ */
+function addAdditionalHandlerToElements(name, handlerType, callbackFunction){
+	$(name).on(handlerType, callbackFunction);
+}
+
+/**
  * Gets the total number of players for a training with the given ID. Hands the received data over to a callback function.
  * @param trainingID the ID of the training for which the number of player is asked.
  */

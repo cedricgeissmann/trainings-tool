@@ -57,7 +57,7 @@
   <script type="text/javascript" src="javascript/admin/adminFunctionHandlers.js"></script>
   <script type="text/javascript" src="javascript/main.js"></script>
   <script type="text/javascript" src="javascript/profile.js"></script>
-  <script type="text/javascript" src="javascript/chat.js"></script>
+  <!--<script type="text/javascript" src="javascript/chat.js"></script>-->
 
   <!-- Importing a font from google api -->
   <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -73,7 +73,10 @@
 
 <body>
   <?php include "navbar.php"; ?>
+  
+  <!--<div id="menu-dragger" style="position:fixed; background-color: #000000; height: 100px; width: 200px;"></div>-->
 
+  <button id="offcanvas-toggler" class="btn btn-primary visibleTrainer visibleAdmin" type="button" style="position:fixed; top: 100px; left: 20px;"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>
 
   <div class="container activeTab" id="main">
     <!--class="container"-->
