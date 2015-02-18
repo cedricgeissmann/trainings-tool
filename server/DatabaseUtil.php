@@ -20,7 +20,7 @@ class DatabaseUtil{
 	private static function connectToDatabase(){
 			$username = "tvmuttenz";
 			$password = "Wiederkäuer2";
-			$hostname = "127.0.0.1";
+			$hostname = "localhost";
 			$port = "3306";
 			$db = "tvmuttenz";
 			$link = mysql_connect($hostname, $username, $password) or die("Keine Verbindung möglich: " .  mysql_error());

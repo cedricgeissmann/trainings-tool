@@ -21,9 +21,26 @@
 <body>
 	<div class="container" style="padding-top: 100px;">
 		<div class="row">
-			 <canvas id="annahme" width="1000" height="500" style="border:1px solid #000000;">
+			<!--<div id="controlPanel" class="col-xs-12">-->
+				
+			<!--</div>-->
+			<div class="col-xs-3">
+				<button id="startAnimation" class="btn btn-default form-control">Play</button>
+				<button id="stopAnimation" class="btn btn-default form-control">Stop</button>
+				<hr>
+				<button id="addPlayer" class="btn btn-default form-control">Set Player</button>
+				<button id="movePlayer" class="btn btn-default form-control">Move Player</button>
+				<button id="selectPlayer" class="btn btn-default form-control">Select Player</button>
+				<hr>
+				<ul>
+					<li>blabla</li>
+				</ul>
+			</div>
+			<div class="col-xs-9">
+			 <canvas id="annahme" style="border:1px solid #000000;">
         		Wird nicht unterstützt.
     		</canvas>
+    		</div>
 	</div>
 </div>
 
