@@ -76,7 +76,7 @@
   
   <!--<div id="menu-dragger" style="position:fixed; background-color: #000000; height: 100px; width: 200px;"></div>-->
 
-  <button id="offcanvas-toggler" class="btn btn-primary visibleTrainer visibleAdmin" type="button" style="position:fixed; top: 100px; left: 20px;"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>
+  <!--<button id="offcanvas-toggler" class="btn btn-primary visibleTrainer visibleAdmin" type="button" style="position:fixed; top: 100px; left: 20px;"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>-->
 
   <div class="container activeTab" id="main">
     <!--class="container"-->
