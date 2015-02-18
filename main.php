@@ -342,7 +342,7 @@
                   {{/adminOrTrainer}}
                   {{/unsubscribed}}
               </div>
-              <div class="equidistant {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}"><a href="#!" data-id="{{id}}"><h2>Nicht gemeldet:</h2></a>
+              <div class="equidistant {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}"><h4>Nicht gemeldet:</h4>
                 <div data-id="{{id}}" class="notSubscribedList"></div>
                 {{#notSubscribed}}
                 {{#adminOrTrainer}}
