@@ -14,3 +14,12 @@ The user subscribes with a self chosen unique username and a password (minimum l
 
 ## Subscription and Unsubscription for an event
 After the login, the user finds a screen that presents all events he can subscribe or unsubscribe to. The events are ordered chronologically ascending. The user can see other team members that are already subscribed or unsubscribed. The user clicks on the link, and sees his name appear in the desired place immediately.
+
+## Navbar
+The tool has a navbar, that will guide the user to different options. The navbar is composable on small screens. The navbar has an always visible "home" link, as well as an left menu opener. If a link in the navbar is clicked, the content of the page switches, but the page does not reload completely.
+
+## Home
+Already discribed in Subscription and Unsubscription for an event.
+
+## Profile
+In the profiles tab, the user can manage its personal data. The user can change address, phone, mail, date of birth. The user can reset its password. Only an admin can view data of other users. Only an admin can change team correspondence.
