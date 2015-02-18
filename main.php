@@ -220,7 +220,7 @@
                 {{! end notification }}
                 
                 
-                <h4 class="panel-title col-xs-10">{{type}}: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
+                <h4 class="panel-title col-xs-10"><b>{{type}}</b>: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
                 <div class="btn-group"><a href="#" class="dropdown-toggle {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
                     <li><a class="removeTraining {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!"  data-id="{{id}}">Training löschen</a>
