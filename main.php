@@ -519,22 +519,22 @@
                   <div class="panel panel-default">
                     <div class="panel-heading">Angaben zur Person</div>
                     <div class="panel-body">
-                      {{#adminData.length}}
+                      {{#isAdmin.length}}
                       <div class="form-group">
                         <label for="usernameField">Benutzername:</label>
-                        <select id="userSelection" name="userSelection" class="form-control" data-selected="{{selectedUser}}">
+                        <select id="userSelection" name="userSelection" class="form-control" data-selected="{{selectedUser}}" >
                           {{#teamMembers}}
                           <option value="{{username}}">{{username}} [{{firstname}} {{name}}]</option>
                           {{/teamMembers}}
                         </select>
                       </div>
-                      {{/adminData.length}}
-                      {{^adminData.length}}
+                      {{/isAdmin.length}}
+                      {{^isAdmin.length}}
                       <div class="form-group">
                         <label for="usernameField">Benutzername:</label>
                         <input type="text" id="usernameField" name="usernameField" class="form-control" value="{{username}}" disabled>
                       </div>
-                      {{/adminData.length}}
+                      {{/isAdmin.length}}
                       <div class="form-group">
                         <label for="firstnameField">Vorname:</label>
                         <input type="text" id="firstnameField" name="firstnameField" class="form-control" value="{{firstname}}">
@@ -600,7 +600,7 @@
                     <div class="panel-body" id="teamSelectPanel">
                       <div class="form-group" id="teamSelectGroup">
                         <label for="teamSelector">Team:</label>
-                        <select multiple="" id="teamSelector" name="teamSelector[]" class="form-control">
+                        <select multiple="" id="teamSelector" name="teamSelector[]" class="form-control" {{^isAdmin.length}}disabled{{/isAdmin.length}}>
                           {{#teamList}}
                           <option value="{{tid}}">{{name}}</option>
                           {{/teamList}}

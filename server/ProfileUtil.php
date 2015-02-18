@@ -98,6 +98,9 @@ class ProfileUtil{
 		$teamList = DatabaseUtil::executeQueryAsJSON("SELECT DISTINCT teams.id AS tid, teams.name AS name FROM `teams` WHERE teams.id NOT IN (SELECT tid FROM role WHERE username='$username')");
 		$teamListMember = DatabaseUtil::executeQueryAsJSON("SELECT * FROM `teams` inner JOIN (role) ON (role.tid=teams.id) WHERE role.username='$username'");
 		$teamMembers = self::getTeamMembersByUser($username);
+		if(AdminUtil::isAdmin($_SESSION["user"]["username"])){
+			return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList, \"teamListMember\":$teamListMember , \"teamMembers\": $teamMembers, \"isAdmin\": \"isAdmin\"}";
+		}
 		return "{\"selectedUser\": \"$username\", \"adminData\": $admin, \"profileData\": $res, \"teamList\":$teamList, \"teamListMember\":$teamListMember , \"teamMembers\": $teamMembers}";
 	}
 	

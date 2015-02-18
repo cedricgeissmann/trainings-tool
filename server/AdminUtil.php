@@ -2,9 +2,12 @@
 
 include_once 'DatabaseUtil.php';
 include_once "LoggerUtil.php";
+include_once "DebugUtil.php";
 
 //Create a logger to write what a user has done.
 $logger = new LoggerUtil();
+//Create a debugger. If you want to write something to the "console" use dbg->debug(...)
+//$dbg = new DebugUtil();
 
 /**
  * This utility class holds multiple functions to execute admin functions on the server side.
@@ -284,6 +287,20 @@ class AdminUtil{
 	public static function checkAdminAndTrainer($username){
 		return DatabaseUtil::executeQueryAsJSON("SELECT admin, trainer FROM role WHERE username='$username'");
 	}
+	
+	/**
+	 * Checks if the user is admin in any of the teams he is a member of.
+	 * @param String $username the username of the user for who the admin property is evaluated for.
+	 * @returns True if the user is admin, False if the user is not admin in any team.
+	 */
+	public static function isAdmin($username){
+		$res = DatabaseUtil::executeQueryAsArrayAssoc("SELECT COUNT(admin) AS admin FROM `role` WHERE admin=1 AND username='$username'");
+		if($res[0]['admin']>0){
+			return true;
+		}
+		return false;
+	}
+	
 }
 
 /**
