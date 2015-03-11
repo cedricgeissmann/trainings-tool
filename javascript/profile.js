@@ -338,11 +338,13 @@ function checkPassword(){
  * Send the content of the form element profileForm to the server to store it in the database.
  */
 function sendProfileData(){
+	//console.log("usernameField="+$("#usernameField").val()+"&"+"teamSelector="+$("#teamSelector").val()+"&"+$("#profileForm").serialize()+"&function=updateUser");
+	var disabled = $("#profileForm").find(':input:disabled').removeAttr('disabled');
 	$.ajax({
 		"type": "POST",
 		"url": "server/ProfileUtil.php",
 		"data": $("#profileForm").serialize()+"&function=updateUser",
-		"async": false,
+		//"async": false,
 		"success": function(data){
 			//console.log(data);
 			//TODO give feedback
@@ -350,6 +352,7 @@ function sendProfileData(){
 			return false;
 		}
 	});
+	disabled.attr("disabled", "disabled");
 }
 
 /**
