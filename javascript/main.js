@@ -1,6 +1,8 @@
 /**
  * Gets the selected team, and shows only contet of this team.
  * @param elem the element that triggers the event and holds the data for which team should be displayed.
+ * 
+ * Tested: pass
  */
 function sidebarHandler(elem){
 	var team = elem.data("teamid");
@@ -29,7 +31,6 @@ function movePlayer(playerName, element, subscribeListClass) {
 	if (player.size() === 0) {
 		player = "<div name=" + playerName + ">" + getFullName(playerName) + "</div>";
 	}
-	//console.log(player);
 	list.append(player);
 }
 
@@ -673,10 +674,11 @@ function showTeamFilterMenu(){
 	$(".offcanvas").offcanvas("toggle");
 }
 
+
 /**
- * When document is loaded, call these functions.
+ * Call this function to initialite the startup main view.
  */
-$("document").ready(function() {
+function initMain(){
 	loadPanelData();
 	loadTeamFilterData();
 	resizeArea("content");
@@ -688,6 +690,13 @@ $("document").ready(function() {
 	addHandlerToElements("#nav-chat", "click", function(){prepareChatPanel();});
 	addHandlerToElements("#offcanvas-toggler", "click", function(){showTeamFilterMenu();});
 //	addRightSwipeHandler("#menu-dragger", showTeamFilterMenu);
+}
+
+/**
+ * When document is loaded, call these functions.
+ */
+$("document").ready(function() {
+	initMain();
 });
 
 
