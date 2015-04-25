@@ -1,16 +1,56 @@
-/**
- * Gets the selected team, and shows only contet of this team.
- * @param elem the element that triggers the event and holds the data for which team should be displayed.
- * 
- * Tested: pass
- */
-function sidebarHandler(elem){
-	var team = elem.data("teamid");
-	if (team === "all") {
-		$(".panel").show();
-	} else {
-		$(".panel").hide();
-		$(".panel[data-teamID='"+team+"']").show();
+
+
+var sidebarHandler = {
+	selector : ".panel",
+	dataSelector : "data-teamid",
+	
+	/**
+	 * An object that holds to lists. a list with elements to be show and a list with elements that will be hidden.
+	 */
+	visibleObjectElement : function(toShow, toHide){
+		this.toShow = toShow;
+		this.toHide = toHide;
+	},
+	/**
+ 	 * Gets the selected team, and shows only contet of this team.
+ 	 * @param elem the element that triggers the event and holds the data for which team should be displayed.
+ 	 * 
+ 	 * Test: does not need a test, all components passed.
+ 	 */
+	elementClicked: function(elem){
+		var team = elem.data("teamid");
+		this.setVisibility(this.selectShowHideElements(team));
+	},
+	/**
+	 * Select the elements the will be show, and the elements that will be hidden.
+	 * 
+	 * Test: pass
+	 */
+	selectShowHideElements: function(teamID){
+		var toShow = $(this.selector + this.buildDataSelector(teamID));
+		var toHide = $(this.selector).not(this.buildDataSelector(teamID));
+		if(teamID==="all"){
+			toShow = $(this.selector);
+			toHide = [];
+		}
+		return new this.visibleObjectElement(toShow, toHide);
+	},
+	/**
+	 * Sets the visibility for the given VisibleObjectElement.
+	 * 
+	 * Test: doeas not need a test.
+	 */
+	setVisibility: function(elements){
+		elements.toShow.show();
+		elements.toHide.hide();
+	},
+	/**
+	 * Builds the string used for the dataselector.
+	 * 
+	 * Test: pass
+	 */
+	buildDataSelector : function(team){
+		return "[" + this.dataSelector+ "='"+team+"']";
 	}
 }
 
@@ -601,7 +641,7 @@ function createNewEvent() {
  * Adds all the sidebar handlers, after the sidebar is loaded.
  */
 function addSidebarHandlers(){
-	addHandlerToElements("#teamFilter li a", "click", function(){sidebarHandler($(this));});
+	addHandlerToElements("#teamFilter li a", "click", function(){sidebarHandler.elementClicked($(this));});
 	addHandlerToElements("#toggleNewEvent", "click", loadNewEventModalHandler);
 }
 

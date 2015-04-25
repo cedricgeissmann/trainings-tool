@@ -7,7 +7,7 @@
 <head>
   <meta charset="utf-8">
   <title>QUnit test for main.php and main.js</title>
-  <base href="/trainingstool/">
+  <base href="/">
   <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.18.0.css">
    <script src="//code.jquery.com/qunit/qunit-1.18.0.js"></script>
    

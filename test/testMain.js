@@ -1,4 +1,4 @@
-QUnit.module("Main tests", {
+QUnit.module("sidebar test", {
    beforeEach: function(){
        QUnit.stop();
        initMain();
@@ -6,42 +6,55 @@ QUnit.module("Main tests", {
    }
 });
 
+
+QUnit.test("selector builder", function(assert){
+    var teamID = 1;
+    var expected = "[data-teamid='1']";
+    assert.equal(sidebarHandler.buildDataSelector(teamID), expected, "Data selector correctly builded.")
+});
+
 /**
  * Test the selection filter by simulating a click on the teamid=1 selector.
  */
 QUnit.test("selectionFilter specific team", function(assert){
-    var panelClassIdentifier = ".panel";
-    var elem = $.parseHTML('<a href="#!" data-teamid="1">TV Muttenz Herren</a>');
-    sidebarHandler($(elem));
-    var visibleList = $(panelClassIdentifier+":visible");
-    var hiddenList = $(panelClassIdentifier+":hidden");
-    visibleList.each(function(){
-       assert.equal($(this).data("teamid"), 1, "teamID matches"); 
+    var teamID = 2;
+    var elements = sidebarHandler.selectShowHideElements(teamID);
+    elements.toShow.each(function(){
+       assert.equal($(this).data("teamid"), teamID, "teamID matches"); 
     });
-    hiddenList.each(function(){
-        assert.notEqual($(this).data("teamid"), 1, "teamID does not match.");
+    elements.toHide.each(function(){
+       assert.notEqual($(this).data("teamid"), teamID, "teamID does not match"); 
     });
+    
+});
+
+
+/**
+ * Test if all elements are eighter visible or hidden.
+ */
+QUnit.test("no elements are lost", function(assert){
+    var teamID = 2;
+    var totalSize = $(sidebarHandler.selector).length;
+    var elements = sidebarHandler.selectShowHideElements(teamID);
+    assert.equal((elements.toShow.length + elements.toHide.length), totalSize, "lists are not empty");
 });
 
 /**
  * Test the selection filter to display all, by simulate a click on the teamid=all selector.
  */
 QUnit.test("selectionFilter visible all", function(assert){
-    var panelClassIdentifier = ".panel";
-    var elem = $.parseHTML('<a href="#" name="all" data-teamid="all">Alle</a>');
-    sidebarHandler($(elem));
-    var completeList = $(panelClassIdentifier);
-    var visibleList = $(panelClassIdentifier+":visible");
-    var hiddenList = $(panelClassIdentifier+":hidden");
-    assert.equal(hiddenList.length, 0, "There are no hidden "+panelClassIdentifier);
-    assert.equal(completeList.length, visibleList.length, "Amount of visible elements, is equal to the amount of total elements.");
-    assert.notEqual(completeList, 0, "There are elments in the list.");
+    var teamID = "all";
+    var allElements =$(sidebarHandler.selector);
+    var totalSize = allElements.length;
+    var elements = sidebarHandler.selectShowHideElements(teamID);
+    assert.equal(elements.toShow.length, totalSize, "Lists have same length");
+    assert.equal(elements.toHide.length, 0, "No elements will be hidden");
+    
 });
 
 /**
  * Move a player from not subscribed to subscribed.
  */
-QUnit.test("move player", function(assert){
-    var elem = $.parseHTML('<a href="#!" class="subscribe" data-id="503"><h2>Anmelden:</h2></a>');
-    
-});
+//QUnit.test("move player", function(assert){
+//    var elem = $.parseHTML('<a href="#!" class="subscribe" data-id="503"><h2>Anmelden:</h2></a>');
+//});
