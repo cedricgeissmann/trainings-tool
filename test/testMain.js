@@ -1,8 +1,11 @@
 QUnit.module("sidebar test", {
-   beforeEach: function(){
-       QUnit.stop();
+   beforeEach: function(assert){
+       var done = assert.async();
        initMain();
-       QUnit.start();
+       setTimeout(function(){
+           assert.ok(true, "Setup complete");
+           done();
+       });
    }
 });
 
@@ -58,3 +61,51 @@ QUnit.test("selectionFilter visible all", function(assert){
 //QUnit.test("move player", function(assert){
 //    var elem = $.parseHTML('<a href="#!" class="subscribe" data-id="503"><h2>Anmelden:</h2></a>');
 //});
+
+
+/**
+ * This object stores the data object that ajax will send to the server. Use this to check if the data is correct.
+ */
+var ajaxParams;
+
+QUnit.module("subscribe user", {
+    beforeEach: function(){
+        this._real_ajax = $.ajax;
+        $.ajax = function(param){
+            ajaxParams = param;
+        }
+    },
+    afterEach: function(){
+        $.ajax = this._real_ajax;
+    }
+});
+
+QUnit.test("subscribe user", function(assert){
+    var trainingsID = 10;
+    var expectedData = {
+        "trainingsID": trainingsID,
+        "subscribeType": 1,
+        "function": "subscribeForTraining"
+    };
+    var expectedURL = "server/TrainingUtil.php";
+    var expectedType = "POST";
+    subscription.subscribe(trainingsID);
+    assert.deepEqual(ajaxParams.data, expectedData, "Data that will be sended to the server is correct.");
+    assert.equal(ajaxParams.type, expectedType, "Ajax type is POST");
+    assert.equal(ajaxParams.url, expectedURL, "Ajax request is sent to the right destination.");
+});
+
+QUnit.test("unsubscribe user", function(assert){
+    var trainingsID = 10;
+    var expectedData = {
+        "trainingsID": trainingsID,
+        "subscribeType": 0,
+        "function": "subscribeForTraining"
+    };
+    var expectedURL = "server/TrainingUtil.php";
+    var expectedType = "POST";
+    subscription.unsubscribe(trainingsID);
+    assert.deepEqual(ajaxParams.data, expectedData, "Data that will be sended to the server is correct.");
+    assert.equal(ajaxParams.type, expectedType, "Ajax type is POST");
+    assert.equal(ajaxParams.url, expectedURL, "Ajax request is sent to the right destination.");
+});

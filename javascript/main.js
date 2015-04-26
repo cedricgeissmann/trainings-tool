@@ -1,5 +1,3 @@
-
-
 var sidebarHandler = {
 	selector : ".panel",
 	dataSelector : "data-teamid",
@@ -54,61 +52,74 @@ var sidebarHandler = {
 	}
 }
 
-/**
- * Moves a player to its corresponding list.
- * @param playerName the name of the player who should be moved.
- * @param element the element that is triggering the move event.
- * @param subscribeListClass the class in which the player should be added.
- */
-function movePlayer(playerName, element, subscribeListClass) {
-	var panel = element.closest(".panel-body");
-	var list = panel.find("." + subscribeListClass);
-	var player = panel.find("[name*='" + playerName + "']");
-	var tagName = player.prop("tagName");
-	if (tagName === "A") {
-		player = player.parent();
-	}
-	if (player.size() === 0) {
-		player = "<div name=" + playerName + ">" + getFullName(playerName) + "</div>";
-	}
-	list.append(player);
-}
-
-/**
- * subscribe the current user, who triggers this event user from the training.
- * @param id the id for the training for which the current user gets unsubscribed.
- */
-function subscribe(id) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"trainingsID": id,
-			"subscribeType": 1,
-			"function": "subscribeForTraining"
+var subscription = {
+	/**
+	 * subscribe the current user, who triggers this event user from the training.
+	 * @param id the id for the training for which the current user gets unsubscribed.
+	 */
+	 subscribe: function(id) {
+		$.ajax({
+			"type": "POST",
+			"url": "server/TrainingUtil.php",
+			"data": {
+				"trainingsID": id,
+				"subscribeType": 1,
+				"function": "subscribeForTraining"
+			}
+		});
+	},
+	/**
+	 * unsubscribe the current user, who triggers this event user from the training.
+	 * @param id the id for the training for which the current user gets unsubscribed.
+	 */
+	 unsubscribe: function(id) {
+		$.ajax({
+			"type": "POST",
+			"url": "server/TrainingUtil.php",
+			"data": {
+				"trainingsID": id,
+				"subscribeType": 0,
+				"function": "subscribeForTraining"
+			},
+			"success": function(data){
+				//console.log(data);
+			}
+		});
+	},
+	/**
+	 * Moves a player to its corresponding list.
+	 * @param playerName the name of the player who should be moved.
+	 * @param element the element that is triggering the move event.
+	 * @param subscribeListClass the class in which the player should be added.
+	 */
+	 movePlayer: function(playerName, element, subscribeListClass) {
+		var panel = element.closest(".panel-body");
+		var list = panel.find("." + subscribeListClass);
+		var player = panel.find("[name*='" + playerName + "']");
+		var tagName = player.prop("tagName");
+		if (tagName === "A") {
+			player = player.parent();
 		}
-	});
-}
-
-
-/**
- * unsubscribe the current user, who triggers this event user from the training.
- * @param id the id for the training for which the current user gets unsubscribed.
- */
-function unsubscribe(id) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"trainingsID": id,
-			"subscribeType": 0,
-			"function": "subscribeForTraining"
-		},
-		"success": function(data){
-			//console.log(data);
+		if (player.size() === 0) {
+			player = "<div name=" + playerName + ">" + getFullName(playerName) + "</div>";
 		}
-	});
-}
+		list.append(player);
+	},
+	move: {
+		createMoveElement: function(){
+			return new this.moveElement();
+		}
+	},
+	moveElement: function(playerElement, moveToList){
+		this.playerElement = playerElement;
+		this.moveToList = moveToList;
+	}
+};
+
+
+
+
+
 
 /**
  * This function is for the admin, to subscribe someone for a training.
@@ -231,8 +242,8 @@ function addTrainingPlanHandler(element){
  */
 function subscribeHandler(element) {
 	var id = element.data("id");
-	subscribe(id);
-	getSessionsUsername(movePlayer, element, "subscribeList");
+	subscription.subscribe(id);
+	getSessionsUsername(subscription.movePlayer, element, "subscribeList");
 }
 
 /**
@@ -278,11 +289,11 @@ function sendReason(trainingID, username) {
  */
 function unsubscribeWithReasonHandler(element) {
 	var id = element.data("id");
-	unsubscribe(id);
+	subscription.unsubscribe(id);
 	var name = getSessionsUsername();
 	sendReason(id, name);
 	name = removeLineBreaks(name);
-	movePlayer(name, element, "unsubscribeList");
+	subscription.movePlayer(name, element, "unsubscribeList");
 }
 
 /**
@@ -326,8 +337,8 @@ function unsubscribeHandler(element){
 		}
 		$("#unsubscribeReasonModal").modal("toggle");
 	} else {
-		unsubscribe(id);
-		getSessionsUsername(movePlayer, element, "unsubscribeList");
+		subscription.unsubscribe(id);
+		getSessionsUsername(subscription.movePlayer, element, "unsubscribeList");
 	}
 }
 
@@ -339,7 +350,7 @@ function signUpPlayerHandler(element) {
 	var id = element.data('trainingsid');
 	var username = element.data('username');
 	subscribeFromAdmin(username, id);
-	movePlayer(username, element, "subscribeList");
+	subscription.movePlayer(username, element, "subscribeList");
 }
 
 /**
@@ -350,7 +361,7 @@ function signOutPlayerHandler(element){
 	var id = element.data('trainingsid');
 	var username = element.data('username');
 	unsubscribeFromAdmin(username, id);
-	movePlayer(username, element, "unsubscribeList");
+	subscription.movePlayer(username, element, "unsubscribeList");
 }
 
 
@@ -362,7 +373,7 @@ function removePlayerHandler(element){
 	var id = element.data('trainingsid');
 	var username = element.data('username');
 	removeFromTrainingFromAdmin(username, id);
-	movePlayer(username, element, "notSubscribedList");
+	subscription.movePlayer(username, element, "notSubscribedList");
 }
 
 /**
@@ -373,7 +384,7 @@ function signUpPlayerAlwaysHandler(element) {
 	var id = element.data('trainingsid');
 	var username = element.data('username');
 	defaultSubscribeForTrainingFromAdmin(username, id, 1);
-	movePlayer(username, element, "subscribeList");
+	subscription.movePlayer(username, element, "subscribeList");
 }
 
 /**
@@ -384,7 +395,7 @@ function signOutPlayerAlwaysHandler(element) {
 	var id = element.data('trainingsid');
 	var username = element.data('username');
 	defaultSubscribeForTrainingFromAdmin(username, id, 0);
-	movePlayer(username, element, "unsubscribeList");
+	subscription.movePlayer(username, element, "unsubscribeList");
 }
 
 /**
