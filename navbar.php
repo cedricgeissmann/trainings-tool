@@ -37,6 +37,9 @@
             <li id="nav-calendar">
                 <a href="#!" data-identifier="calendar" class="nav-link">Kalender</a>
             </li>
+            <li id="nav-organizer" class="visibleTrainer visibleAdmin">
+                <a href="#!" data-identifier="organizer" class="nav-link">Mannschafts-Manager</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>

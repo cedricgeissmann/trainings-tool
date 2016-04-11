@@ -11,18 +11,16 @@
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/jasny-bootstrap.min.js"></script>
 
-
-
-  <script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+<!--  <script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
   <script src="js/gmap/jquery.ui.map.full.min.js" type="text/javascript"></script>
-
+-->
 
   <!-- loading third party libraries -->
   <script type="text/javascript" src="js/mustache.js"></script>
   <script src='js/moment.min.js'></script>
   <script src='js/fullcalendar.min.js'></script>
   <script type="text/javascript" src="js/json2html.js"></script>
-  <script type="text/javascript" src="js/md5.js"></script>
+ <!-- <script type="text/javascript" src="js/md5.js"></script>-->
   <script type="text/javascript" src="js/jquery.cookie.js"></script>
   <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
   <script type="text/javascript" src="js/jPushMenu.js"></script>
@@ -31,21 +29,6 @@
   <script type="text/javascript" src="calendars/defaultCalendar.js"></script>
 
   <!-- loading the transformations needed by json2html -->
-  <!--<script type="text/javascript" src="transformation/mainTransforms/mainPanelTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/teamFilterTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/notSubscribeTransformAdmin.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/personTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/subscribeTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/subscribeTransformAdmin.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/unsubscribeTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/unsubscribeTransformAdmin.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/unsubscribeReasonTransform.js"></script>
-  <script type="text/javascript" src="transformation/profileTransforms/teamListTransform.js"></script>
-  <script type="text/javascript" src="transformation/divider.js"></script>
-  <script type="text/javascript" src="transformation/trainingNotificationTransforms/createTrainingNotificationTransform.js"></script>
-  <script type="text/javascript" src="transformation/trainingNotificationTransforms/trainingNotificationTransform.js"></script>
-  <script type="text/javascript" src="transformation/trainingNotificationTransforms/trainingNotificationInnerTransform.js"></script>
-  -->
   <script type="text/javascript" src="transformation/passwordTransform.js"></script>
   <script type="text/javascript" src="transformation/mainTransforms/selectReasonTransform.js"></script>
   <script type="text/javascript" src="transformation/defaultNotification.js"></script>
@@ -57,7 +40,6 @@
   <script type="text/javascript" src="javascript/admin/adminFunctionHandlers.js"></script>
   <script type="text/javascript" src="javascript/main.js"></script>
   <script type="text/javascript" src="javascript/profile.js"></script>
-  <!--<script type="text/javascript" src="javascript/chat.js"></script>-->
 
   <!-- Importing a font from google api -->
   <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -74,10 +56,6 @@
 <body>
   <?php include "navbar.php"; ?>
   
-  <!--<div id="menu-dragger" style="position:fixed; background-color: #000000; height: 100px; width: 200px;"></div>-->
-
-  <!--<button id="offcanvas-toggler" class="btn btn-primary visibleTrainer visibleAdmin" type="button" style="position:fixed; top: 100px; left: 20px;"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>-->
-
   <div class="container activeTab" id="main">
     <!--class="container"-->
     <div class="row row-fluid">
@@ -108,6 +86,8 @@
   </div>
   
   <div class="container" id="profile"></div>
+	<div class="container" id="organizer"> </div>
+  <div class="container" id="notification"></div>
   
   <!-- begin calendar -->
   <div class="container">
@@ -712,6 +692,48 @@
           {{/data}}
         </script>
         
+				<script id="organizerTemplate" type="x-tmpl-mustache">
+
+		<div class="organizerToolList">
+			<button id="createNewTeam" class="btn btn-default">Neues Team erstellen</button>
+		</div>
+{{#data}}
+						{{#teams}}
+						<div class="panel panel-default">
+							<div class="panel-heading ">
+								<h3 class="panel-titel"><b>{{teamname}}</b></h3>
+							</div>
+							<div class="panel-body">
+
+							</div>
+							</div>
+							{{/teams}}
+					{{/data}}	
+				</script>
+
+<script id="notificationTemplate" type="x-tmpl-mustache">
+	{{#data}}
+	<div class="modal fade in" id="modalNewGame" tabindex="-1" aria-hidden="false" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title">{{title}}</h4>
+        </div>
+        <div class="modal-body" id="modalContent">
+				{{content}} 
+				Name des neuen Teams: <input type="text" id="newTeamName"/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button id={{id}} type="submit" class="btn btn-primary" data-dismiss="modal">Absenden</button>
+        </div>
+      </div>
+    </div>
+  </div>	
+		{{/data}}
+</script>
+
   <!-- end templates -->
 
 

@@ -3,7 +3,7 @@ var sidebarHandler = {
 	dataSelector : "data-teamid",
 	
 	/**
-	 * An object that holds to lists. a list with elements to be show and a list with elements that will be hidden.
+	 * An object that holds 2 lists. a list with elements to be show and a list with elements that will be hidden.
 	 */
 	visibleObjectElement : function(toShow, toHide){
 		this.toShow = toShow;
@@ -36,7 +36,7 @@ var sidebarHandler = {
 	/**
 	 * Sets the visibility for the given VisibleObjectElement.
 	 * 
-	 * Test: doeas not need a test.
+	 * Test: does not need a test.
 	 */
 	setVisibility: function(elements){
 		elements.toShow.show();
@@ -721,7 +721,7 @@ function renderTeamList(teamListData){
  * The team filter menu is an off-canvas element. Toggle the menu to access it.
  */
 function showTeamFilterMenu(){
-	console.log("foo");
+	//console.log("foo");
 	$(".offcanvas").offcanvas("toggle");
 }
 
@@ -738,8 +738,9 @@ function initMain(){
 	addHandlerToElements(".nav-link", "click", function(){changeActiveTab($(this));});
 	addHandlerToElements("#nav-profile", "click", function(){loadProfileData(renderProfileData);});
 	addHandlerToElements("#nav-calendar", "click", function(){renderCalendar();});
-	addHandlerToElements("#nav-chat", "click", function(){prepareChatPanel();});
+	//addHandlerToElements("#nav-chat", "click", function(){prepareChatPanel();});
 	addHandlerToElements("#offcanvas-toggler", "click", function(){showTeamFilterMenu();});
+	addHandlerToElements("#nav-organizer", "click", function(){loadOrganizerData(renderOrganizerData);});
 //	addRightSwipeHandler("#menu-dragger", showTeamFilterMenu);
 }
 
@@ -750,6 +751,73 @@ $("document").ready(function() {
 	initMain();
 });
 
+/**
+ * Loads the data that will be used to render the organizer from the server, and passes them to the renderCallback function.
+ */
+function loadOrganizerData(renderCallback){
+	$.ajax({
+		"type": "POST",
+		"url": "server/AdminUtil.php",
+		"data": {
+			"function": "getOrganizerData"
+		},
+		"dataType": "json",
+		"success": function(data){
+			console.log(data);
+			renderCallback(data);
+		}
+	});
+}
+
+/**
+ * Renders the JSON-object, that contains the organizer data, to a valid html element, and adds it to the page.
+ * @param data the JSON-object that holds the organizer data.
+ */
+ function renderOrganizerData(data){
+ 	var template = $("#organizerTemplate").html();
+ 	var res = Mustache.render(template, data);
+ 	$("#organizer").html(res);
+ 	addHandlerToElements("#createNewTeam", "click", function(){
+		//TODO: Change data
+		var notificationData = {
+			data: {
+				title: "Neues Team erstellen",
+				id: "submitCreateNewTeam"
+			}
+		};
+		displayTeamCreator(notificationData);
+ 	});
+ 	//$('#main').toggle("slide");
+ }
+
+function displayTeamCreator(data){
+	var template = $("#notificationTemplate").html();
+	var res = Mustache.render(template, data);
+	$("#notification").html(res);
+	addHandlerToElements("#submitCreateNewTeam", 'click', function(){
+		var teamName = $("#newTeamName").val();
+		createNewTeam(teamName);
+	});
+	$("#notification").modal("show");
+}
+
+/**
+ * TODO: implement this function
+ */
+function createNewTeam(teamName){
+	$.ajax({
+		"type": "POST",
+		"url": "server/AdminUtil.php",
+		"data": {
+			"teamName": teamName,
+			"function": "createNewTeam"
+		},
+		"dataType": "json",
+		"success": function(data){
+			console.log(data);
+		}
+	});
+}
 
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -795,6 +863,7 @@ function setActiveTab(id){
  * @param data the JSON-object that holds the profile data.
  */
  function renderProfileData(data){
+	 console.log(data);
  	var template = $("#profileTemplate").html();
  	var res = Mustache.render(template, data);
  	$("#profile").html(res);
@@ -841,7 +910,7 @@ function loadProfileDataCallback(username, renderDataCallback){
 		},
 		"dataType": "json",
 		"success": function(data){
-			console.log(data);
+			//console.log(data);
 			renderDataCallback(data);
 		}
 	});

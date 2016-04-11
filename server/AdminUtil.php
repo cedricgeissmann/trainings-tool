@@ -300,6 +300,25 @@ class AdminUtil{
 		}
 		return false;
 	}
+
+	public static function createNewTeam($teamname){
+		self::mayExecuteIfAdmin();
+		$count = DatabaseUtil::executeQueryAsArrayAssoc("SELECT COUNT(name) AS count FROM `teams` WHERE name = '$teamname'");
+		var_dump($count);
+		if($count[0]['count'] > 0){
+			echo "A team with this name already exists.";
+		}else{
+			DatabaseUtil::executeQuery("INSERT INTO `teams` (name, need_reason) VALUES ('$teamname', 0)");
+		}
+	}
+
+
+	public static function getOrganizerData(){
+		$username = $_SESSION["user"]["username"];
+		$res = DatabaseUtil::executeQueryAsJSON("SELECT teams.name AS teamname, teams.id AS teamid FROM teams INNER JOIN (`role`) ON (role.tid = teams.id) WHERE username='$username'");
+		$teams = "{\"data\" : [{\"teams\": " . $res . "}]}";
+		echo $teams;
+	}
 	
 }
 
@@ -370,6 +389,14 @@ switch($function){
 		break;
 	case "checkAdminAndTrainer":
 		echo AdminUtil::checkAdminAndTrainer($_SESSION["user"]["username"]);
+		$logger->writeLog($_SESSION["user"]["username"], $function);
+		break;
+	case "createNewTeam":
+		AdminUtil::createNewTeam($_POST["teamName"]);
+		$logger->writeLog($_SESSION["user"]["username"], $function);
+		break;
+	case "getOrganizerData":
+		echo AdminUtil::getOrganizerData();
 		$logger->writeLog($_SESSION["user"]["username"], $function);
 		break;
 }

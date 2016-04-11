@@ -35,7 +35,7 @@ class ProfileUtil{
 			echo "Sie sind bereits mit einem anderen Benutzernamen angemeldet.";
 			return;
 		}
-		DatabaseUtil::executeQuery("INSERT INTO `user`(username, firstname, name, password, birthdate, mail, phone) VALUES ('$username', '$firstname', '$name', '$password', '$birthdate', '$mail', '$phone')");
+		DatabaseUtil::executeQuery("INSERT INTO `user`(username, firstname, name, password, birthdate, mail, phone, activate) VALUES ('$username', '$firstname', '$name', '$password', '$birthdate', '$mail', '$phone', '1')");
 		echo "Ein neuer Benutzer wurde erstellt. Bitte warten Sie bis Sie vom Administrator freigeschatlen werden.";
 	}
 	
@@ -160,7 +160,7 @@ class ProfileUtil{
 				}
 			}
 		}
-		DatabaseUtil::executeQuery("DELETE FROM `role` WHERE tid NOT IN ($implodedTeamList) AND username='$username'");
+		//DatabaseUtil::executeQuery("DELETE FROM `role` WHERE tid NOT IN ($implodedTeamList) AND username='$username'");
 	}
 	
 	

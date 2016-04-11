@@ -1,13 +1,17 @@
 <?php
 
+
 class LoggerUtil{
 	
-	private $logfilename = "/users/tvmuttenz/www/logs/default.log";
+
+	private $logfilename = "";
 	private $logFileHandle = NULL;
 	private $DEBUG = false;
 	
 	public function __construct(){
-		if(DEBUG){
+		$config = parse_ini_file('../config.ini');
+		$this->logfilename = $config['main_log_path'] . '/default.log';
+		if($this->DEBUG){
 			$this->openLogFile();
 		}
 	}
@@ -17,7 +21,7 @@ class LoggerUtil{
 	 * Opens the logfile in append mode.
 	 */
 	private function openLogfile(){
-		if(DEBUG){
+		if($this->DEBUG){
 			if (is_writable($this->logfilename)) {
 				if (!$this->logFileHandle = fopen($this->logfilename, "a")) {
 	         		echo "Kann die Datei $this->logfilename nicht öffnen";
@@ -34,7 +38,7 @@ class LoggerUtil{
 	 * Closes the logfile.
 	 */
 	private function closeLogfile(){
-		if(DEBUG){
+		if($this->DEBUG){
 			fclose($this->logFileHandle);
 		}
 	}
@@ -45,7 +49,7 @@ class LoggerUtil{
 	 * @param String $action the action the user executed.
 	 */
 	public function writeLog($username, $action){
-		if(DEBUG){
+		if($this->DEBUG){
 			$time = date("Y-m-d H:i:s");
 			$content = "$time	$username:	$action\n";
 			if (!fwrite($this->logFileHandle, $content)) {

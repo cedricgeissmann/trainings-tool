@@ -7,6 +7,48 @@ if(!isset($_SESSION)){
 	session_start();
 }
 
+
+class ConnectionInformation{
+	private $username = "";
+	private $password = "";
+	private $hostname = "";
+	private $port = "";
+	private $db = "";
+
+
+	public function __construct(){
+		$config = parse_ini_file('../config.ini');
+		$filename = $config['main_config_path'] . '/database.ini';
+		$data = parse_ini_file($filename);
+		$this->username = $data['username'];
+		$this->password = $data['password'];
+		$this->hostname = $data['hostname'];
+		$this->port = $data['port'];
+		$this->db = $data['db'];
+	}
+
+	public function getUsername(){
+		return $this->username;
+	}
+
+	public function getPassword(){
+		return $this->password;
+	}
+
+	public function getHostname(){
+		return $this->hostname;
+	}
+
+	public function getPort(){
+		return $this->port;
+	}
+
+	public function getDB(){
+		return $this->db;
+	}
+
+}
+
 /**
  * This utility class holds the function which are used to interact with the database on the server.
  */
@@ -18,13 +60,9 @@ class DatabaseUtil{
 	 * @returns Resource the link to the database.
 	 */
 	private static function connectToDatabase(){
-			$username = "tvmuttenz";
-			$password = "Wiederkäuer2";
-			$hostname = "localhost";
-			$port = "3306";
-			$db = "tvmuttenz";
-			$link = mysql_connect($hostname, $username, $password) or die("Keine Verbindung möglich: " .  mysql_error());
-			$datenbank = mysql_select_db($db, $link);
+			$con = new ConnectionInformation();
+			$link = mysql_connect($con->getHostname(), $con->getUsername(), $con->getPassword()) or die("Keine Verbindung möglich: " .  mysql_error());
+			$datenbank = mysql_select_db($con->getDB(), $link);
 			if(!$datenbank){
 				echo "Kann nicht zur Datenbank verbinden.";
 			}

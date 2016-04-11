@@ -28,7 +28,7 @@ function changeNavbarActive(newActive){
 /**
  * Gets the number of unread messages, for the currently logged in user.
  */
-function getNewMessageCount(){
+/*function getNewMessageCount(){
 	$.ajax({
 		"type": "POST",
 		"url": "server/ChatUtil.php",
@@ -41,7 +41,7 @@ function getNewMessageCount(){
 			$("#newMessageCounter").html(countData[0].count);
 		}
 	});
-}
+}*/
 
 $(document).ready(function(){
 	//getNewMessageCount();
