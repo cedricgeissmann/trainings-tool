@@ -7,6 +7,8 @@ if(!isset($_SESSION)){
 	session_start();
 }
 
+include $_SERVER['DOCUMENT_ROOT'] . 'config.php';
+include Config::get_main_config_path() . 'database.php';
 
 class ConnectionInformation{
 	private $username = "";
@@ -17,14 +19,12 @@ class ConnectionInformation{
 
 
 	public function __construct(){
-		$config = parse_ini_file('../config.ini');
-		$filename = $config['main_config_path'] . '/database.ini';
-		$data = parse_ini_file($filename);
-		$this->username = $data['username'];
-		$this->password = $data['password'];
-		$this->hostname = $data['hostname'];
-		$this->port = $data['port'];
-		$this->db = $data['db'];
+		global $database_config;
+		$this->username = $database_config['username'];
+		$this->password = $database_config['password'];
+		$this->hostname = $database_config['hostname'];
+		$this->port = $database_config['port'];
+		$this->db = $database_config['db'];
 	}
 
 	public function getUsername(){

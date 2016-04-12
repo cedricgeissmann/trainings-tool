@@ -37,7 +37,7 @@
 							<button id="loginButton" type="button" class="btn btn-primary">Anmelden</button>
 					</div>
 					<div class="form-center">
-							oder <a id="signupLink" href="profile.php">Einschreiben</a>
+							oder <a id="signupLink" href="subscribe.php">Einschreiben</a>
 					</div>
 				</form>
 			</div>

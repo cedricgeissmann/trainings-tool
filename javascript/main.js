@@ -598,7 +598,6 @@ function loadTeamFilterData() {
 		//"dataType": "json",
 		"success": function(data) {
 			data = jQuery.parseJSON(data);
-//			console.log(data);
 			renderTeamFilter(data);
 		}
 	});

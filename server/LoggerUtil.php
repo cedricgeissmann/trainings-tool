@@ -1,6 +1,8 @@
 <?php
 
 
+include_once $_SERVER['DOCUMENT_ROOT'] . 'config.php';
+
 class LoggerUtil{
 	
 
@@ -9,8 +11,7 @@ class LoggerUtil{
 	private $DEBUG = false;
 	
 	public function __construct(){
-		$config = parse_ini_file('../config.ini');
-		$this->logfilename = $config['main_log_path'] . '/default.log';
+		$this->logfilename = Config::get_main_log_path() . '/default.log';
 		if($this->DEBUG){
 			$this->openLogFile();
 		}
