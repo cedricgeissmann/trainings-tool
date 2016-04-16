@@ -1,14 +1,12 @@
 <?php
 
-include 'server/DatabaseUtil.php';
-
-echo "DatabaseUtil is successfully included<br>";
-
-echo $_SERVER["HTTP_POST"] . "<br>";
-
 var_dump($_SERVER);
 
 echo "<br>";
+
+include $_SERVER['DOCUMENT_ROOT'] . 'server/DatabaseUtil.php';
+
+echo "DatabaseUtil is successfully included<br>";
 
 $config = new ConnectionInformation();
 
