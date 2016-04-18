@@ -1,6 +1,17 @@
 <?php
 
+/**
+ * Use output buffering because this should be the header file for each php-script on this server. It is possible that there is output in one of the autoloaded classes. Since this script uses sessions and cookies, the header will be sent if all session and cookie processing is finished.
+ */
+ob_start();
 
+if( !isset($_SESSION) ){
+	session_start();
+}
+
+/**
+ * This is the only php-class which exists outside of the classes directory. This class is needed to autoload all the used php-classes from within the classes directory.
+ */
 class Autoloader
 {
     /**
@@ -72,18 +83,31 @@ class Autoloader
 spl_autoload_register('Autoloader::loader');
 
 
-$test = new Test();
-$test->test();
-
-new My_New();
 
 
-$mustache = new ArrayResponse();
-$mustache->add_data_to_mustache("hello", "world");
-$mustache->add_data_to_mustache("cedy", array(firstname => "Cedric", name => "Geissmann"));
 
-echo "<br><br>";
 
-echo $mustache->get_data_for_mustache();
+
+
+
+
+
+
+/**
+ * Here starts the test-section of the init.php header file. Delete this part if finished testing.
+ */
+
+
+
+//Currently testing the auth-class for user authentication.
+
+
+
+
+/**
+ * End of test-section. Everything below this comment may not be deleted.
+ */
+
+ob_end_flush();
 
 ?>
