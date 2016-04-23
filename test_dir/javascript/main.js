@@ -187,99 +187,13 @@ function subscribeHandler(element) {
 }
 
 /**
- * Adds all the handlers to the unsubscribe modal after this is rendered.
- * @param element the element that triggers the unsubscribeWithReasonHandler.
- */
-function addUnsubscribeModalHandlers(element) {
-	$("textarea").on("input", function() {
-		resizeActiveTextArea($(this));
-	});
-	$("#unsubscribeWithReason").on("click", function() {
-		unsubscribeWithReasonHandler(element);
-	});
-}
-
-/**
- * Sends the reason to the server and adds it to the database.
- * @param trainingsID the id for which training the user sends the unsubscribe reason.
- * @param username the username of the user that sends the unsubscribe reason.
- */
-function sendReason(trainingID, username) {
-	var reasonType = $("#selectReason").val();
-	var reason = $("#reasonField").val();
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"trainingID": trainingID,
-			"username": username,
-			"reasonType": reasonType,
-			"reason": reason,
-			"function": "addReason"
-		},
-		"success": function(data) {
-			//console.log(data);
-		}
-	});
-}
-
-/**
- * Adds an eventhandler to the html element that triggers the unsubscription for the active player with the specified reason.
- * @param element the html element that is triggered.
- */
-function unsubscribeWithReasonHandler(element) {
-	var id = element.data("id");
-	subscription.unsubscribe(id);
-	var name = getSessionsUsername();
-	sendReason(id, name);
-	name = removeLineBreaks(name);
-	subscription.movePlayer(name, element, "unsubscribeList");
-}
-
-/**
- * Gets all available reasons to unsubribe from a training from the server, and renders them to a html select group. Appends this group to the specified html element.
- * @param element the html element on which the select data is appended to.
- */
-function addSelectReasonValues(element) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"async": false,		//TODO change this to async: true if possible. This must not be async, because you have to wait for a single loading of this dialog to continue.
-		"data": {
-			"function": "getReasons"
-		},
-		"dataType": "json",
-		"success": function(selectReasonData) {
-			var res = json2html.transform(selectReasonData, selectReasonTransform);
-			element.append(res);
-		}
-	});
-}
-
-/**
- * TODO: need_reason modal with mustache
  * Adds an eventhandler to the specified html element, which triggers the function for a player to unsubscribe himself.
  * @param element the html element to which the handler gets attached.
  */
 function unsubscribeHandler(element){
 	var id = element.data("id");
-	var need_reason = element.data("need_reason");
-	if (need_reason === 1) {		//TODO get the need_reason in the training data.
-		//TODO create unsubscribe modal
-		var unsubscribeReason = {
-			"id": id
-		};
-		if ($("#unsubscribeReasonModal").size() === 0) {
-			var res = json2html.transform(unsubscribeReason, unsubscribeReasonTransform);
-			$(res).insertBefore("#removeNext");
-			addSelectReasonValues($("#selectReason"));
-			addUnsubscribeModalHandlers(element);
-		}
-		$("#unsubscribeReasonModal").modal("toggle");
-	} else {
 		subscription.unsubscribe(id);
 		getSessionsUsername(subscription.movePlayer, element, "unsubscribeList");
-	}
 }
 
 /**
@@ -495,19 +409,7 @@ $(window).on("resize", function() {
  * Loads the information for all trainings and hands the JSON data to a render callback function.
  */
 function loadPanelData(){
-	//TODO	change to dataType: json, remove console.log
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"function": "getTraining"
-		},
-		//"dataType": "json",
-		"success": function(data) {
-			data = jQuery.parseJSON(data);
-			renderPanel(data);
-		}
-	});
+	call_server_side_function("getTraining", "server/TrainingUtil.php", {}, function(data){renderPanel(data);});
 }
 
 /**
@@ -515,9 +417,7 @@ function loadPanelData(){
  * @param data a JSON object that contains the data of all trainings.
  */
 function renderPanel(data){
-	var template = $("#panelTemplate").html();
-	var res = Mustache.render(template, data);
-	$("#content").html(res);
+	renderTemplate("#panelTemplate", "#content", data);
 	//Call here functions that have to be executed after the training panels are rendered.
 	addTrainingPanelHandlers();
 	addParticipantsHandlers();

@@ -9,6 +9,7 @@
 /**
  * External libraries:
  * JQuery: Version 2.2.2
+ * Mustache
  */
 
 
@@ -558,3 +559,13 @@ function listLocalStorage(){
 	 console.log($(this));
      console.log(e);
  });
+
+/**
+ * Searches for the mustache template with the specified jQuery selector, and randers this templete with the given data.
+ * The result will then override the html of the target jQuery selector.
+ */
+function renderTemplate(templateName, targetName, data){
+	var template = $(templateName).html();
+	var res = Mustache.render(template, data);
+	$(targetName).html(res);
+}
