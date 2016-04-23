@@ -42,12 +42,12 @@ class DBConnection{
 	 */
 	public function select($sql){
 		$response = array(
-			number_of_rows => 0,
-			response => array(),
+			"number_of_rows" => 0,
+			"response" => array(),
 		);
 
 
-		$res = mysqli_query($this->link, $sql);
+		$res = mysqli_query($this->link, $sql) or die(mysqli_error($this->link) . "\n");
 
 		$num = mysqli_num_rows($res);
 

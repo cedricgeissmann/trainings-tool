@@ -78,12 +78,13 @@ class Auth{
 		$obj = new Auth();
 
 		if($obj->db->exists("SELECT * FROM user WHERE username='$username' AND password='$password'")){
+			$_SESSION["auth"] = TRUE;
+			$_SESSION["user"]["username"] = $username;
+
 			$obj->create_hash();
 			$obj->write_cookie();
 			$obj->store_session_in_db();
 			
-			$_SESSION["auth"] = TRUE;
-			$_SESSION["user"]["username"] = $username;
 		}else{
 			header("location: /index.php");
 		}
@@ -110,16 +111,16 @@ class Auth{
 		// Note: This will destroy the session, and not just the session data!
 		if (ini_get("session.use_cookies")) {
 			$params = session_get_cookie_params();
-			setcookie(session_name(), '', time() - 42000);
+			$cookie = new CookieSetter();
+			$cookie->setcookie(session_name(), '', time() - 42000);
 		}
 
-		// Finally, destroy the session.
-		session_destroy();
 	}
 
 	private function destroy_cookie(){
 		$exp_time = strtotime("-30 days");
-		setcookie($this->hash_cookie_name, "", $exp_time);
+		$cookie = new CookieSetter();
+		$cookie->setcookie($this->hash_cookie_name, "", $exp_time);
 	}
 
 
@@ -153,16 +154,15 @@ class Auth{
 	 * Creates a cookie at the user that contains the hash. This cookie will be used to reload the users session.
 	 */
 	public function write_cookie(){
-		setcookie($this->hash_cookie_name, $this->hash, $this->hash_cookie_expiration_time);
+		$cookie = new CookieSetter();
+		$cookie->setcookie($this->hash_cookie_name, $this->hash, $this->hash_cookie_expiration_time);
 	}
 
 	/**
 	 * Stores the user session in the database.
 	 */
 	public function store_session_in_db(){
-		//TODO implement
-		//
-		$username = "cedy";
+		$username = $_SESSION["user"]["username"];
 
 		if( $this->db->exists("SELECT username FROM auth WHERE username='$username'") ){
 			$this->db->update("UPDATE auth SET hash='$this->hash'");

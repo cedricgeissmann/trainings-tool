@@ -19,6 +19,11 @@ class ArrayResponse{
 		$this->response[$key] = $value;
 	}
 
+
+	public function output_response(){
+		return json_encode($this->response);
+	}
+
 }
 
 

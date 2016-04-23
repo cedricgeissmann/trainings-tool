@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * @router_may_call
+ */
 class TrainingUtil {
 	public static $types = array (
 			'training' => 'Trainings',
@@ -23,19 +25,11 @@ class TrainingUtil {
 		$this->db = new DBConnection();
 	}
 	
-	/* private function selectTrainings($username){ */
-	/* 	return DatabaseUtil::executeQuery ( "SELECT training.id AS id, training.date AS date, training.day AS day, training.time_start AS time_start, training.time_end AS time_end, training.teamID AS teamID, role.admin AS admin, role.trainer AS trainer, training.location AS location, training.type AS type, training.meeting_point AS meeting_point, training.enemy AS enemy, teams.need_reason AS need_reason */
-	/* 	FROM `training` INNER JOIN (role, teams) ON (training.teamID = role.tid AND training.teamID=teams.id) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY date ASC, time_start ASC" ); */
-	/* } */
-
-	
-	/* private static function getTID($trainingsID){ */
-	/* 	$res = DatabaseUtil::executeQuery("SELECT trainingsID FROM training WHERE id='$trainingsID'"); */
-	/* 	$row = mysql_fetch_assoc($res); */
-	/* 	return $row["trainingsID"]; */
-	/* } */
 
 	/**
+	 *
+	 * This method does not need to be tested, since it only returns data from the database.
+	 *
 	 * Returns a JSON-array, that contains all the players, that are not subscribed for the training with the specified ID.
 	 * @param Integer $trainingsID is the id of the training, for which the not subscribed players are selected.
 	 * @returns JSON-array an array that contains all the not subscribed players int the form [{username: ..., firstname: ..., name: ..., trainingsID: ...}]
@@ -56,6 +50,10 @@ class TrainingUtil {
 		return $res["response"];
 	}
 	
+	/**
+	 * @router_may_call
+	 * This function does not need testing.
+	 */
 	public function subscribeForTraining($username, $subscribeType, $trainingsID) {
 		if( $this->db->exists( "SELECT * FROM subscribed_for_training WHERE username = '$username' AND trainingsID = '$trainingsID'" ) ){
 			$this->db->update( "UPDATE subscribed_for_training SET subscribe_type = '$subscribeType' WHERE trainingsID='$trainingsID' AND username='$username'" );
@@ -90,6 +88,7 @@ class TrainingUtil {
 	
 	/**
 	 * Selects all future trainings for the current user.	
+	 * @router_may_call
 	 * @return string Returns a json-array that holds the trainings.
 	 */
 	public function getTraining() {
@@ -97,6 +96,9 @@ class TrainingUtil {
 		$res = $this->db->select( "SELECT training.id AS id, training.date AS date, training.day AS day, training.time_start AS time_start, training.time_end AS time_end, training.teamID AS teamID, role.admin AS admin, role.trainer AS trainer, training.location AS location, training.type AS type, training.meeting_point AS meeting_point, training.enemy AS enemy, teams.need_reason AS need_reason
 		FROM `training` INNER JOIN (role, teams) ON (training.teamID = role.tid AND training.teamID=teams.id) WHERE date>='" . date ( "Y-m-d" ) . "' AND username='$username' AND deleted='0' ORDER BY date ASC, time_start ASC" );
 		/* return json_encode($res["response"]); */
+
+
+
 		$json_obj = $res["response"];
 		foreach($json_obj as &$item){
 			$id = $item["id"];
@@ -108,10 +110,17 @@ class TrainingUtil {
 			$item["adminOrTrainer"] = $this->getAdminOrTrainer();
 		}
 		$res = json_encode($json_obj);
-		return "{\"panels\": $res}";
+		/* return "{\"panels\": $res}"; */
+		
+		
+		
+		return array("panels" => $json_obj);
 	}
 	
+	/**
+	 */
 	public function createNextTrainings() {
+		echo "Function is called";
 		$nextWeeks = 4; // Wieviele Wochen im voraus ein training erzeugt werden soll.
 		$res = $this->db->select( "SELECT * FROM default_training" );
 		foreach( $res["response"] as &$row ) {
