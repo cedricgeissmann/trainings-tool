@@ -11,13 +11,13 @@ class Request{
 
 	public function __construct(){
 		if( !empty($_POST) ){
-			if( isset($_POST["class"]) ){
-				$this->class_name = $_POST["class"];
+			if( isset($_POST["class_name"]) ){
+				$this->class_name = $_POST["class_name"];
 			}else{
 				throw new RequestException("No Class is specified");
 			}
-			if( isset($_POST["function"]) ){
-				$this->function_name = $_POST["function"];
+			if( isset($_POST["function_name"]) ){
+				$this->function_name = $_POST["function_name"];
 			}else{
 				throw new RequestException("No function is specified");
 			}
