@@ -35,6 +35,7 @@ class Reader
 			}
 		}
 
+
 		$this->rawDocBlock = $reflection->getDocComment();
 		$this->parameters = array();
 	}

@@ -1,6 +1,7 @@
 <?php
 	include 'init.php';			//this will be in the same directory, so it is okay like this.
-	Auth::construct_default();
+	$auth = new Auth();
+	$auth->construct_default();
 ?>
 
 <!DOCTYPE html>

@@ -20,8 +20,13 @@ class TrainingUtil {
 			'Saturday' => 'Samstag',
 			'Sunday' => 'Sonntag'
 	);
-	
+
+	/**
+	 * This class may only be used if the user is logged in.
+	 */
 	public function __construct(){
+		$auth = new Auth();
+		$auth->needs_login();
 		$this->db = new DBConnection();
 	}
 	

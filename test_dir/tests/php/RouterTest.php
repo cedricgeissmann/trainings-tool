@@ -1,19 +1,21 @@
 <?php
 
-require_once __DIR__ . "/../init.php";
+require_once __DIR__ . "/../../init.php";
 
 class RouterTest extends PHPUnit_Framework_Testcase{
 
 
 
 	protected function setUp(){
-		$this->auth = Auth::construct_with_log_in("cedy", md5("ced-jes"));
+		$this->auth = new Auth();
+		$this->auth->login("cedy", md5("ced-jes"));
 		$this->training = new TrainingUtil();
 	}
 
 
 	protected function tearDown(){
-		Auth::logout();
+		$auth = new Auth();
+		$auth->logout();
 	}
 
 

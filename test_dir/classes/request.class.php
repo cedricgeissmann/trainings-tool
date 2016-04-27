@@ -1,6 +1,5 @@
 <?php
 
-
 class RequestException extends Exception{
 
 }
@@ -22,7 +21,7 @@ class Request{
 				throw new RequestException("No function is specified");
 			}
 			if( isset($_POST["args"]) ){
-				$this->args = $_POST["args"];
+				$this->args = json_decode($_POST["args"], true);
 			}else{
 				$this->args = array();
 			}

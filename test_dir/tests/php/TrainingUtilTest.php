@@ -1,19 +1,21 @@
 <?php
 
-require_once __DIR__ . "/../init.php";
+require_once __DIR__ . "/../../init.php";
 
 
 class TrainingUtilTest extends PHPUnit_Framework_Testcase{
 
 
 	protected function setUp(){
-		$this->auth = Auth::construct_with_log_in("test", md5("1234"));
+		$this->auth = new Auth();
+		$this->auth->login("test", md5("1234"));
 		$this->training = new TrainingUtil();
 	}
 
 
 	protected function tearDown(){
-		Auth::logout();
+		$auth = new Auth();
+		$auth->logout();
 	}
 
 

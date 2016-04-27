@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../init.php";
+require_once __DIR__ . "/../../init.php";
 
 
 
@@ -12,7 +12,8 @@ class AuthTest extends PHPUnit_Framework_Testcase{
 	 * After the login the $_SESSION has to be set according to this test.
 	 */
 	public function testLogin(){
-		$auth = Auth::construct_with_log_in("test", md5("1234"));
+		$auth = new Auth();
+		$auth->login("test", md5("1234"));
 		
 
 

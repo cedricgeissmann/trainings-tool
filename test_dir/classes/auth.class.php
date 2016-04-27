@@ -1,11 +1,5 @@
 <?php
 
-if( isset($_SESSION["auth"]) and $_SESSION["auth"] === TRUE){
-	// The user is authenticated.
-}else{
-	//header("location: /index.php");
-}
-
 /**
  * This class will be used to authenticate the user.
  *
@@ -13,6 +7,9 @@ if( isset($_SESSION["auth"]) and $_SESSION["auth"] === TRUE){
  * The user may stay in the autheticated area if:
  *	1: he has a session that says auth is okay
  *	2: he has a matching cookie 
+ *
+ *
+ *	@router_may_call
  */
 class Auth{
 
@@ -21,38 +18,50 @@ class Auth{
 	private $hash_cookie_expiration_time = 0;
 
 
-	private function __construct(){
+	public function __construct(){
 		$this->hash_cookie_expiration_time = strtotime("+30 days");
 		$this->db = new DBConnection();
 	}
 
 
-	public static function construct_default(){
-		$obj = new Auth();
+	public function construct_default(){
+		$this->needs_login();
+	}
+
+	private function abort($str){
+		$res = new ArrayResponse();
+		$res->add_data("error", $str);
+		echo $res->output_response();
+		exit;
+	}
+
+	public function needs_login(){
 
 		if( isset($_SESSION["auth"]) and $_SESSION["auth"] === TRUE){
 			// The user is authenticated.
 			// Nothing more has to be done.
 		}else{
 			// The user is not currently authenticated. Check if he has a cookie. If he has, autologgin the user, else redirect the user to authentication screen.
-			if( $obj->load_hash_from_cookie() ){
+			if( $this->load_hash_from_cookie() ){
 				//Cookie was set. Continue with normal execution.
-				if( $obj->check_if_hash_is_valid() ){
+				if( $this->check_if_hash_is_valid() ){
 					//The hash is valid and exists in the database.
 					//
 					//Reload the users session.
-					$obj->reload_user_session();
+					$this->reload_user_session();
 				}else{
 					// The hash is invalid or has expired. 
 					//
 					// No need to reload the users session.
-					header("location: /index.php");
-					exit;
+					//header("location: /index.php");
+					//
+					$this->abort("This session cookie is no longer valid.");
 				}
 			}else{
 				//Cookie was not set or expired. There is no session to reload.
-				header("location: /index.php");
-				exit;
+				//header("location: /index.php");
+				//
+				$this->abort("Cannot recreate session. Cookie is expired or does not exist.");
 			}
 
 			// The user has either successfully reloaded its session or logged in with an expired cookie.
@@ -60,47 +69,61 @@ class Auth{
 			// Either way. Create a new hash for the user, store the hash as cookie, and update the session entry in the database.
 			//
 			// Only do this on logout.
-			$obj->create_hash();
-			$obj->write_cookie();
-			$obj->store_session_in_db();
+			$this->create_hash();
+			$this->write_cookie();
+			$this->store_session_in_db();
 		}
-
-		return $obj;
 
 	}
 
 
 
 	/**
-	 * Use this constructor to log the user in.
+	 * @router_may_call
 	 */
-	public static function construct_with_log_in($username, $password){
-		$obj = new Auth();
+	/* public function login($args){ */
+	/* 	echo "Till here"; */
+	/* 	exit; */
+	/* 	return $this->login($args["username"], $args["password"]); */
+	/* } */
 
-		if($obj->db->exists("SELECT * FROM user WHERE username='$username' AND password='$password'")){
+
+
+
+	/**
+	 * @router_may_call
+	 */
+	public function login($args){
+		$username = $args["username"];
+		$password = md5($args["password"]);
+		if($this->db->exists("SELECT * FROM user WHERE username='$username' AND password='$password'")){
 			$_SESSION["auth"] = TRUE;
 			$_SESSION["user"]["username"] = $username;
 
-			$obj->create_hash();
-			$obj->write_cookie();
-			$obj->store_session_in_db();
+			$this->create_hash();
+			$this->write_cookie();
+			$this->store_session_in_db();
 			
+			return "Login was successfull";
 		}else{
-			header("location: /index.php");
+
+			return "Failed to log in with $username and $password";
+			//header("location: /index.php");
 		}
 
-		return $obj;
 	}
+
 
 	/**
 	 * This will logout the user, destroy his session and delete the cookie as well as remove his auth from the database.
+	 *
+	 * @router_may_call
 	 */
-	public static function logout(){
-		$obj = new Auth();
-
-		$obj->destroy_cookie();
-		$obj->destroy_db_entry();
-		$obj->destroy_session();
+	public function logout(){
+		$this->destroy_cookie();
+		$this->destroy_db_entry();
+		$this->destroy_session();
+		return "Successfully logged out.";
 	}
 
 	private function destroy_session(){
