@@ -1,11 +1,48 @@
 {{#panels}}
 
-            <div class="panel panel-default team{{teamID}} {{type}}" data-teamid="{{teamID}}" data-id="{{id}}">
+            <div class="event-panel panel panel-default team{{teamID}} {{type}}" data-teamid="{{teamID}}" data-id="{{id}}">
               <div class="panel-heading">
               
+              <ul class="event-panel-heading">
+                
+                
+								<!-- start panel titel -->
+								<li>
+                <h4 class="panel-title"><b>{{type}} [{{teamName}}]</b>: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
+								</li>
+								<!-- end panel titel -->
+
+								<!-- start panel options button -->
+								<li>
+                <div class="btn-group panel-options-button pull-right"><a href="#" class="dropdown-toggle {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a class="removeTraining {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!"  data-id="{{id}}">Training löschen</a>
+                    </li>
+                    <li><a class="addTrainingPlan {{#trainer}}visibleTrainer{{/trainer}}" href="#!" name="{{id}}" data-id="{{id}}">Traininplan bearbeiten</a>    {{!TODO: remove name}}
+                    </li>
+                    <li><a class="addTrainingNotification {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Benachrichtigung hinzufügen</a>
+                    </li>
+                    <li><a class="changeEvent {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Ereigniss bearbeiten</a>
+                    </li>
+                  </ul>
+                </div>
+								</li>
+								<!-- end panel options button -->
+							</ul>
+
+              </div> <!-- End of panel heading -->
               
-                {{! begin notification }}
-                <span class="label label-primary notification col-xs-1" data-id="{{id}}">{{notifications.length}}</span>
+							<!-- Here starts the body of the panel, the body contains all the informations that will be presented to the user -->
+              <div class="panel-body">
+
+
+								<!-- start of notification -->
+								<!-- TODO: find a better solution for notifications -->
+                {{#notifications.length}}
+								<div>
+								<span>Benachtichtigungen: </span>
+								<a href="#!" class="notification" data-id="{{id}}">{{notifications.length}}</a>
+								</div>
                 {{#notifications.length}}
                 <div class="modal fade in notificationModal" style="display: none;" aria-hidden="false" data-trainings_id="{{id}}">
                   <div class="modal-dialog">
@@ -33,25 +70,10 @@
                   </div>
                 </div>
                 {{/notifications.length}}
-                {{! end notification }}
-                
-                
-                <h4 class="panel-title col-xs-10"><b>{{type}} [{{teamName}}]</b>: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
-                <div class="btn-group"><a href="#" class="dropdown-toggle {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><b class="caret"></b></a>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a class="removeTraining {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!"  data-id="{{id}}">Training löschen</a>
-                    </li>
-                    <li><a class="addTrainingPlan {{#trainer}}visibleTrainer{{/trainer}}" href="#!" name="{{id}}" data-id="{{id}}">Traininplan bearbeiten</a>    {{!TODO: remove name}}
-                    </li>
-                    <li><a class="addTrainingNotification {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Benachrichtigung hinzufügen</a>
-                    </li>
-                    <li><a class="changeEvent {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Ereigniss bearbeiten</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div class="panel-body">
+                {{/notifications.length}}
+								<!-- end of notification -->
+
+
               <div class="numberDiv"><span>Anzahl Teilnehmer: </span><span data-id="{{id}}" class="numberOfPlayers">{{numberOfPlayers}}</span>
               </div>
               {{#location}}
@@ -66,7 +88,19 @@
               <div class="meetingPointDiv"><span>Treffpunkt: </span><span class="meetingPointSpan">{{meeting_point}}</span>
               </div>
               {{/meeting_point}}
-              <div class="equidistant"><a href="#!" class="subscribe" data-id="{{id}}"><h2>Anmelden:</h2></a>
+
+
+							<div class="row"><!-- this diw wraps the subscribe lists. -->
+							<!-- show the lists as following:
+								xs: sub -> full, unsub -> full, not -> hidden
+								sm: sub -> half, unsub -> half, not -> hidden
+								md: sub -> third, unsub -> third, not -> third
+								lg: sub -> third, unsub -> third, not -> third
+							-->
+
+							
+							<!-- Here starts the list with players that are subscribed for the event -->
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><a href="#!" class="subscribe" data-id="{{id}}"><h2>Anmelden:</h2></a>
                 <div data-id="{{id}}" class="subscribeList">
                   {{#subscribed}}
                   {{#adminOrTrainer}}
@@ -112,8 +146,13 @@
                   {{/subscribed}}
                   
                 </div>
-              </div>
-              <div class="equidistant"><a href="#!" class="unsubscribe" data-id="{{id}}"><h2>Abmelden:</h2></a>
+              </div><!-- end of subscribe list -->
+
+
+
+
+							<!-- Here starts the list with players that are UNsubscribed for the event -->
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><a href="#!" class="unsubscribe" data-id="{{id}}"><h2>Abmelden:</h2></a>
                 <div data-id="{{id}}" class="unsubscribeList"></div>
                 {{#unsubscribed}}
                 {{#adminOrTrainer}}
@@ -158,10 +197,14 @@
                   {{/adminOrTrainer}}
                   {{/unsubscribed}}
               </div>
-              <div class="equidistant {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}"><h4>Nicht gemeldet:</h4>
+
+
+
+							<!-- Here starts the list with players that are NOT subscribed for the event -->
+							{{#adminOrTrainer}}
+              <div class="col-lg-4 col-md-4 hidden-sm hidden-xs"><h4>Nicht gemeldet:</h4>
                 <div data-id="{{id}}" class="notSubscribedList"></div>
                 {{#notSubscribed}}
-                {{#adminOrTrainer}}
                   <div class="btn-group playerDropdownButton"><a name="{{username}}" href="#" class="dropdown-toggle" data-toggle="dropdown" data-username="{{username}}">{{firstname}} {{name}}<span></span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                       <li></li>
@@ -197,17 +240,17 @@
                       </li>
                     </ul>
                   </div>
-                  {{/adminOrTrainer}}
-                  {{^adminOrTrainer}}
-                    <div>{{firstname}} {{name}}</div>
-                  {{/adminOrTrainer}}
                   {{/notSubscribed}}
               </div>
+							{{/adminOrTrainer}}
+
+
+							</div> <!-- end of row -->
               
-              </div>
+              </div><!-- end of panel-body -->
               
               
-            </div>
+            </div><!-- end of panel -->
 
           {{/panels}}
 

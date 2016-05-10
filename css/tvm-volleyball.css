@@ -12,14 +12,15 @@
 body{
 	font-family: 'Varela Round';
 	margin-top: 60px !important;
+	background-color: grey;
 }
 
 /**
  * 	this is for centering elements in a form.
  */
 .form-center {
-    margin: 10px auto;
-    text-align: center;
+	margin: 10px auto;
+	text-align: center;
 }
 
 
@@ -79,9 +80,9 @@ body{
 .exerciseTitleField{
 	border: none;
 	box-shadow: none !important;
-    min-width: 20px;
-    max-width: 500px;
-    transition: width 0.25s;    
+	min-width: 20px;
+	max-width: 500px;
+	transition: width 0.25s;    
 } 
 
 .startTime{
@@ -110,7 +111,7 @@ body{
 }
 
 table {
-    max-width: none;
+	max-width: none;
 }
 
 .tableHolder{
@@ -129,15 +130,15 @@ table {
 
 
 .row-fluid div {
-    /*height: 200px;*/
-    -webkit-transition: width 0.3s ease, margin 0.3s ease;
-    -moz-transition: width 0.3s ease, margin 0.3s ease;
-    -o-transition: width 0.3s ease, margin 0.3s ease;
-    transition: width 0.3s ease, margin 0.3s ease;
+	/*height: 200px;*/
+	-webkit-transition: width 0.3s ease, margin 0.3s ease;
+	-moz-transition: width 0.3s ease, margin 0.3s ease;
+	-o-transition: width 0.3s ease, margin 0.3s ease;
+	transition: width 0.3s ease, margin 0.3s ease;
 }
 
 .row-fluid .span0 {
-    width: 0%;
+	width: 0%;
 }
 
 .text-center{
@@ -148,4 +149,33 @@ table {
 .organizerToolList{
 	margin: 10px auto;
 	background: black;
+}
+
+
+.event-panel{
+	margin-left: 40px;
+	margin-right: 40px;
+	border: none;
+	border-radius: 0px;
+}
+
+
+.event-panel-heading{
+	margin-bottom: 0px;
+}
+
+
+.event-panel-heading li{
+	display: inline;
+}
+
+
+.event-panel-heading li h4{
+	display: inline;
+}
+
+
+
+.panel-options-button{
+	display: inline;
 }
