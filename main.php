@@ -1,4 +1,9 @@
-<?php include 'init.php'; ?>
+<?php
+	include 'init.php';			//this will be in the same directory, so it is okay like this.
+	$auth = new Auth();
+	$auth->construct_default();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -6,43 +11,39 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-  <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/jasny-bootstrap.min.js"></script>
-
-<!--  <script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
-  <script src="js/gmap/jquery.ui.map.full.min.js" type="text/javascript"></script>
--->
+  <script src="js/jquery-2.2.2.min.js"></script>
+  <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jasny-bootstrap.min.js"></script>
 
   <!-- loading third party libraries -->
-  <script type="text/javascript" src="js/mustache.js"></script>
+  <script src="js/mustache.js"></script>
   <script src='js/moment.min.js'></script>
   <script src='js/fullcalendar.min.js'></script>
-  <script type="text/javascript" src="js/json2html.js"></script>
- <!-- <script type="text/javascript" src="js/md5.js"></script>-->
-  <script type="text/javascript" src="js/jquery.cookie.js"></script>
-  <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
-  <script type="text/javascript" src="js/jPushMenu.js"></script>
+  <script src="js/json2html.js"></script>
+ <!-- <script src="js/md5.js"></script>-->
+  <script src="js/jquery.cookie.js"></script>
+  <script src="js/jquery.touchSwipe.min.js"></script>
+  <script src="js/jPushMenu.js"></script>
   
   <!-- loading calendars -->
-  <script type="text/javascript" src="calendars/defaultCalendar.js"></script>
+  <script src="calendars/defaultCalendar.js"></script>
 
   <!-- loading the transformations needed by json2html -->
-  <script type="text/javascript" src="transformation/passwordTransform.js"></script>
-  <script type="text/javascript" src="transformation/mainTransforms/selectReasonTransform.js"></script>
-  <script type="text/javascript" src="transformation/defaultNotification.js"></script>
+  <!-- <script src="transformation/passwordTransform.js"></script> -->
+  <!-- <script src="transformation/mainTransforms/selectReasonTransform.js"></script> -->
+  <!-- <script src="transformation/defaultNotification.js"></script> -->
 
 
   <!-- loading own libraries -->
-  <script type="text/javascript" src="javascript/util.js"></script>
-  <script type="text/javascript" src="javascript/admin/adminFunctions.js"></script>
-  <script type="text/javascript" src="javascript/admin/adminFunctionHandlers.js"></script>
-  <script type="text/javascript" src="javascript/main.js"></script>
-  <script type="text/javascript" src="javascript/profile.js"></script>
+  <script src="javascript/util.js"></script>
+  <script src="javascript/main.js"></script>
+  <script src="javascript/admin/adminFunctions.js"></script>
+  <script src="javascript/admin/adminFunctionHandlers.js"></script>
+  <script src="javascript/profile.js"></script>
 
   <!-- Importing a font from google api -->
-  <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<!--  <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'> -->
 
   <link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">

@@ -1,21 +1,13 @@
 <?php
-session_start();
-include_once "server/LoggerUtil.php";
 
-$logger = new LoggerUtil();
+require_once "init.php";
 
 
-$logger->writeLog($_SESSION["user"]["username"], "Loggs out");
+$auth = new Auth();
+$auth->logout();
 
 
-if(isset($_SESSION["login"])){
-	unset($_SESSION["login"]);
-}
-if(isset($_SESSION["user"])){
-	unset($_SESSION["user"]);
-}
+echo "<br><br><h1>You have been logged out</h1>";
 
-$url = "index.php";
-header("Location:$url");
 
 ?>

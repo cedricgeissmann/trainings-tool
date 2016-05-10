@@ -58,33 +58,14 @@ var subscription = {
 	 * @param id the id for the training for which the current user gets unsubscribed.
 	 */
 	 subscribe: function(id) {
-		$.ajax({
-			"type": "POST",
-			"url": "server/TrainingUtil.php",
-			"data": {
-				"trainingsID": id,
-				"subscribeType": 1,
-				"function": "subscribeForTraining"
-			}
-		});
+		call_server_side_function("subscribeForTraining", "server/TrainingUtil.php", {trainingsID: id, subscribeType: 1}, function(){});
 	},
 	/**
 	 * unsubscribe the current user, who triggers this event user from the training.
 	 * @param id the id for the training for which the current user gets unsubscribed.
 	 */
 	 unsubscribe: function(id) {
-		$.ajax({
-			"type": "POST",
-			"url": "server/TrainingUtil.php",
-			"data": {
-				"trainingsID": id,
-				"subscribeType": 0,
-				"function": "subscribeForTraining"
-			},
-			"success": function(data){
-				//console.log(data);
-			}
-		});
+		call_server_side_function("subscribeForTraining", "server/TrainingUtil.php", {trainingsID: id, subscribeType: 0}, function(){});
 	},
 	/**
 	 * Moves a player to its corresponding list.
@@ -118,7 +99,14 @@ var subscription = {
 
 
 
-
+function adminActions(serverSideFunctionName, username, trainingsID, additionalData){
+	var data = {
+		username      : username,
+		trainingsID   : trainingsID
+	};
+	$.extend(true, data, additionalData);
+	call_server_side_function(serverSideFunctionName, "server/AdminUtil.php", data, function(){});
+}
 
 
 /**
@@ -127,16 +115,7 @@ var subscription = {
  * @param trainingsID the id of the training for which the user should be subscribed.
  */
 function subscribeFromAdmin(username, trainingsID) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/AdminUtil.php",
-		"data": {
-			"username": username,
-			"subscribeType": "1",
-			"trainingsID": trainingsID,
-			"function": "subscribeForTrainingFromAdmin"
-		}
-	});
+	adminActions("subscribeForTrainingFromAdmin", username, trainingsID, {subscribeType: 1});
 }
 
 /**
@@ -145,16 +124,7 @@ function subscribeFromAdmin(username, trainingsID) {
  * @param trainingsID the id of the training for which the user should be unsubscribed.
  */
 function unsubscribeFromAdmin(username, trainingsID) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/AdminUtil.php",
-		"data": {
-			"username": username,
-			"subscribeType": "0",
-			"trainingsID": trainingsID,
-			"function": "subscribeForTrainingFromAdmin"
-		}
-	});
+	adminActions("subscribeForTrainingFromAdmin", username, trainingsID, {subscribeType: 0});
 }
 
 /**
@@ -163,15 +133,7 @@ function unsubscribeFromAdmin(username, trainingsID) {
  * @param trainingsID the id of the training for which the user should be removed.
  */
 function removeFromTrainingFromAdmin(username, trainingsID) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/AdminUtil.php",
-		"data": {
-			"username": username,
-			"trainingsID": trainingsID,
-			"function": "removeFromTrainingFromAdmin"
-		}
-	});
+	adminActions("removeFromTrainingFromAdmin", username, trainingsID, {subscribeType: 1});
 }
 
 /**
@@ -181,19 +143,7 @@ function removeFromTrainingFromAdmin(username, trainingsID) {
  * @param subscribeType 1 for subscribe, 0 for unsubscribe.
  */
 function defaultSubscribeForTrainingFromAdmin(username, trainingsID, subscribeType) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/AdminUtil.php",
-		"data": {
-			"username": username,
-			"trainingsID": trainingsID,
-			"subscribeType": subscribeType,
-			"function": 'defaultSubscribeForTrainingFromAdmin'
-		},
-		"success": function(data) {
-			//console.log(data);
-		}
-	});
+	adminActions("defaultSubscribeForTrainingFromAdmin", username, trainingsID, {subscribeType: subscribeType});
 }
 
 /**
@@ -201,17 +151,7 @@ function defaultSubscribeForTrainingFromAdmin(username, trainingsID, subscribeTy
  * @param id is the id of the training that will be deleted.
  */
 function removeTraining(id) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"id": id,
-			"function": "removeTraining"
-		},
-		"success": function(data) {
-			//console.log(data);
-		}
-	});
+	call_server_side_function("removeTraining", "server/TrainingUtil.php", {id: id}, function(){});
 }
 
 /**
@@ -247,99 +187,13 @@ function subscribeHandler(element) {
 }
 
 /**
- * Adds all the handlers to the unsubscribe modal after this is rendered.
- * @param element the element that triggers the unsubscribeWithReasonHandler.
- */
-function addUnsubscribeModalHandlers(element) {
-	$("textarea").on("input", function() {
-		resizeActiveTextArea($(this));
-	});
-	$("#unsubscribeWithReason").on("click", function() {
-		unsubscribeWithReasonHandler(element);
-	});
-}
-
-/**
- * Sends the reason to the server and adds it to the database.
- * @param trainingsID the id for which training the user sends the unsubscribe reason.
- * @param username the username of the user that sends the unsubscribe reason.
- */
-function sendReason(trainingID, username) {
-	var reasonType = $("#selectReason").val();
-	var reason = $("#reasonField").val();
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"trainingID": trainingID,
-			"username": username,
-			"reasonType": reasonType,
-			"reason": reason,
-			"function": "addReason"
-		},
-		"success": function(data) {
-			//console.log(data);
-		}
-	});
-}
-
-/**
- * Adds an eventhandler to the html element that triggers the unsubscription for the active player with the specified reason.
- * @param element the html element that is triggered.
- */
-function unsubscribeWithReasonHandler(element) {
-	var id = element.data("id");
-	subscription.unsubscribe(id);
-	var name = getSessionsUsername();
-	sendReason(id, name);
-	name = removeLineBreaks(name);
-	subscription.movePlayer(name, element, "unsubscribeList");
-}
-
-/**
- * Gets all available reasons to unsubribe from a training from the server, and renders them to a html select group. Appends this group to the specified html element.
- * @param element the html element on which the select data is appended to.
- */
-function addSelectReasonValues(element) {
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"async": false,		//TODO change this to async: true if possible. This must not be async, because you have to wait for a single loading of this dialog to continue.
-		"data": {
-			"function": "getReasons"
-		},
-		"dataType": "json",
-		"success": function(selectReasonData) {
-			var res = json2html.transform(selectReasonData, selectReasonTransform);
-			element.append(res);
-		}
-	});
-}
-
-/**
- * TODO: need_reason modal with mustache
  * Adds an eventhandler to the specified html element, which triggers the function for a player to unsubscribe himself.
  * @param element the html element to which the handler gets attached.
  */
 function unsubscribeHandler(element){
 	var id = element.data("id");
-	var need_reason = element.data("need_reason");
-	if (need_reason === 1) {		//TODO get the need_reason in the training data.
-		//TODO create unsubscribe modal
-		var unsubscribeReason = {
-			"id": id
-		};
-		if ($("#unsubscribeReasonModal").size() === 0) {
-			var res = json2html.transform(unsubscribeReason, unsubscribeReasonTransform);
-			$(res).insertBefore("#removeNext");
-			addSelectReasonValues($("#selectReason"));
-			addUnsubscribeModalHandlers(element);
-		}
-		$("#unsubscribeReasonModal").modal("toggle");
-	} else {
 		subscription.unsubscribe(id);
 		getSessionsUsername(subscription.movePlayer, element, "unsubscribeList");
-	}
 }
 
 /**
@@ -555,19 +409,7 @@ $(window).on("resize", function() {
  * Loads the information for all trainings and hands the JSON data to a render callback function.
  */
 function loadPanelData(){
-	//TODO	change to dataType: json, remove console.log
-	$.ajax({
-		"type": "POST",
-		"url": "server/TrainingUtil.php",
-		"data": {
-			"function": "getTraining"
-		},
-		//"dataType": "json",
-		"success": function(data) {
-			data = jQuery.parseJSON(data);
-			renderPanel(data);
-		}
-	});
+	call_server_side_function("getTraining", "server/TrainingUtil.php", {}, function(data){renderPanel(data);});
 }
 
 /**
@@ -575,9 +417,7 @@ function loadPanelData(){
  * @param data a JSON object that contains the data of all trainings.
  */
 function renderPanel(data){
-	var template = $("#panelTemplate").html();
-	var res = Mustache.render(template, data);
-	$("#content").html(res);
+	renderTemplate("#panelTemplate", "#content", data);
 	//Call here functions that have to be executed after the training panels are rendered.
 	addTrainingPanelHandlers();
 	addParticipantsHandlers();

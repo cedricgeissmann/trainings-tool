@@ -1,0 +1,213 @@
+{{#panels}}
+
+            <div class="panel panel-default team{{teamID}} {{type}}" data-teamid="{{teamID}}" data-id="{{id}}">
+              <div class="panel-heading">
+              
+              
+                {{! begin notification }}
+                <span class="label label-primary notification col-xs-1" data-id="{{id}}">{{notifications.length}}</span>
+                {{#notifications.length}}
+                <div class="modal fade in notificationModal" style="display: none;" aria-hidden="false" data-trainings_id="{{id}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Info</h4>
+                      </div>
+                      <div class="modal-body" id="trainingNotificationModalContent">
+                        <ul class="list-group">
+                          {{#notifications}}
+                          <li class="list-group-item"><b>{{title}}</b>
+                            
+                            <button class="close deleteTrainingNotification {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-id="{{id}}">×</button>
+                            
+                            <div>{{message}}</div>
+                          </li>
+                          {{/notifications}}
+                        </ul>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Schliessen</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{/notifications.length}}
+                {{! end notification }}
+                
+                
+                <h4 class="panel-title col-xs-10"><b>{{type}} [{{teamName}}]</b>: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
+                <div class="btn-group"><a href="#" class="dropdown-toggle {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a class="removeTraining {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!"  data-id="{{id}}">Training löschen</a>
+                    </li>
+                    <li><a class="addTrainingPlan {{#trainer}}visibleTrainer{{/trainer}}" href="#!" name="{{id}}" data-id="{{id}}">Traininplan bearbeiten</a>    {{!TODO: remove name}}
+                    </li>
+                    <li><a class="addTrainingNotification {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Benachrichtigung hinzufügen</a>
+                    </li>
+                    <li><a class="changeEvent {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Ereigniss bearbeiten</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="panel-body">
+              <div class="numberDiv"><span>Anzahl Teilnehmer: </span><span data-id="{{id}}" class="numberOfPlayers">{{numberOfPlayers}}</span>
+              </div>
+              {{#location}}
+              <div class="locationDiv"><span>Ort: </span><span class="locationSpan">{{location}}</span>
+              </div>
+              {{/location}}
+              {{#enemy}}
+              <div class="enemyDiv"><span>Gegner: </span><span class="enemySpan">{{enemy}}</span>
+              </div>
+              {{/enemy}}
+              {{#meeting_point}}
+              <div class="meetingPointDiv"><span>Treffpunkt: </span><span class="meetingPointSpan">{{meeting_point}}</span>
+              </div>
+              {{/meeting_point}}
+              <div class="equidistant"><a href="#!" class="subscribe" data-id="{{id}}"><h2>Anmelden:</h2></a>
+                <div data-id="{{id}}" class="subscribeList">
+                  {{#subscribed}}
+                  {{#adminOrTrainer}}
+                  <div class="btn-group playerDropdownButton"><a name="{{username}}" href="#" class="dropdown-toggle" data-toggle="dropdown" data-username="{{username}}">{{firstname}} {{name}}<span></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li></li>
+                      <li><a class="signUpPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler abmelden</a>
+                      </li>
+                      <li><a class="removePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler entfernen</a>
+                      </li>
+                      <li><a class="signUpPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer abmelden</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="activate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Freischalten</a>
+                      </li>
+                      <li><a class="deactivate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Sperren</a>
+                      </li>
+                      <li><a class="grantTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte gewähren</a>
+                      </li>
+                      <li><a class="denyTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte verwerfen</a>
+                      </li>
+                      <li><a class="grantAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte gewähren</a>
+                      </li>
+                      <li><a class="denyAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte verwerfen</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="resetPassword" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Passwort zurücksetzen</a>
+                      </li>
+                      <li><a class="deletePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler löschen</a>
+                      </li>
+                      <li><a class="editPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler bearbeiten</a>
+                      </li>
+                    </ul>
+                  </div>
+                  {{/adminOrTrainer}}
+                  {{^adminOrTrainer}}
+                    <div>{{firstname}} {{name}}</div>
+                  {{/adminOrTrainer}}
+                  {{/subscribed}}
+                  
+                </div>
+              </div>
+              <div class="equidistant"><a href="#!" class="unsubscribe" data-id="{{id}}"><h2>Abmelden:</h2></a>
+                <div data-id="{{id}}" class="unsubscribeList"></div>
+                {{#unsubscribed}}
+                {{#adminOrTrainer}}
+                  <div class="btn-group playerDropdownButton"><a name="{{username}}" href="#" class="dropdown-toggle" data-toggle="dropdown" data-username="{{username}}">{{firstname}} {{name}}<span></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li></li>
+                      <li><a class="signUpPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler abmelden</a>
+                      </li>
+                      <li><a class="removePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler entfernen</a>
+                      </li>
+                      <li><a class="signUpPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer abmelden</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="activate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Freischalten</a>
+                      </li>
+                      <li><a class="deactivate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Sperren</a>
+                      </li>
+                      <li><a class="grantTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte gewähren</a>
+                      </li>
+                      <li><a class="denyTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte verwerfen</a>
+                      </li>
+                      <li><a class="grantAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte gewähren</a>
+                      </li>
+                      <li><a class="denyAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte verwerfen</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="resetPassword" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Passwort zurücksetzen</a>
+                      </li>
+                      <li><a class="deletePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler löschen</a>
+                      </li>
+                      <li><a class="editPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler bearbeiten</a>
+                      </li>
+                    </ul>
+                  </div>
+                  {{/adminOrTrainer}}
+                  {{^adminOrTrainer}}
+                    <div>{{firstname}} {{name}}</div>
+                  {{/adminOrTrainer}}
+                  {{/unsubscribed}}
+              </div>
+              <div class="equidistant {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}"><h4>Nicht gemeldet:</h4>
+                <div data-id="{{id}}" class="notSubscribedList"></div>
+                {{#notSubscribed}}
+                {{#adminOrTrainer}}
+                  <div class="btn-group playerDropdownButton"><a name="{{username}}" href="#" class="dropdown-toggle" data-toggle="dropdown" data-username="{{username}}">{{firstname}} {{name}}<span></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li></li>
+                      <li><a class="signUpPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler abmelden</a>
+                      </li>
+                      <li><a class="removePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler entfernen</a>
+                      </li>
+                      <li><a class="signUpPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer anmelden</a>
+                      </li>
+                      <li><a class="signOutPlayerAlways" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler immer abmelden</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="activate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Freischalten</a>
+                      </li>
+                      <li><a class="deactivate" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Sperren</a>
+                      </li>
+                      <li><a class="grantTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte gewähren</a>
+                      </li>
+                      <li><a class="denyTrainer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Trainerrechte verwerfen</a>
+                      </li>
+                      <li><a class="grantAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte gewähren</a>
+                      </li>
+                      <li><a class="denyAdmin" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Adminrechte verwerfen</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a class="resetPassword" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Passwort zurücksetzen</a>
+                      </li>
+                      <li><a class="deletePlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler löschen</a>
+                      </li>
+                      <li><a class="editPlayer" data-trainingsid="{{id}}" data-username="{{username}}" href="#!">Spieler bearbeiten</a>
+                      </li>
+                    </ul>
+                  </div>
+                  {{/adminOrTrainer}}
+                  {{^adminOrTrainer}}
+                    <div>{{firstname}} {{name}}</div>
+                  {{/adminOrTrainer}}
+                  {{/notSubscribed}}
+              </div>
+              
+              </div>
+              
+              
+            </div>
+
+          {{/panels}}
+

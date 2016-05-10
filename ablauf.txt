@@ -1,0 +1,9 @@
+main.html --- send request to server ---> Router.php
+																					Router.php --- process request ---> server/db
+main.html <--- send back to client --- Router.php <-- prepare response --- server/db
+|
+|
+--> render response --> add handlers
+|
+|
+--> do logic based on response
