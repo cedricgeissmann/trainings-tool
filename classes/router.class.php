@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../init.php";
-
-
 class Router{
 
 	private $must_have_annotation = "router_may_call";

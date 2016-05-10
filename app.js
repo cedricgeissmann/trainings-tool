@@ -1,7 +1,7 @@
 requirejs.config({
  	baseUrl: "./",
  	paths: {
- 		js: "javascript",
+ 		js: "jscript",
 		lib: "lib",
 		jquery: "lib/jquery",
 		templates: "templates",
@@ -13,7 +13,7 @@ requirejs.config({
 
 
 
-require(["js/login_test"], function(login){
+require(["js/login"], function(login){
 	login.isLoggedIn();
 });
 

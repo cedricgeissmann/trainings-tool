@@ -4,7 +4,7 @@ define(["jquery", "js/render"], function($, render){
 
 	function clearCache(){
 		//TODO: implement
-		require(["js/login_test"], function(login){
+		require(["js/login"], function(login){
 			login.logout();
 			console.log("Cache cleared");
 		});
@@ -31,7 +31,7 @@ define(["jquery", "js/render"], function($, render){
 		renderNav: function(){
 			render.render("navbar.must", {}, "#nav", ready);
 		}
-	}
+	};
 
 
 	return pub;

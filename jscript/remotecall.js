@@ -10,10 +10,11 @@ define(["jquery"], function($){
 			$.ajax({
 				type: "POST",
 				//TODO: change the url_path
-				url: "/test_dir/Route.php",
+				url: "/server/Route.php",
 				data: data,
 				dataType: "JSON",
 				success: function(data){
+					console.log(data);		//TODO: remove this line
 					callback(data);
 				}
 			});

@@ -1,8 +1,25 @@
 <?php
 
-require_once __DIR__ . "/../init.php";
-
 class Util{
+
+
+	
+	public static function abort($str){
+		$res = new ArrayResponse();
+		$res->add_data("error", $str);
+		echo $res->output_response();
+		exit;
+	}
+
+
+
+	public static function success($str){
+		$res = new ArrayResponse();
+		$res->add_data("success", $str);
+		echo $res->output_response();
+		exit;
+	}
+
 
 	public static function invokeMethod(&$object, $methodName, array $parameters = array()) {
     $reflection = new \ReflectionClass(get_class($object));

@@ -28,12 +28,6 @@ class Auth{
 		$this->needs_login();
 	}
 
-	private function abort($str){
-		$res = new ArrayResponse();
-		$res->add_data("error", $str);
-		echo $res->output_response();
-		exit;
-	}
 
 	/**
 	 * @router_may_call
@@ -43,7 +37,10 @@ class Auth{
 		if( isset($_SESSION["auth"]) and $_SESSION["auth"] === TRUE){
 			// The user is authenticated.
 			// Nothing more has to be done.
-			return "user session still active";
+			//
+			// TODO: separate function in call from server and call from client.
+			return "";
+			//Util::success("User session still active.");
 		}else{
 			// The user is not currently authenticated. Check if he has a cookie. If he has, autologgin the user, else redirect the user to authentication screen.
 			if( $this->load_hash_from_cookie() ){
@@ -53,20 +50,20 @@ class Auth{
 					//
 					//Reload the users session.
 					$this->reload_user_session();
-					return "User session restored";
+					Util::success("User session restored");
 				}else{
 					// The hash is invalid or has expired. 
 					//
 					// No need to reload the users session.
 					//header("location: /index.php");
 					//
-					$this->abort("This session cookie is no longer valid.");
+					Util::abort("This session cookie is no longer valid.");
 				}
 			}else{
 				//Cookie was not set or expired. There is no session to reload.
 				//header("location: /index.php");
 				//
-				$this->abort("Cannot recreate session. Cookie is expired or does not exist.");
+				Util::abort("Cannot recreate session. Cookie is expired or does not exist.");
 			}
 
 			// The user has either successfully reloaded its session or logged in with an expired cookie.
@@ -86,18 +83,6 @@ class Auth{
 	/**
 	 * @router_may_call
 	 */
-	/* public function login($args){ */
-	/* 	echo "Till here"; */
-	/* 	exit; */
-	/* 	return $this->login($args["username"], $args["password"]); */
-	/* } */
-
-
-
-
-	/**
-	 * @router_may_call
-	 */
 	public function login($args){
 		$username = $args["username"];
 		$password = md5($args["password"]);
@@ -109,10 +94,10 @@ class Auth{
 			$this->write_cookie();
 			$this->store_session_in_db();
 			
-			return "Login was successfull";
+			Util::success("Login was successfull");
 		}else{
 
-			return "Failed to log in with $username and $password";
+			Util::abort("Failed to log in with $username and $password");
 			//header("location: /index.php");
 		}
 
@@ -128,7 +113,7 @@ class Auth{
 		$this->destroy_cookie();
 		$this->destroy_db_entry();
 		$this->destroy_session();
-		return "Successfully logged out.";
+		Util::success("Successfully logged out.");
 	}
 
 	private function destroy_session(){

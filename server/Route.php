@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/init.php";
+require_once __DIR__ . "/autoloader.php";
 
 /**
  * This script will be called to route to a server side function.
@@ -22,6 +22,7 @@ $req = new Request();
 
 // Add some data to the response here
 $router = new Router();
+
 $result = $router->call_serverside_function($req->get_class_name(), $req->get_function_name(), $req->get_args());
 
 
