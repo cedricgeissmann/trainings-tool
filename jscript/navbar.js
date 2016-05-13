@@ -15,7 +15,15 @@ define(["jquery", "js/render"], function($, render){
 		if (!elem.hasClass('active')) {
 			$('.active').removeClass("active");
 			elem.addClass('active');
+
 		}
+			var contentName = element.data("identifier");
+
+			require(["js/content_switcher"], function(cs){
+				var content = cs.getContent();
+				content.switchEntry(contentName);
+
+			});
 	}
 
 
@@ -23,6 +31,13 @@ define(["jquery", "js/render"], function($, render){
 		require(["js/util"], function(util){
 			util.addHandlerToElements("#logout", "click", function(){clearCache();});
 			util.addAdditionalHandlerToElements(".nav-link", "click", function(){navLinkClicked($(this));});
+
+			require(["js/content_switcher"], function(cs){
+				cs.initialize();
+			});
+
+
+
 		});
 	}
 

@@ -313,6 +313,17 @@ function addParticipantsHandlers(){
 			panels = data.panels;
 			addTrainingPanelHandlers();
 			addParticipantsHandlers();
+
+
+		/**
+		 * Allways call this function after generating new content.
+		 */
+		require(["js/content_switcher"], function(cs){
+			var content = cs.getContent();
+			
+			//The first entry has to be the filename of the module without the extention
+			content.addEntry("trainings", data.panels, $("#screen").html());
+		});
 	}
 
 	/**
@@ -322,6 +333,7 @@ function addParticipantsHandlers(){
 	function renderTrainings(data){
 		console.log(data);
 		render.render("trainings.must", data.result, "#screen", function(){postRender(data);});
+
 	}
 
 	var pub = {
@@ -331,6 +343,9 @@ function addParticipantsHandlers(){
 		loadTrainings: function(){
 			rc.call_server_side_function("TrainingUtil", "getTraining", {}, renderTrainings);
 		},
+		loadContent: function(){
+			this.loadTrainings();
+		}
 	};
 
 	return pub;

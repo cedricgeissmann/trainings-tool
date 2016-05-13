@@ -7,28 +7,28 @@
   </div>
   <div>
   <ul class="my-nav-list">
-    <li id="nav-home"><a href="#!" data-identifier="main">Home</a></li>
+    <li id="nav-home"><a href="#!" data-identifier="trainings" class="nav-link">Home</a></li>
 
-		<li id="nav-profile"><a href="#!" data-identifier="profile">Profil</a></li>
+		<li id="nav-profile"><a href="#!" data-identifier="profile" class="nav-link">Profil</a></li>
 
-		<li id="nav-trainer" class="visibleTrainer"><a href="trainer.php" data-identifier="trainer">Trainer</a>
+		<li id="nav-trainer" class="visibleTrainer"><a href="#!" data-identifier="trainer" class="nav-link">Trainer</a>
 		</li>
 
-		<li id="nav-admin" class="visibleAdmin"><a href="admin.php" data-identifier="admin">Admin</a>
+		<li id="nav-admin" class="visibleAdmin"><a href="#!" data-identifier="admin" class="nav-link">Admin</a>
 		</li>
 
 		<li id="nav-attendanceCheck" class="visibleTrainer visibleAdmin">
-		<a href="attendance_check.php" data-identifier="attendance_check">Anwesenheitskontrolle</a>
+		<a href="#!" data-identifier="attendance_check" class="nav-link">Anwesenheitskontrolle</a>
 		</li>
 
 		<li id="nav-calendar">
-		<a href="#!" data-identifier="calendar">Kalender</a>
+		<a href="#!" data-identifier="calendar" class="nav-link">Kalender</a>
 		</li>
 		<!--            <li id="nav-organizer" class="visibleTrainer visibleAdmin">
 								<a href="#!" data-identifier="organizer" class="my-nav-link">Mannschafts-Manager</a>
 						</li>-->
 		<li>
-		<a id="logout" href="#!">Abmelden</a>
+		<a id="logout" href="#!" class="nav-link">Abmelden</a>
 		</li>
 
 

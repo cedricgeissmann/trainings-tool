@@ -1,0 +1,39 @@
+{{#panels}}
+
+            <div class="event-panel panel panel-default team{{teamID}} {{type}}" data-teamid="{{teamID}}" data-id="{{id}}">
+              <div class="panel-heading">
+              
+              <ul class="event-panel-heading">
+                
+                
+								<!-- start panel titel -->
+								<li>
+                <h4 class="panel-title"><b>{{type}} [{{teamName}}]</b>: {{day}} {{date}} {{time_start}} - {{time_end}}</h4>
+								</li>
+								<!-- end panel titel -->
+
+								<!-- start panel options button -->
+								<li>
+                <div class="btn-group panel-options-button pull-right"><a href="#" class="dropdown-toggle {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a class="removeTraining {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!"  data-id="{{id}}">Training löschen</a>
+                    </li>
+                    <li><a class="addTrainingPlan {{#trainer}}visibleTrainer{{/trainer}}" href="#!" name="{{id}}" data-id="{{id}}">Traininplan bearbeiten</a>    {{!TODO: remove name}}
+                    </li>
+                    <li><a class="addTrainingNotification {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Benachrichtigung hinzufügen</a>
+                    </li>
+                    <li><a class="changeEvent {{#admin}}visibleAdmin{{/admin}} {{#trainer}}visibleTrainer{{/trainer}}" href="#!" data-id="{{id}}">Ereigniss bearbeiten</a>
+                    </li>
+                  </ul>
+                </div>
+								</li>
+								<!-- end panel options button -->
+							</ul>
+
+              </div> <!-- End of panel heading -->
+              
+              
+            </div><!-- end of panel -->
+
+          {{/panels}}
+
