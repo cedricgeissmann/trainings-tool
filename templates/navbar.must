@@ -1,38 +1,44 @@
+<div class="my-navbar">
+  <div class="my-offcanvas-toggler my-offcanvas-toggler-left">
+    <img src="icon/hamburger.png" alt="E">
+  </div>
+  <div class="my-navbar-brand">
+  <a href="#">TV Muttenz</a>
+  </div>
+  <div>
+  <ul class="my-nav-list">
+    <li id="nav-home"><a href="#!" data-identifier="main">Home</a></li>
 
-<nav class="my-navbar" role="navigation">
-			<button id="offcanvas-toggler" class="visibleTrainer visibleAdmin off-canvas-toggler off-canvas-toggler-left" type="button">X</button>
-			<a class="my-navbar-brand" href="main.php">TV Muttenz</a>
+		<li id="nav-profile"><a href="#!" data-identifier="profile">Profil</a></li>
 
-		<ul class="my-navbar-nav">
-			<li class="active" id="nav-home"><a href="#!" data-identifier="main" class="nav-link">Home</a>
+		<li id="nav-trainer" class="visibleTrainer"><a href="trainer.php" data-identifier="trainer">Trainer</a>
+		</li>
 
-			</li>
-			<!--<li id="nav-chat">
-				<a href="#!"  data-identifier="chat" class="my-nav-link">Nachrichten <span class="badge" id="newMessageCounter">0</span></a> 
-						</li>-->
-			<li id="nav-profile"><a href="#!" data-identifier="profile" class="my-nav-link">Profil</a>
+		<li id="nav-admin" class="visibleAdmin"><a href="admin.php" data-identifier="admin">Admin</a>
+		</li>
 
-			</li>
-			<li id="nav-trainer" class="visibleTrainer"><a href="trainer.php" data-identifier="trainer" class="my-nav-link">Trainer</a>
+		<li id="nav-attendanceCheck" class="visibleTrainer visibleAdmin">
+		<a href="attendance_check.php" data-identifier="attendance_check">Anwesenheitskontrolle</a>
+		</li>
 
-			</li>
-			<li id="nav-admin" class="visibleAdmin"><a href="admin.php" data-identifier="admin" class="my-nav-link">Admin</a>
-
-			</li>
-			<li id="nav-attendanceCheck" class="visibleTrainer visibleAdmin">
-			<a href="attendance_check.php" data-identifier="attendance_check" class="my-nav-link">Anwesenheitskontrolle</a>
-			</li>
-			<li id="nav-calendar">
-			<a href="#!" data-identifier="calendar" class="my-nav-link">Kalender</a>
-			</li>
-			<!--            <li id="nav-organizer" class="visibleTrainer visibleAdmin">
+		<li id="nav-calendar">
+		<a href="#!" data-identifier="calendar">Kalender</a>
+		</li>
+		<!--            <li id="nav-organizer" class="visibleTrainer visibleAdmin">
 								<a href="#!" data-identifier="organizer" class="my-nav-link">Mannschafts-Manager</a>
 						</li>-->
-		</ul>
-		<ul class="my-navbar-nav my-navbar-right">
-			<li>
-			<a id="logout" href="#!" class="my-nav-link">Abmelden</a>
-			</li>
-		</ul>
-</nav>
+		<li>
+		<a id="logout" href="#!">Abmelden</a>
+		</li>
 
+
+
+
+  </ul>
+  </div>
+  <div class="my-offcanvas-toggler my-offcanvas-toggler-right">
+    <img src="icon/hamburger.png" alt="E">
+  </div>
+	<div class="my-clearfix">
+  </div>
+</div>

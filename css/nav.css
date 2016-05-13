@@ -1,0 +1,115 @@
+a{
+  transition: 0.3s;
+}
+
+.my-navbar{
+  height: 60px;
+  position: fixed;
+  background: gray;
+  width: 100%;
+  top: 0px;
+	z-index: 1002;
+}
+
+.my-navbar > div {
+  float: left;
+  margin: 0 10px 0 10px;
+  height: 100%;
+}
+
+.my-nav-list{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.my-nav-list > li{
+  float: left;
+  padding-right: 10px;
+  display: block;
+  height: 60px;
+}
+
+.my-navbar a{
+  display:block;
+  color: white;
+  height: 100%;
+  text-decoration: none;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.my-navbar a:hover{
+  background-color: black;
+}
+
+.my-offcanvas-toggler{
+  height: 100%;
+  margin: 0px !important;
+}
+
+.my-offcanvas-toggler-right{
+  float: right !important;
+}
+
+.my-offcanvas-toggler img{
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.my-navbar-brand a{
+  height: 100%;
+  font-size: 2em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+#main {
+    transition: margin-right .5s;
+    margin-right: 0px;
+    padding-right: 20px;
+}
+
+.my-offcanvas-menu{
+  position: fixed;
+  display: block;
+  width: 0px;
+  background: green;
+  top: 0px;
+  transition: 0.5s;
+  height: 100%;
+}
+
+.my-offcanvas-menu ul{
+  list-style-type: none;
+}
+
+.my-offcanvas-menu a{
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.my-offcanvas-menu a:hover{
+  color: black;
+}
+.my-offcanvas-menu-left{
+  left: 0px;
+}
+
+.my-offcanvas-menu-right{
+  right: 0px;
+}
+
+.my-clearfix{
+  display:none;
+  clear: left;
+  clear: right;
+}
+
+.my-close{
+  text-align: right;
+  margin-right: 20px;
+}
