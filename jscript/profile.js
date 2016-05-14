@@ -13,7 +13,7 @@ define(["js/render", "js/remotecall", "js/util", "lib/bootstrap"], function(rend
 			var content = cs.getContent();
 			
 			//The first entry has to be the filename of the module without the extention
-			content.addEntry("profile", data.panels, $("#screen").html());
+			content.addEntry("profile", data.panels, $("#screen").html(), false);
 		});
 	}
 
