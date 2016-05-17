@@ -1,0 +1,29 @@
+{{#check}}
+
+  <div class="event-panel panel panel-default">
+    <div class="panel-heading">
+      <ul class="event-panel-heading">
+        <li>
+      <h4><b>{{row.type}} [{{row.team}}]:</b> {{row.date}} {{row.time_start}} {{row.time_end}}</h4>
+        </li>
+        <li>
+      <button class="pull-right">send</button>
+        </li>
+    </div>
+    <div class="panel-pody">
+      
+  <ul>
+  {{#data}}
+    <li>
+      {{firstname}} {{name}}
+      <input type="checkbox">
+    </li>
+  {{/data}}
+  </ul>
+
+
+    </div>
+
+  </div>
+
+{{/check}}

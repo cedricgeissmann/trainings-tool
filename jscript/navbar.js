@@ -44,7 +44,7 @@ define(["jquery", "js/render"], function($, render){
 
 	var pub = {
 		renderNav: function(){
-			render.render("navbar.must", {}, "#nav", ready);
+			render.render("navbar.must", {}, "#nav", {callback: ready});
 		}
 	};
 

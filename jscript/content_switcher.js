@@ -1,7 +1,7 @@
 define(["jquery"], function($){
 
   //use content as a module variable. instantiate it when it is used first, right after the navbar is loaded, or override it, to clear the cache.
-  content = {};
+  var content;
 
 
   Content = function(){
@@ -13,8 +13,6 @@ define(["jquery"], function($){
       var name = $(obj).data("identifier");
       contents[name] = new ContentEntry();
     });
-    console.log(contents);
-    console.log(contents.main);
 
     /**
      * Since this function throws an error, no boolean has to be returned.
@@ -26,38 +24,81 @@ define(["jquery"], function($){
     };
 
     this.addEntry = function(name, data, html, needs_reload){
-      this.checkIfContentExists(name);
+      content.checkIfContentExists(name);
 
       contents[name].needs_reload = needs_reload === undefined ? true : needs_reload;
       contents[name].content = data;
       contents[name].html = html;
-
-      console.log(contents[name]);
     };
 
+    this.set_needs_reload = function(name, needs_reload){
+      content.checkIfContentExists(name);
+      contents[name].needs_reload = needs_reload === undefined ? true : needs_reload;
+    };
+
+
+    this.addData = function(name, data){
+      content.checkIfContentExists(name);
+      contents[name].content = data;
+    };
+
+
+    this.addHTML = function(name, html){
+      content.checkIfContentExists(name);
+      contents[name].html = html;
+    };
+
+
+    /**
+     * TODO: Remove
+     *
+     * DO NOT LONGER USE THIS FUNCTION
+     *
+     */
     this.getEntry = function(contentName){
       this.checkIfContentExists(contentName);
       var entry = contents[contentName];
-      console.log(entry);   //TODO: Remove this
       return entry;
     };
 
     this.generateEntry = function(name){
       require(["js/"+name], function(loader){
-        loader.loadContent();
+        /**
+         * This callbackObj contains multiple functions.
+         * One function is the addEntry from this object.
+         * Another function is the render function that will deal with the data.
+         */
+        var CallbackObj = function(){
+          this.execute = function(data, needs_reload){
+            render(data);
+            content.addData(name, data);
+          };
+          render = function(data){
+            //Just call the rendering function defined in the loader here, and pass the data.
+            loader.render(data, {callback: content.addHTML, name: name, needs_reload: content.set_needs_reload});
+          };
+          addEntry = function(data, html){
+            content.addEntry(name, data, html, true);
+          };
+        };
+        loader.loadContent(new CallbackObj());
       });
     };
 
 
     this.switchEntry = function(contentName){
-      this.checkIfContentExists(contentName);
+      if(contents[contentName] === undefined){
+        contents[contentName] = new ContentEntry();
+      }
       var entry = contents[contentName];
 
       if(entry.html === "" || entry.needs_reload){
         this.generateEntry(contentName);
-        throw "There is no html. Create it and display it in the #screen";
+        //throw "There is no html. Create it and display it in the #screen";
+      }else{
+        //content and html can be reloaded from cache
+        $("#screen").html(entry.html);
       }
-      $("#screen").html(entry.html);
       //TODO: Add trasition
 
     };
@@ -73,10 +114,12 @@ define(["jquery"], function($){
 
   var pub = {
     initialize: function(){
-      console.log("initialize content is called");  //TODO: remove this
       content = new Content();
     },
     getContent: function(){
+      if(content === undefined){
+        this.initialize();
+      }
       return content;
     }
   };
