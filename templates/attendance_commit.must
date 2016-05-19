@@ -1,16 +1,20 @@
+<input id="showOnlyValue" type="text"/><button id="showOnlyButton">Suche mit Datum</button>
+
+
+
 {{#check}}
 
-<div class="event-panel panel panel-default">
+<div class="event-panel panel panel-default" data-date="{{header.date}}">
   <div class="panel-heading">
     <ul class="event-panel-heading">
       <li>
-        <h4><b>{{row.type}} [{{row.team}}]:</b> {{row.date}} {{row.time_start}} {{row.time_end}}</h4>
+        <h4><b>{{header.type}} [{{header.team_name}}]:</b> {{header.date}} {{header.time_start}} {{header.time_end}}</h4>
       </li>
       <li>
       <button class="send-attendance-check pull-right" data-id="{{row.id}}">send</button>
       </li>
       <li>
-      <button class="commit-attendance-check pull-right" data-id="{{row.id}}">commit</button>
+      <button class="hide-others pull-right" data-id="{{header.id}}" data-date="{{header.date}}">hide others</button>
       </li>
   </div>
   <div class="panel-pody">

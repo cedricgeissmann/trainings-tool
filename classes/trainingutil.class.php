@@ -371,25 +371,52 @@ class TrainingUtil {
       //$res_tmp = $this->db->select("SELECT subscribed_for_training.trainingsID AS id, subscribed_for_training.subscribe_type AS subscribed, user.username AS username, user.name AS name, user.firstname AS firstname FROM `subscribed_for_training` JOIN (`user`) ON (user.username=subscribed_for_training.username) WHERE trainingsID='$row[id]'");
       //
       //
-      $res_tmp = $this->db->select("SELECT training.trainingsID AS id, user.username AS username, user.name AS name, user.firstname AS firstname FROM `training` JOIN (`user`, `role`) ON (user.username=role.username AND role.tid=training.teamID) WHERE training.id='$row[id]'");
+      $res_tmp = $this->db->select("SELECT training.id AS tid, user.username AS username, user.name AS name, user.firstname AS firstname FROM `training` JOIN (`user`, `role`) ON (user.username=role.username AND role.tid=training.teamID) WHERE training.id='$row[id]'");
       //
       $returnArray[] = array("row" => $row, "data" => $res_tmp["response"]);
     }
     return array("check" => $returnArray);
     
   }
-  
-  public static function commitAttendanceCheck($trainingID){
-    DatabaseUtil::executeQuery("UPDATE `training` SET attendance_check=1 WHERE id='$trainingID'");
+
+
+  /**
+   * @router_may_call
+   */
+  public function getAttendanceList(){
+    $res = $this->db->select("SELECT * FROM `attendance_checked_header_view`");
+    $returnArray = array();
+    foreach($res["response"] as $header){
+      $res_data = $this->db->select("SELECT * FROM `attendance_checked_view` WHERE trainingsID='$header[trainingsID]'");
+      $returnArray[] = array("header" => $header, "data" => $res_data["response"]);
+    }
+    return array("check" => $returnArray);
+  }
+
+
+  /**
+   * @router_may_call
+   */
+  public function completeCheck($args){
+    $trainingsID = $args["id"];
+    $list = $args["attendance_list"];
+    foreach($list as $val){
+      //return $val;
+      $this->commitAttendanceForUser($trainingsID, $val["username"], $val["subscribe_type"]);
+    }
+    $this->commitAttendanceCheck($trainingsID);
+    return array("complete" => "Successfully inserted into database");
   }
   
-  public static function commitAttendanceForUser($trainingID, $username, $subscribed){
-    $res = DatabaseUtil::executeQuery("SELECT * FROM `attendance_check` WHERE trainingsID='$trainingID' AND username='$username'");
-    if(mysql_num_rows($res)>0){
-      DatabaseUtil::executeQuery("UPDATE `attendance_check` SET attendance='$subscribed' WHERE trainingsID='$trainingID' AND username='$username'");
-      echo "UPDATE `attendance_check` SET attendance='$subscribed' WHERE trainingsID='$trainingID' AND username='$username'";
+  private function commitAttendanceCheck($trainingID){
+    $this->db->update("UPDATE `training` SET attendance_check=1 WHERE id='$trainingID'");
+  }
+  
+  private function commitAttendanceForUser($trainingID, $username, $subscribed){
+    if($this->db->exists("SELECT * FROM `attendance_check` WHERE trainingsID='$trainingID' AND username='$username'")){
+      $this->db->update("UPDATE `attendance_check` SET attendance='$subscribed' WHERE trainingsID='$trainingID' AND username='$username'");
     }else{
-      DatabaseUtil::executeQuery("INSERT INTO `attendance_check` (trainingsID, username, attendance) VALUES ('$trainingID', '$username', '$subscribed')");
+      $this->db->insert("INSERT INTO `attendance_check` (trainingsID, username, attendance) VALUES ('$trainingID', '$username', '$subscribed')");
     }
   } 
   

@@ -1,0 +1,22 @@
+<div class="my-offcanvas-menu my-offcanvas-menu-left">
+<ul>
+  <li class="my-close my-close-right">
+    <a href="#">X</a>
+  </li>
+  <li>
+    <a href="#">Test</a>
+  </li>
+    <li>
+    <a href="#">Test</a>
+  </li>
+    <li>
+    <a href="#">Test</a>
+  </li>
+    <li>
+    <a href="#">Test</a>
+  </li>
+    <li>
+    <a href="#">Test</a>
+  </li>
+</ul>
+</div>

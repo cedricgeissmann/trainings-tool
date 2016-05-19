@@ -68,6 +68,7 @@ a{
 
 #main {
     transition: margin-right .5s;
+    transition: margin-left .5s;
     margin-right: 0px;
     padding-right: 20px;
 }
@@ -96,7 +97,7 @@ a{
   color: black;
 }
 .my-offcanvas-menu-left{
-  left: 0px;
+  left: -200px;
 }
 
 .my-offcanvas-menu-right{
