@@ -1,0 +1,51 @@
+
+<div class="container">
+  <div class="row">
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-white">
+          <h2>Training:</h2>
+          
+        </div>
+      {{#training}}
+     <div class="card card-white">
+      {{#header}}
+
+      <div>
+        <h2>{{teamID}}: {{time_start}} - {{time_end}}</h2>  
+
+      </div>
+
+      {{/header}}
+
+      {{#exercises}}
+
+
+      <div>
+        <h3> {{title}} <span class="pull-right">Dauer: {{duration}} Min</span> </h3>
+        <p> {{description}} </p>
+      </div>
+
+      {{/exercises}}
+    </div>
+      {{/training}}
+    </div>
+
+
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div class="card card-white">
+      <h2>Vorschl&auml;ge:</h2>
+      </div>
+    {{#suggestions}}
+     <div class="card card-white">
+
+       <div>
+         <h3> [{{id}}]: {{title}} <span class="pull-right">Dauer: {{duration}} Min</span></h3>
+         <p> {{description}} </p>
+         <button class="btn btn-default addExerciseFromSuggestions" data-id="{{id}}">Hinzuf&uuml;gen</button>
+       </div>
+    </div>
+    {{/suggestions}}
+    </div>
+  </div>
+</div>

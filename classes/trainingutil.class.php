@@ -33,6 +33,16 @@ class TrainingUtil {
     $auth->needs_login();
     $this->db = new DBConnection();
   }
+
+
+  /**
+   * @router_may_call
+   */
+  public function getSuggestions($args){
+    $topic = $args["topic"];
+    $res = $this->db->select("SELECT * FROM exercises LIMIT 10"); //TODO: WHERE topic='$topic';
+    return array("suggestions" => $res["response"]);
+  }
   
 
   /**

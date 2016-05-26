@@ -195,3 +195,4 @@ class Reader
 		return $this->parseSingle($key);
 	}
 }
+?>
