@@ -1,0 +1,193 @@
+@import "nav.css";
+
+
+/**
+ * 	Is used to center elements vertically on login screen.
+ */
+.centered{
+	float: none !important;
+	margin: 0px auto;
+}
+
+/**
+ * 	Using another font from google api.
+ */
+body{
+	font-family: 'Varela Round';
+	margin-top: 80px !important;
+	background-color: grey;
+}
+
+/**
+ * 	this is for centering elements in a form.
+ */
+.form-center {
+	margin: 10px auto;
+	text-align: center;
+}
+
+
+#chatInputField{
+	/*width: auto;
+	position: fixed;
+	bottom: 0px;*/
+}
+
+#chatPanel{
+	height: 100%;
+}
+
+.testClass{
+	margin: 20%;
+}
+
+#conversationArea{
+	overflow-y: auto;
+	/*height: 100px;	/*hack for setting the content size by javascript*/
+}
+
+.messageTime{
+	color: #c0c0c0;
+	font-size: x-small;
+}
+
+.messageBody{
+	margin: 2%;
+}
+
+.conversationBubble{
+	text-align: left;
+}
+
+.notificationCenter{
+	margin: 20% auto;
+	text-align: center;
+}
+
+.exerciseTitle{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.exercise{
+	padding-bottom: 20px;
+}
+
+.exerciseDescription{
+	border: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	box-shadow: none !important
+} 
+
+.exerciseTitleField{
+	border: none;
+	box-shadow: none !important;
+	min-width: 20px;
+	max-width: 500px;
+	transition: width 0.25s;    
+} 
+
+.startTime{
+	border: none;
+	box-shadow: none !important;
+	text-align: center;
+} 
+
+.endTime{
+	border: none;
+	box-shadow: none !important;
+	text-align: center;
+}
+
+.senderMessages{
+	text-align: right;
+	padding-right: 20px;
+}
+
+.calendar{
+	padding-top: 30px;
+}
+
+#content{
+	padding-top: 30px;
+}
+
+table {
+	max-width: none;
+}
+
+.tableHolder{
+	overflow-x: auto;
+}
+
+.onlyContentScroll{
+	overflow-y: auto;
+	height: 500px;
+}
+
+.playerDropdownButton{
+	margin-bottom: 0;
+	width: 100%;
+}
+
+
+.row-fluid div {
+	/*height: 200px;*/
+	-webkit-transition: width 0.3s ease, margin 0.3s ease;
+	-moz-transition: width 0.3s ease, margin 0.3s ease;
+	-o-transition: width 0.3s ease, margin 0.3s ease;
+	transition: width 0.3s ease, margin 0.3s ease;
+}
+
+.row-fluid .span0 {
+	width: 0%;
+}
+
+.text-center{
+	text-align: center;
+}
+
+
+.organizerToolList{
+	margin: 10px auto;
+	background: black;
+}
+
+
+.event-panel{
+	margin-left: 40px;
+	margin-right: 40px;
+	border: none;
+	border-radius: 0px;
+}
+
+
+.event-panel-heading{
+	margin-bottom: 0px;
+}
+
+
+.event-panel-heading li{
+	display: inline;
+}
+
+
+.event-panel-heading li h4{
+	display: inline;
+}
+
+
+
+.panel-options-button{
+	display: inline;
+}
+
+.card{
+  margin: 10px;
+  padding: 10px;
+}
+
+.card-white{
+  background: white;
+}
